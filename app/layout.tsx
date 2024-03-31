@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "@/assets/styles/globals.css";
 import { jetBrainsMono } from "../fonts";
 import { ThemeProvider } from "@/components/themes/theme-provider";
+import NavBar from "@/components/NavBar";
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -28,6 +29,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <NavBar />
           {children}
         </ThemeProvider>
       </body>

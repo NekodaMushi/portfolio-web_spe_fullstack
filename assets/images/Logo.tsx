@@ -11,7 +11,7 @@ const Logo = () => {
           alt="NexLearn"
           width={100}
           height={100}
-          property="unoptimized"
+          unoptimized={true}
         />
       </span>
     </div>
