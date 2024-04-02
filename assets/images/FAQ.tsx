@@ -1,16 +1,16 @@
 "use client";
 import Image from "next/image";
 
-const Logo = () => {
+const FAQ = () => {
   return (
     <div>
       <span>
         <Image
           className="h-10 w-auto"
-          src="/images/logos/logo.gif"
-          alt="NexLearn"
-          width={100}
-          height={100}
+          src="/images/logos/faq.png"
+          alt="FAQ"
+          width={120}
+          height={120}
           unoptimized={true}
         />
       </span>
@@ -18,4 +18,4 @@ const Logo = () => {
   );
 };
 
-export default Logo;
+export default FAQ;
