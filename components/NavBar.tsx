@@ -70,120 +70,123 @@ const NavBar = () => {
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[400px]">
                 <nav className="flex flex-col gap-5 mt-12">
-                  <Button onClick={() => handleSectionClick("use")}>
+                  <Button variant="ghost" onClick={() => handleSectionClick("use")}>
                     <div className="block px-2 py-1 text-lg">Use</div>
                   </Button>
                   {/* USE */}
                   {activeSection === "use" && (
-  <animated.div style={{ ...springs }}>
-    <SheetClose asChild>
-      <Link href="/use/quiz">
-        <div className="flex items-center p-2 gap-10 hover:bg#[4EC5D9]">
-          <div className="flex-shrink-0">
-            <Quiz />
-          </div>
-          <div>
-            <h1>Quiz</h1>
-            <p className="text-sm lg:text-lg">Main dish: challenge your knowledge</p>
-          </div>
-        </div>
-      </Link>
-    </SheetClose>
-    <SheetClose asChild>
-      <Link href="/use/chat">
-        <div className="flex items-center p-2 gap-10 hover:bg#[4EC5D9]">
-          <div className="flex-shrink-0">
-            <Chat />
-          </div>
-          <div>
-            <h1>Chat</h1>
-            <p className="text-sm lg:text-lg">Need a teacher? Get AI answers</p>
-          </div>
-        </div>
-      </Link>
-    </SheetClose>
-  </animated.div>
-)}
+                  <animated.div style={{ ...springs }}>
+                    <SheetClose asChild>
+                      <Link href="/use/quiz">
+                        <div className="relative flex items-center p-2 gap-10 group">
+                          <div className="absolute top-1/2 transform -translate-y-1/2 w-0.5 h-0 bg-primary group-hover:h-full group-hover:w-full duration-700 group-hover:transition-[width] group-hover:delay-400 rounded-md"></div>
+                          <div className="flex-shrink-0 z-10">
+                            <Quiz />
+                          </div>
+                          <div className="z-10">
+                            <h1>Quiz</h1>
+                            <p className="text-sm lg:text-lg">Main dish: challenge your knowledge</p>
+                          </div>
+                        </div>
+                      </Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link href="/use/chat">
+                        <div className="relative flex items-center p-2 gap-10 group">
+                          <div className="absolute top-1/2 transform -translate-y-1/2 w-0.5 h-0 bg-primary group-hover:h-full group-hover:w-full duration-700 group-hover:transition-[width] group-hover:delay-400 rounded-md"></div>
+                          <div className="flex-shrink-0 z-10">
+                            <Chat />
+                          </div>
+                          <div className="z-10">
+                            <h1>Chat</h1>
+                            <p className="text-sm lg:text-lg">Need a teacher? Get AI answers</p>
+                          </div>
+                        </div>
+                      </Link>
+                    </SheetClose>
+                  </animated.div>
+                )}
 
-                  <Button
-                    onClick={() => handleSectionClick("learn")}
-                    variant="ghost"
-                  >
-                    <div className="block px-2 py-1 text-lg">Learn</div>
-                  </Button>
-                  {/* LEARN */}
-                  {activeSection === "learn" && (
-                    <animated.div style={{ ...springs }}>
-                      <SheetClose asChild>
-                        <Link href="/learn/recall">
-                        <div className="flex items-center p-2 gap-6 hover:bg#[4EC5D9]">
-                            <div className="flex items-center justify-center">
-                              <Recall/>
-                            </div>
-                            <div>
-                              <h1>Recall</h1>
-                              <p className="text-sm lg:text-lg">All your last sessions are stored here</p>
-                            </div>
+                <Button
+                  onClick={() => handleSectionClick("learn")}
+                  variant="ghost"
+                >
+                  <div className="block px-2 py-1 text-lg">Learn</div>
+                </Button>
+                {/* LEARN */}
+                {activeSection === "learn" && (
+                  <animated.div style={{ ...springs }}>
+                    <SheetClose asChild>
+                      <Link href="/learn/recall">
+                        <div className="relative flex items-center p-2 gap-6 group">
+                          <div className="absolute top-1/2 transform -translate-y-1/2 w-0.5 h-0 bg-primary group-hover:h-full group-hover:w-full duration-700 group-hover:transition-[width] group-hover:delay-400 rounded-md"></div>
+                          <div className="flex items-center justify-center z-10">
+                            <Recall />
                           </div>
-                         
-                        </Link>
-                      </SheetClose>
+                          <div className="z-10">
+                            <h1>Recall</h1>
+                            <p className="text-sm lg:text-lg">All your last sessions are stored here</p>
+                          </div>
+                        </div>
+                      </Link>
+                    </SheetClose>
 
-                      <SheetClose asChild>
-                        <Link href="/learn/faq">
-                        <div className="flex items-center p-2 gap-6 hover:bg#[4EC5D9]">
-                            <div className="flex items-center justify-center">
-                              <FAQ />
-                            </div>
-                            <div>
-                              <h1>FAQ</h1>
-                              <p className="text-sm lg:text-lg">You’ve got questions, here the answers</p>
-                            </div>
+                    <SheetClose asChild>
+                      <Link href="/learn/faq">
+                        <div className="relative flex items-center p-2 gap-6 group">
+                          <div className="absolute top-1/2 transform -translate-y-1/2 w-0.5 h-0 bg-primary group-hover:h-full group-hover:w-full duration-700 group-hover:transition-[width] group-hover:delay-400 rounded-md"></div>
+                          <div className="flex items-center justify-center z-10">
+                            <FAQ />
                           </div>
-                          
-                        </Link>
-                      </SheetClose>
-                    </animated.div>
-                  )}
-                  <Button
-                    onClick={() => handleSectionClick("dev")}
-                    variant="ghost"
-                  >
-                    <div className="block px-2 py-1 text-lg">Dev</div>
-                  </Button>
-                  {/* DEV */}
-                  {activeSection === "dev" && (
-                    <animated.div style={{ ...springs }}>
-                      <SheetClose asChild>
-                        <Link href="/dev/documentation">
-                          <div className="flex items-center p-2 gap-10 hover:bg#[4EC5D9]">
-                            <div className="flex items-center justify-center">
-                              <Documentation/>
-                            </div>
-                            <div>
-                              <h1>Documentation</h1>
-                              <p className="text-sm lg:text-lg">Reference for builders</p>
-                            </div>
+                          <div className="z-10">
+                            <h1>FAQ</h1>
+                            <p className="text-sm lg:text-lg">You've got questions, here the answers</p>
                           </div>
-                        </Link>
-                      </SheetClose>
-                      <SheetClose asChild>
+                        </div>
+                      </Link>
+                    </SheetClose>
+                  </animated.div>
+                )}
+                <Button
+                  onClick={() => handleSectionClick("dev")}
+                  variant="ghost"
+                >
+                  <div className="block px-2 py-1 text-lg">Dev</div>
+                </Button>
+                {/* DEV */}
+                {activeSection === "dev" && (
+                  <animated.div style={{ ...springs }}>
+                    <SheetClose asChild>
+                      <Link href="/dev/documentation">
+                        <div className="relative flex items-center p-2 gap-10 group">
+                          <div className="absolute top-1/2 transform -translate-y-1/2 w-0.5 h-0 bg-primary group-hover:h-full group-hover:w-full duration-700 group-hover:transition-[width] group-hover:delay-400 rounded-md"></div>
+                          <div className="flex items-center justify-center z-10">
+                            <Documentation />
+                          </div>
+                          <div className="z-10">
+                            <h1>Documentation</h1>
+                            <p className="text-sm lg:text-lg">Reference for builders</p>
+                          </div>
+                        </div>
+                      </Link>
+                    </SheetClose>
+                    <SheetClose asChild>
                       <Link href="/">
-                          <div className="flex items-center p-2 gap-10 hover:bg#[4EC5D9]">
-                            <div className="flex items-center justify-center">
-                              <Github/>
-                            </div>
-                            <div>
-                              <h1>Github</h1>
-                              <p className="text-sm lg:text-lg">NexLearn Repository</p>
-                            </div>
+                        <div className="relative flex items-center p-2 gap-10 group">
+                          <div className="absolute top-1/2 transform -translate-y-1/2 w-0.5 h-0 bg-primary group-hover:h-full group-hover:w-full duration-700 group-hover:transition-[width] group-hover:delay-400 rounded-md"></div>
+                          <div className="flex items-center justify-center z-10">
+                            <Github />
                           </div>
-                        </Link>
-                        
-                      </SheetClose>
-                    </animated.div>
-                  )}
-                  
+                          <div className="z-10">
+                            <h1>Github</h1>
+                            <p className="text-sm lg:text-lg">NexLearn Repository</p>
+                          </div>
+                        </div>
+                      </Link>
+                    </SheetClose>
+                  </animated.div>
+                )}
+                 
                   
                 </nav>
               </SheetContent>
