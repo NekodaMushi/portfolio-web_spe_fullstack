@@ -1,16 +1,24 @@
 "use client";
 import Image from "next/image";
+import React from "react";
 
-const DOCUMENTATION = () => {
+interface DocumentationProps {
+  width?: number;
+  height?: number;
+}
+
+const Documentation: React.FC<DocumentationProps> = ({
+  width = 64,
+  height = 64,
+}) => {
   return (
     <div>
       <span>
         <Image
-          className="h-10 w-auto"
           src="/images/logos/documentation.png"
           alt="DOCUMENTATION"
-          width={64}
-          height={64}
+          width={width}
+          height={height}
           unoptimized={true}
         />
       </span>
@@ -18,4 +26,4 @@ const DOCUMENTATION = () => {
   );
 };
 
-export default DOCUMENTATION;
+export default Documentation;

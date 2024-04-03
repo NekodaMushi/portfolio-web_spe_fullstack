@@ -1,16 +1,21 @@
 "use client";
 import Image from "next/image";
+import React from "react";
 
-const Github = () => {
+interface GithubProps {
+  width?: number;
+  height?: number;
+}
+
+const Github: React.FC<GithubProps> = ({ width = 120, height = 120 }) => {
   return (
     <div>
       <span>
         <Image
-          className="h-10 w-auto"
           src="/images/logos/github.png"
           alt="GITHUB"
-          width={64}
-          height={64}
+          width={width}
+          height={height}
           unoptimized={true}
         />
       </span>

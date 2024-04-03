@@ -1,16 +1,21 @@
 "use client";
 import Image from "next/image";
+import React from "react";
 
-const CHAT = () => {
+interface ChatProps {
+  width?: number;
+  height?: number;
+}
+
+const Chat: React.FC<ChatProps> = ({ width = 64, height = 64 }) => {
   return (
     <div>
       <span>
         <Image
-          className="h-10 w-10"
           src="/images/logos/chat.png"
           alt="CHAT"
-          width={64}
-          height={64}
+          width={width}
+          height={height}
           unoptimized={true}
         />
       </span>
@@ -18,4 +23,4 @@ const CHAT = () => {
   );
 };
 
-export default CHAT;
+export default Chat;

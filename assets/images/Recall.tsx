@@ -1,22 +1,26 @@
 "use client";
 import Image from "next/image";
+import React from "react";
 
-const RECALL = () => {
+interface RecallProps {
+  width?: number;
+  height?: number;
+}
+
+const Recall: React.FC<RecallProps> = ({ width = 64, height = 64 }) => {
   return (
     <div>
       <span>
         <Image
-          className="h-10 w-auto"
           src="/images/logos/recall.png"
           alt="RECALL"
-          width={120}
-          height={120}
-          objectFit="cover"
-          objectPosition="center"
+          width={width}
+          height={height}
+          unoptimized={true}
         />
       </span>
     </div>
   );
 };
 
-export default RECALL;
+export default Recall;

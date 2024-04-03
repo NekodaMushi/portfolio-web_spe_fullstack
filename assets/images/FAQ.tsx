@@ -1,16 +1,21 @@
 "use client";
 import Image from "next/image";
+import React from "react";
 
-const FAQ = () => {
+interface FAQProps {
+  width?: number;
+  height?: number;
+}
+
+const FAQ: React.FC<FAQProps> = ({ width = 120, height = 120 }) => {
   return (
     <div>
       <span>
         <Image
-          className="h-10 w-auto"
           src="/images/logos/faq.png"
           alt="FAQ"
-          width={120}
-          height={120}
+          width={width}
+          height={height}
           unoptimized={true}
         />
       </span>

@@ -1,16 +1,21 @@
 "use client";
 import Image from "next/image";
+import React from "react";
 
-const Logo = () => {
+interface LogoProps {
+  width?: number;
+  height?: number;
+}
+
+const Logo: React.FC<LogoProps> = ({ width = 100, height = 100 }) => {
   return (
     <div>
       <span>
         <Image
-          className="h-10 w-auto"
-          src="/images/logos/logo.gif"
-          alt="NexLearn"
-          width={100}
-          height={100}
+          src="/images/logos/logo.png"
+          alt="LOGO"
+          width={width}
+          height={height}
           unoptimized={true}
         />
       </span>

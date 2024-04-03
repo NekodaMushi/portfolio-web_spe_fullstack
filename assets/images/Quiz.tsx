@@ -1,16 +1,21 @@
 "use client";
 import Image from "next/image";
+import React from "react";
 
-const QUIZ = () => {
+interface QuizProps {
+  width?: number;
+  height?: number;
+}
+
+const Quiz: React.FC<QuizProps> = ({ width = 64, height = 64 }) => {
   return (
     <div>
       <span>
         <Image
-          className="h-10 w-10"
           src="/images/logos/quiz.png"
           alt="QUIZ"
-          width={64}
-          height={64}
+          width={width}
+          height={height}
           unoptimized={true}
         />
       </span>
@@ -18,4 +23,4 @@ const QUIZ = () => {
   );
 };
 
-export default QUIZ;
+export default Quiz;
