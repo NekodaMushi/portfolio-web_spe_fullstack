@@ -4,14 +4,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import Quiz from "@/assets/images/Quiz";
 import Chat from "@/assets/images/Chat";
 import Recall from "@/assets/images/Recall";
@@ -20,7 +13,7 @@ import Documentation from "@/assets/images/Documentation";
 import Github from "@/assets/images/Github";
 
 interface FlyoutLinkProps {
-  link: string;
+  link?: string;
   children: React.ReactNode;
   FlyoutContent: React.FC;
 }
@@ -28,13 +21,13 @@ interface FlyoutLinkProps {
 const NavLinks = () => {
   return (
     <nav className="mx-6 hidden items-center space-x-4 md:flex lg:space-x-6  ">
-      <NavLink link="Use" FlyoutContent={UseContent}>
+      <NavLink  FlyoutContent={UseContent}>
         Use
       </NavLink>
-      <NavLink link="Learn" FlyoutContent={LearnContent}>
+      <NavLink  FlyoutContent={LearnContent}>
         Learn
       </NavLink>
-      <NavLink link="Dev" FlyoutContent={DevContent}>
+      <NavLink  FlyoutContent={DevContent}>
         Dev
       </NavLink>
     </nav>
@@ -42,7 +35,7 @@ const NavLinks = () => {
 };
 
 export const NavLink = ({ link, children, FlyoutContent }: FlyoutLinkProps) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   return (
     <div
@@ -50,7 +43,7 @@ export const NavLink = ({ link, children, FlyoutContent }: FlyoutLinkProps) => {
       onMouseLeave={() => setOpen(false)}
       className="group relative h-fit w-fit"
     >
-      <a href={`/${link.toLowerCase()}`} className="relative ">
+      <a className="relative ">
         {children}
       </a>
       <span
@@ -69,7 +62,7 @@ export const NavLink = ({ link, children, FlyoutContent }: FlyoutLinkProps) => {
             style={{ x: "-50%" }}
           >
             <div className="absolute -top-[35px] left-0 right-0 h-[50px] bg-transparent"></div>
-            {/* <div className="absolute left-1/2 bottom-24 h-3 w-3 -translate-x-1/2 -translte-y-1/2 rotate-45 bg-primary"></div> */}
+
             <FlyoutContent />
           </motion.div>
         )}

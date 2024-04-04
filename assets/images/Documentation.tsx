@@ -16,7 +16,7 @@ const Documentation: React.FC<DocumentationProps> = ({
       <span>
         <Image
           src="/images/logos/documentation.png"
-          alt="DOCUMENTATION"
+          alt="DOCU"
           width={width}
           height={height}
           unoptimized={true}
