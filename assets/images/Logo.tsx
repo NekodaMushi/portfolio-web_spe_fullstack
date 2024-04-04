@@ -7,12 +7,12 @@ interface LogoProps {
   height?: number;
 }
 
-const Logo: React.FC<LogoProps> = ({ width = 100, height = 100 }) => {
+const Logo: React.FC<LogoProps> = ({ width = 80, height = 80 }) => {
   return (
     <div>
       <span>
         <Image
-          src="/images/logos/logo.png"
+          src="/images/logos/logo.gif"
           alt="LOGO"
           width={width}
           height={height}

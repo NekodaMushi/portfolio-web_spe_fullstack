@@ -42,7 +42,7 @@ const NavLinks = () => {
 };
 
 export const NavLink = ({ link, children, FlyoutContent }: FlyoutLinkProps) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   return (
     <div
@@ -99,6 +99,7 @@ export const UseContent = () => {
           </div>
         </Link>
       </motion.div>
+      <div className="my-4 w-1/2 mx-auto border-t " />
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
@@ -130,8 +131,8 @@ export const LearnContent = () => {
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
       >
         <Link href="/" className="m-2 flex items-center gap-8 ">
-          <div className="  basis-1/3 ">
-            <Recall width={96} height={96} />
+          <div className=" pl-2 basis-1/3 ">
+            <Recall width={88} height={88} />
           </div>
           <div className="basis-2/3 ">
             <CardTitle className="p-2 text-left">Recall</CardTitle>
@@ -142,14 +143,16 @@ export const LearnContent = () => {
           </div>
         </Link>
       </motion.div>
+      <div className="my-4 w-1/2 mx-auto border-t " />
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
       >
+        
         <Link href="/" className="m-2 flex items-center gap-8 ">
-          <div className="  basis-1/3 ">
-            <FAQ width={96} height={96} />
+          <div className=" pl-3 basis-1/3 ">
+            <FAQ width={80} height={80} />
           </div>
           <div className="basis-2/3 ">
             <CardTitle className="p-2 text-left">FAQ</CardTitle>
@@ -166,44 +169,50 @@ export const LearnContent = () => {
 
 export const DevContent = () => {
   return (
-    <Card className=" w-[448px] flex-col p-2">
+    <Card className=" w-[448px]  flex-col p-2">
+
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
       >
-        <Link href="/" className="m-2 flex items-center gap-8 ">
-          <div className="  basis-1/3 ">
-            <Documentation width={96} height={96} />
+        <Link href="/" className="m-2 flex items-center gap-8  ">
+          <div className=" pl-2 basis-1/3 ">
+            <Documentation width={80} height={80} />
           </div>
           <div className="basis-2/3 ">
             <CardTitle className="p-2 text-left">Documentation</CardTitle>
 
             <CardContent className="p-2 text-left">
-              <p>Reference for builders</p>
+              <p>Everything referenced for builders</p>
             </CardContent>
           </div>
         </Link>
       </motion.div>
+      <div className="my-4 w-1/2 mx-auto border-t " />
+
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
       >
+        
         <Link href="/" className="m-2 flex items-center gap-8 ">
-          <div className="  basis-1/3 ">
-            <Github />
+          <div className="  ml-1 -mr-1 basis-1/3">
+            <Github width={80} height={80}/>
           </div>
           <div className="basis-2/3 ">
             <CardTitle className="p-2 text-left">Github</CardTitle>
 
             <CardContent className="p-2 text-left">
-              <p>NexLearn Repository</p>
+              <p>NexLearn Project : Repository</p>
             </CardContent>
           </div>
         </Link>
-      </motion.div>
+        </motion.div>
+      
     </Card>
+    
   );
 };
 

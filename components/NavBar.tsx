@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import { ModeToggle } from "./themes/theme-toggle";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "./ui/sheet";
 
-import { Ghost, Menu } from "lucide-react";
+import {  Menu } from "lucide-react";
 import Logo from "@/assets/images/Logo";
 import { useState } from "react";
 
@@ -109,14 +109,14 @@ const NavBar = () => {
                   {/* LEARN */}
                   {activeSection === "learn" && (
                     <animated.div style={{ ...springs }}>
-                      <SheetClose asChild>
+                      <SheetClose asChild >
                         <Link href="/learn/recall">
                           <div className="group relative flex items-center gap-6 p-2">
                             <div className="group-hover:delay-400 absolute top-1/2 h-0 w-0.5 -translate-y-1/2 transform rounded-md bg-primary duration-700 group-hover:h-full group-hover:w-full group-hover:transition-[width]"></div>
                             <div className="z-10 flex items-center justify-center">
-                              <Recall />
+                              <Recall  width={120} height={120} />
                             </div>
-                            <div className="z-10">
+                            <div className="z-10 ml-5">
                               <h1>Recall</h1>
                               <p className="text-sm lg:text-lg">
                                 All your last sessions are stored here
@@ -131,9 +131,9 @@ const NavBar = () => {
                           <div className="group relative flex items-center gap-6 p-2">
                             <div className="group-hover:delay-400 absolute top-1/2 h-0 w-0.5 -translate-y-1/2 transform rounded-md bg-primary duration-700 group-hover:h-full group-hover:w-full group-hover:transition-[width]"></div>
                             <div className="z-10 flex items-center justify-center">
-                              <FAQ />
+                              <FAQ  width={120} height={120}/>
                             </div>
-                            <div className="z-10">
+                            <div className="z-10  ml-5">
                               <h1>FAQ</h1>
                               <p className="text-sm lg:text-lg">
                                 You've got questions, here the answers
@@ -158,12 +158,12 @@ const NavBar = () => {
                           <div className="group relative flex items-center gap-10 p-2">
                             <div className="group-hover:delay-400 absolute top-1/2 h-0 w-0.5 -translate-y-1/2 transform rounded-md bg-primary duration-700 group-hover:h-full group-hover:w-full group-hover:transition-[width]"></div>
                             <div className="z-10 flex items-center justify-center">
-                              <Documentation />
+                              <Documentation width={120} height={120}/>
                             </div>
                             <div className="z-10">
                               <h1>Documentation</h1>
                               <p className="text-sm lg:text-lg">
-                                Reference for builders
+                                Everything referenced for builders
                               </p>
                             </div>
                           </div>
@@ -174,7 +174,7 @@ const NavBar = () => {
                           <div className="group relative flex items-center gap-10 p-2">
                             <div className="group-hover:delay-400 absolute top-1/2 h-0 w-0.5 -translate-y-1/2 transform rounded-md bg-primary duration-700 group-hover:h-full group-hover:w-full group-hover:transition-[width]"></div>
                             <div className="z-10 flex items-center justify-center">
-                              <Github />
+                              <Github width={64} height={64}/>
                             </div>
                             <div className="z-10">
                               <h1>Github</h1>
@@ -199,37 +199,3 @@ const NavBar = () => {
 };
 
 export default NavBar;
-
-{
-  /* <nav className="mx-6 items-center space-x-4 lg:space-x-6 hidden md:block">
-            {/* <Button variant="ghost" >
-              <Link href="/" className="text-sm font-medium transition-colors">
-                Use
-              </Link>
-            </Button>
-            <Button variant="ghost">
-              <Link href="/" className="text-sm font-medium transition-colors">
-                Learn
-              </Link>
-            </Button>
-            <Button variant="ghost">
-              <Link href="/" className="text-sm font-medium transition-colors">
-                Dev
-              </Link>
-            </Button> */
-}
-//             {/* START */}<div className="inline-block">
-//             <NavLink name="Use" FlyoutContent={UseContent}>
-//   Use
-// </NavLink>
-// </div>
-// <NavLink name="Learn" FlyoutContent={LearnContent} >
-//   Learn
-// </NavLink>
-// <NavLink name="Dev" FlyoutContent={DevContent}>
-//   Dev
-// </NavLink>
-{
-  /* END */
-}
-//  </nav> */}
