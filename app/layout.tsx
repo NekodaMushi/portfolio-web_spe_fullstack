@@ -22,7 +22,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon/favicon.ico" />
       </head>
-      <body>
+      <body className="bg-gray-400">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

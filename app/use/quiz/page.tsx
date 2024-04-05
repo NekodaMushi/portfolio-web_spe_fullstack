@@ -1,7 +1,9 @@
-import React from "react";
+import LoadingQuiz from "@/components/LoadingQuiz";
 
-const Quiz = () => {
-  return <div>Quiz</div>;
-};
-
-export default Quiz;
+export default function Quiz() {
+  return (
+    <>
+      <LoadingQuiz />
+    </>
+  );
+}

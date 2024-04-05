@@ -22,7 +22,7 @@ const NavBar = () => {
   };
 
   return (
-    <div className="border-b px-4 py-3 sm:flex sm:justify-between">
+    <div className=" sticky top-0 z-10 border-b px-4 py-3 backdrop-blur supports-[backgrop-filter]:bg-background/60 ">
       <Container>
         <div className="relative flex h-16 w-full items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center">
@@ -32,6 +32,7 @@ const NavBar = () => {
           </div>
 
           <NavLinks />
+
           <div className="flex">
             <NavLinksRight
               activeSection={activeSection}

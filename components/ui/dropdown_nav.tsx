@@ -21,15 +21,9 @@ interface FlyoutLinkProps {
 const NavLinks = () => {
   return (
     <nav className="mx-6 hidden items-center space-x-4 md:flex lg:space-x-6  ">
-      <NavLink  FlyoutContent={UseContent}>
-        Use
-      </NavLink>
-      <NavLink  FlyoutContent={LearnContent}>
-        Learn
-      </NavLink>
-      <NavLink  FlyoutContent={DevContent}>
-        Dev
-      </NavLink>
+      <NavLink FlyoutContent={UseContent}>Use</NavLink>
+      <NavLink FlyoutContent={LearnContent}>Learn</NavLink>
+      <NavLink FlyoutContent={DevContent}>Dev</NavLink>
     </nav>
   );
 };
@@ -43,9 +37,7 @@ export const NavLink = ({ link, children, FlyoutContent }: FlyoutLinkProps) => {
       onMouseLeave={() => setOpen(false)}
       className="group relative h-fit w-fit"
     >
-      <a className="relative ">
-        {children}
-      </a>
+      <a className="relative ">{children}</a>
       <span
         style={{ transform: open ? "scaleX(1)" : "scaleX(0)" }}
         className="absolute -bottom-2 -left-2 -right-2 h-1 origin-left rounded-full bg-primary transition-transform duration-300 ease-out"
@@ -79,7 +71,7 @@ export const UseContent = () => {
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
       >
-        <Link href="/" className="m-2 flex items-center gap-8 ">
+        <Link href="/use/quiz" className="m-2 flex items-center gap-8 ">
           <div className="  basis-1/3 ">
             <Quiz width={96} height={96} />
           </div>
@@ -92,13 +84,13 @@ export const UseContent = () => {
           </div>
         </Link>
       </motion.div>
-      <div className="my-4 w-1/2 mx-auto border-t " />
+      <div className="mx-auto my-4 w-1/2 border-t " />
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
       >
-        <Link href="/" className="m-2 flex items-center gap-8 ">
+        <Link href="/use/chat" className="m-2 flex items-center gap-8 ">
           <div className="  basis-1/3 ">
             <Chat width={96} height={96} />
           </div>
@@ -123,8 +115,8 @@ export const LearnContent = () => {
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
       >
-        <Link href="/" className="m-2 flex items-center gap-8 ">
-          <div className=" pl-2 basis-1/3 ">
+        <Link href="/learn/recall" className="m-2 flex items-center gap-8 ">
+          <div className=" basis-1/3 pl-2 ">
             <Recall width={88} height={88} />
           </div>
           <div className="basis-2/3 ">
@@ -136,15 +128,14 @@ export const LearnContent = () => {
           </div>
         </Link>
       </motion.div>
-      <div className="my-4 w-1/2 mx-auto border-t " />
+      <div className="mx-auto my-4 w-1/2 border-t " />
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
       >
-        
-        <Link href="/" className="m-2 flex items-center gap-8 ">
-          <div className=" pl-3 basis-1/3 ">
+        <Link href="/learn/faq" className="m-2 flex items-center gap-8 ">
+          <div className=" basis-1/3 pl-3 ">
             <FAQ width={80} height={80} />
           </div>
           <div className="basis-2/3 ">
@@ -163,14 +154,16 @@ export const LearnContent = () => {
 export const DevContent = () => {
   return (
     <Card className=" w-[448px]  flex-col p-2">
-
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
       >
-        <Link href="/" className="m-2 flex items-center gap-8  ">
-          <div className=" pl-2 basis-1/3 ">
+        <Link
+          href="/dev/documentation"
+          className="m-2 flex items-center gap-8  "
+        >
+          <div className=" basis-1/3 pl-2 ">
             <Documentation width={80} height={80} />
           </div>
           <div className="basis-2/3 ">
@@ -182,17 +175,16 @@ export const DevContent = () => {
           </div>
         </Link>
       </motion.div>
-      <div className="my-4 w-1/2 mx-auto border-t " />
+      <div className="mx-auto my-4 w-1/2 border-t " />
 
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
       >
-        
         <Link href="/" className="m-2 flex items-center gap-8 ">
-          <div className="  ml-1 -mr-1 basis-1/3">
-            <Github width={80} height={80}/>
+          <div className="  -mr-1 ml-1 basis-1/3">
+            <Github width={80} height={80} />
           </div>
           <div className="basis-2/3 ">
             <CardTitle className="p-2 text-left">Github</CardTitle>
@@ -202,10 +194,8 @@ export const DevContent = () => {
             </CardContent>
           </div>
         </Link>
-        </motion.div>
-      
+      </motion.div>
     </Card>
-    
   );
 };
 
