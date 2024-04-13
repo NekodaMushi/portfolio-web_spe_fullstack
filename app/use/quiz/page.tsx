@@ -1,9 +1,5 @@
 import LoadingQuiz from "@/components/LoadingQuiz";
 
 export default function Quiz() {
-  return (
-    <>
-      <LoadingQuiz />
-    </>
-  );
+  return <div>Quiz</div>;
 }

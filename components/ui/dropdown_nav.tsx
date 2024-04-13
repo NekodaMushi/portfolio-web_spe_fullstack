@@ -65,17 +65,20 @@ export const NavLink = ({ link, children, FlyoutContent }: FlyoutLinkProps) => {
 
 export const UseContent = () => {
   return (
-    <Card className=" w-[448px] flex-col p-2">
+    <Card className="w-[448px] flex-col p-2">
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
       >
-        <Link href="/use/quiz" className="m-2 flex items-center gap-8 ">
-          <div className="  basis-1/3 ">
+        <Link
+          href="/use/quiz"
+          className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary"
+        >
+          <div className="basis-1/3">
             <Quiz width={96} height={96} />
           </div>
-          <div className="basis-2/3 ">
+          <div className="basis-2/3">
             <CardTitle className="p-2 text-left">Quiz</CardTitle>
 
             <CardContent className="p-2 text-left">
@@ -84,17 +87,20 @@ export const UseContent = () => {
           </div>
         </Link>
       </motion.div>
-      <div className="mx-auto my-4 w-1/2 border-t " />
+      <div className="mx-auto my-4 w-1/2 border-t" />
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
       >
-        <Link href="/use/chat" className="m-2 flex items-center gap-8 ">
-          <div className="  basis-1/3 ">
+        <Link
+          href="/use/chat"
+          className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary"
+        >
+          <div className="basis-1/3">
             <Chat width={96} height={96} />
           </div>
-          <div className="basis-2/3 ">
+          <div className="basis-2/3">
             <CardTitle className="p-2 text-left">Chat</CardTitle>
 
             <CardContent className="p-2 text-left">
@@ -115,7 +121,10 @@ export const LearnContent = () => {
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
       >
-        <Link href="/learn/recall" className="m-2 flex items-center gap-8 ">
+        <Link
+          href="/learn/recall"
+          className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary"
+        >
           <div className=" basis-1/3 pl-2 ">
             <Recall width={88} height={88} />
           </div>
@@ -134,7 +143,10 @@ export const LearnContent = () => {
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
       >
-        <Link href="/learn/faq" className="m-2 flex items-center gap-8 ">
+        <Link
+          href="/learn/faq"
+          className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary"
+        >
           <div className=" basis-1/3 pl-3 ">
             <FAQ width={80} height={80} />
           </div>
@@ -161,7 +173,7 @@ export const DevContent = () => {
       >
         <Link
           href="/dev/documentation"
-          className="m-2 flex items-center gap-8  "
+          className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary"
         >
           <div className=" basis-1/3 pl-2 ">
             <Documentation width={80} height={80} />
@@ -182,7 +194,10 @@ export const DevContent = () => {
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
       >
-        <Link href="/" className="m-2 flex items-center gap-8 ">
+        <Link
+          href="/"
+          className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary "
+        >
           <div className="  -mr-1 ml-1 basis-1/3">
             <Github width={80} height={80} />
           </div>

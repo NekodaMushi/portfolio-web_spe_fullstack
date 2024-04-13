@@ -1,0 +1,53 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Unregistered Student" as UnregisteredStudent
+actor "Registered Student" as RegisteredStudent
+actor GoogleAuthProvider
+
+rectangle "NexLearn" {
+    usecase "View Homepage" as UC1
+    usecase "View FAQ" as UC2
+    usecase "View Documentation" as UC3
+    usecase "Sign Up" as UC4
+    usecase "Sign In" as UC5
+    usecase "Interact with ChatBot AI API" as UC15
+    usecase "Install Chrome Extension" as UC6
+    usecase "Watch Udemy Video" as UC7
+    usecase "Take Quiz" as UC10
+    usecase "Review Quiz Results" as UC11
+    usecase "Review Learning Progress" as UC12
+    usecase "Perform Active Recall" as UC13
+    usecase "Access ChatBot Features" as UC16
+    usecase "Logout" as UC14
+}
+
+UnregisteredStudent --> UC1
+UnregisteredStudent --> UC2
+UnregisteredStudent --> UC3
+UnregisteredStudent --> UC4
+UnregisteredStudent --> UC15
+
+RegisteredStudent --> UC1
+RegisteredStudent --> UC2
+RegisteredStudent --> UC3
+RegisteredStudent --> UC5
+RegisteredStudent --> UC6
+RegisteredStudent --> UC7
+RegisteredStudent --> UC10
+RegisteredStudent --> UC11
+RegisteredStudent --> UC12
+RegisteredStudent --> UC13
+RegisteredStudent --> UC15
+RegisteredStudent --> UC16
+RegisteredStudent --> UC14
+
+UC4 --> GoogleAuthProvider
+UC5 --> GoogleAuthProvider
+
+note right of GoogleAuthProvider
+  GoogleAuthProvider is an external system
+  that provides authentication services.
+end note
+@enduml

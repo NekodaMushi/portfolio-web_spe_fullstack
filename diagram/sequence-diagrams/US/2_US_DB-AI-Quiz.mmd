@@ -1,0 +1,14 @@
+sequenceDiagram
+    participant Database
+    participant API
+    participant AIService
+    participant QuizDatabase
+
+    API->>Database: Retrieve transcript
+    Database-->>API: Return transcript
+    API->>AIService: Send transcript for quiz generation
+    AIService->>AIService: Generate quiz using AI
+    AIService-->>API: Return generated quiz
+    API->>QuizDatabase: Store generated quiz
+    QuizDatabase-->>API: Confirm quiz storage
+    API-->>Database: Update transcript status

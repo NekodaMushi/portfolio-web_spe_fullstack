@@ -1,0 +1,16 @@
+sequenceDiagram
+    participant User
+    participant QuizPage
+    participant LoadingQuiz
+    participant API
+
+    User->>QuizPage: Navigate to Quiz Page
+    QuizPage->>LoadingQuiz: Render LoadingQuiz component
+    LoadingQuiz->>API: Request quiz data
+    API-->>LoadingQuiz: Return quiz data
+    LoadingQuiz-->>QuizPage: Pass quiz data
+    QuizPage->>User: Display quiz questions
+    User->>QuizPage: Submit quiz answers
+    QuizPage->>API: Send quiz answers
+    API-->>QuizPage: Return quiz results
+    QuizPage->>User: Display quiz results

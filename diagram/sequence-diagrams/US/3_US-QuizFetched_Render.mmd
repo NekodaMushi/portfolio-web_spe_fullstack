@@ -1,0 +1,24 @@
+sequenceDiagram
+    participant User
+    participant QuizPage
+    participant API
+    participant Database
+
+    Note over User,QuizPage: User is on the quiz page
+    User->>QuizPage: Start a quiz
+
+    Note over QuizPage,API: App fetches the corresponding quiz
+    QuizPage->>API: Request quiz data
+    API->>Database: Retrieve quiz from database
+    Database-->>API: Return quiz data
+    API-->>QuizPage: Return quiz data
+
+    Note over QuizPage: Quiz is fetched from DB
+    QuizPage->>QuizPage: Render quiz on the website
+
+    Note over User,QuizPage: User answers the quiz questions
+    User->>QuizPage: Submit quiz answers
+
+    Note over QuizPage: Quiz is completed
+    QuizPage->>QuizPage: Process quiz results
+    QuizPage->>User: Display quiz results

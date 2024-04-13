@@ -22,7 +22,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon/favicon.ico" />
       </head>
-      <body className="bg-gray-400">
+      <body>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -30,7 +30,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <NavBar />
-          {children}
+          <div className="p-8">{children}</div>
         </ThemeProvider>
       </body>
     </html>

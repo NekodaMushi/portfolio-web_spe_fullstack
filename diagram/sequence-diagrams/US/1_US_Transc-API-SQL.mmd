@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant User
+    participant ChromeExtension
+    participant Browser
+    participant API
+    participant Database
+
+
+    User->>ChromeExtension: Activate Chrome extension
+    ChromeExtension->>ChromeExtension: Capture video transcript
+    ChromeExtension->>API: Send captured transcript
+    API->>API: Process received transcript
+    API->>Database: Store transcript
+    API->>Browser: Display animated transcript
+    Database-->>API: Confirm transcript storage
+    API-->>Browser: Confirm transcript processing
+    Browser-->>User: Notify user of successful capture and storage

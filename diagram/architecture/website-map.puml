@@ -1,0 +1,143 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Unregistered Student" as UnregisteredStudent
+actor "Registered Student" as RegisteredStudent
+actor GoogleAuthProvider
+
+rectangle "NexLearn" {
+    usecase "View Homepage" as UC1
+    usecase "View FAQ" as UC2
+    usecase "View Documentation" as UC3
+    usecase "Sign Up" as UC4
+    usecase "Sign In" as UC5
+    usecase "Install Chrome Extension" as UC6
+    usecase "Watch Udemy Video" as UC7
+    usecase "Logout" as UC14
+
+    rectangle "Quiz Subsystem" {
+        usecase "Capture Video Transcript" as UC8
+        usecase "Generate Quiz" as UC9
+        usecase "Take Quiz" as UC10
+        usecase "Review Quiz Results" as UC11
+    }
+
+    rectangle "Active Recall Subsystem" {
+        usecase "Review Learning Progress" as UC12
+        usecase "Perform Spaced Repetition" as UC13
+        usecase "Identify Quizzes for Review" as UC18
+        usecase "Schedule Reminders" as UC19
+        usecase "Set Reminder Preferences" as UC20
+        usecase "Track Performance Over Time" as UC21
+    }
+
+    rectangle "ChatBot Subsystem" {
+        usecase "Interact with AI API" as UC15
+        usecase "Access Quiz Data" as UC16
+        usecase "Access Learning Progress Data" as UC17
+        usecase "Create Quiz via ChatBot" as UC22
+    }
+}
+
+UnregisteredStudent --> UC1
+UnregisteredStudent --> UC2
+UnregisteredStudent --> UC3
+UnregisteredStudent --> UC4
+UnregisteredStudent --> UC5
+UnregisteredStudent --> UC15
+
+RegisteredStudent --> UC1
+RegisteredStudent --> UC2
+RegisteredStudent --> UC3
+RegisteredStudent --> UC6
+RegisteredStudent --> UC7
+RegisteredStudent --> UC10
+RegisteredStudent --> UC11
+RegisteredStudent --> UC12
+RegisteredStudent --> UC13
+RegisteredStudent --> UC14
+RegisteredStudent --> UC15
+RegisteredStudent --> UC16
+RegisteredStudent --> UC17
+RegisteredStudent --> UC18
+RegisteredStudent --> UC19
+RegisteredStudent --> UC20
+RegisteredStudent --> UC21
+RegisteredStudent --> UC22
+
+UC4 --> GoogleAuthProvider
+UC5 --> GoogleAuthProvider
+
+UC4 ..> UC5 : <<include>>
+UC5 ..> UC6 : <<extend>>
+UC5 ..> UC7 : <<include>>
+UC5 ..> UC9 : <<include>>
+UC5 ..> UC10 : <<include>>
+UC5 ..> UC11 : <<include>>
+UC5 ..> UC12 : <<include>>
+UC5 ..> UC13 : <<include>>
+UC5 ..> UC18 : <<include>>
+UC5 ..> UC19 : <<include>>
+UC5 ..> UC20 : <<include>>
+UC5 ..> UC21 : <<include>>
+
+UC7 ..> UC8 : <<include>>
+UC8 ..> UC9 : <<include>>
+UC9 ..> UC10 : <<include>>
+UC10 ..> UC11 : <<include>>
+UC11 ..> UC12 : <<extend>>
+UC12 ..> UC13 : <<extend>>
+UC12 ..> UC21 : <<extend>>
+
+UC18 ..> UC13 : <<include>>
+UC19 ..> UC18 : <<include>>
+UC20 ..> UC19 : <<include>>
+
+UC16 ..> UC11 : <<extend>>
+UC17 ..> UC12 : <<extend>>
+UC22 ..> UC9 : <<include>>
+
+note right of GoogleAuthProvider
+  GoogleAuthProvider is an external system
+  that provides authentication services.
+end note
+
+note left of UC6
+  User is informed about the need
+  to install the Chrome extension
+  in the quiz app and FAQ section.
+end note
+
+note left of UC8
+  Registered user must have the Chrome
+  extension installed to capture video
+  transcripts while watching Udemy videos.
+end note
+
+note right of UC18
+  This use case identifies which quizzes
+  the user needs to retake based on past performance.
+end note
+
+note right of UC19
+  This use case handles the logic for
+  scheduling the spaced repetition reminders.
+end note
+
+note right of UC20
+  Allows users to set their preferences
+  for how and when they receive reminders.
+end note
+
+note left of UC21
+  Tracks the user's quiz performance over time
+  to adjust the spaced repetition schedule.
+end note
+
+note right of UC22
+  This use case represents the ability of the
+  ChatBot Subsystem to generate quizzes directly,
+  offering an alternative to capturing video transcripts.
+end note
+@enduml
