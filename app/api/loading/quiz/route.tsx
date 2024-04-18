@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+// import { db } from "@/db/index";
 import fs from "fs";
 
 export async function POST(req: NextRequest) {
@@ -16,6 +17,7 @@ export async function POST(req: NextRequest) {
       "transcripts.json",
       JSON.stringify(jsonData, null, 2),
     );
+
     return NextResponse.json({ response: "Data stored successfully" });
   } catch (error) {
     console.error("Error writing to file:", error);
