@@ -1,3 +1,10 @@
+import Link from "next/link";
+
 export default function HomePage() {
-  return <div className="text-xs lg:text-lg">HOMEPAGE</div>;
+  return (
+    <div>
+      <h1>Home</h1>
+      <Link href="/use/quiz">Quiz</Link>
+    </div>
+  );
 }
