@@ -1,7 +1,10 @@
 import React from "react";
 
-const Recall = () => {
-  return <div>Recall</div>;
-};
-
-export default Recall;
+export default function Recall() {
+  return (
+    <div>
+      <a href="/use/quiz">Mouette en l'honneur d'Anthony</a>
+      <div>Recall</div>
+    </div>
+  );
+}

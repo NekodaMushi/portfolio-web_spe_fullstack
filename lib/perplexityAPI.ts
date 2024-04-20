@@ -1,28 +1,33 @@
-const PERPLEXITY_API_KEY = process.env.PERPLEXITY_API_KEY; 
 const API_URL = 'https://api.perplexity.ai/chat/completions';
+const API_KEY = process.env.PERPLEXITY_API_KEY
 
-interface ChatCompletionRequest {
-    model: string;
-    messages: Array<{ role: string; content: string }>;
+interface Message {
+  role: 'system' | 'user';
+  content: string;
 }
 
-
-
-async function postChatCompletion(requestData: ChatCompletionRequest) {
-    const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${PERPLEXITY_API_KEY}`
-        },
-        body: JSON.stringify(requestData)
-    });
-
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return response.json();
+interface RequestData {
+  model: string;
+  messages: Array<{ role: string; content: string }>;
 }
 
-export { postChatCompletion }
+export async function fetchChatCompletion(requestData: RequestData) {
+  const options = {
+    method: 'POST',
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+      authorization: `Bearer ${API_KEY}`,
+    },
+    body: JSON.stringify(requestData),
+  };
+
+  try {
+    const response = await fetch(API_URL, options);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching chat completion:', error);
+    throw error;
+  }
+}
