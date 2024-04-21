@@ -19,9 +19,11 @@ export async function POST(req: NextRequest) {
       "transcripts.json",
       JSON.stringify(jsonData, null, 2),
     );
+    // Needs to insert dynamically userId once auth is ready
     await db.insert(transcripts).values({
       videoId: videoTitle,
       content: transcriptString,
+      userId : 1,
     });
     console.log("Transcript stored in database successfully");
     return NextResponse.json({ response: "Data stored successfully" });

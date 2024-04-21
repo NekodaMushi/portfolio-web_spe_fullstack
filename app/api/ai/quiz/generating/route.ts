@@ -1,5 +1,6 @@
 import { fetchChatCompletion } from '@/lib/perplexityAPI';
 import transcript from '@/transcripts.json'
+import { db } from '@/db/index'
 
 export async function POST(request: Request) {
   const { transcriptString, videoTitle } = transcript;
