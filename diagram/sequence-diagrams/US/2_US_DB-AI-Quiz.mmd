@@ -1,14 +1,34 @@
 sequenceDiagram
-    participant Database
-    participant API
-    participant AIService
-    participant QuizDatabase
 
-    API->>Database: Retrieve transcript
-    Database-->>API: Return transcript
-    API->>AIService: Send transcript for quiz generation
-    AIService->>AIService: Generate quiz using AI
-    AIService-->>API: Return generated quiz
-    API->>QuizDatabase: Store generated quiz
-    QuizDatabase-->>API: Confirm quiz storage
-    API-->>Database: Update transcript status
+    participant AIAPI
+    participant API
+    participant Database
+
+
+  
+    API->>Database: Send transcript for storage
+
+    Note over Database: Transcript is stored
+    Database-->>API: Confirm transcript storage
+
+    
+    Database->>API: Retrieve Stored Transcript for AI
+    API->>AIAPI: Send Stored Transcript to AI
+
+
+
+ 
+    AIAPI->>AIAPI: Generate quiz using AI
+
+    Note over AIAPI: AI-generated Quiz is ready
+    AIAPI->>API : Receive AI-generated quiz
+    API->>Database: Store AI-generated quiz
+
+    Note over Database: Quiz is stored
+    Database-->>API: Confirm quiz storage
+
+
+    Database->>API: Retrieve Stored Quiz
+
+
+    Note over Database,API: Quiz is ready for frontend

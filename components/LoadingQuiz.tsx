@@ -9,7 +9,9 @@ import Quiz from "@/assets/images/Quiz";
 import transcripts from "@/transcripts.json";
 
 const LoadingQuiz: React.FC = () => {
-  const [transcript, setTranscript] = useState<string>(transcripts.transcript);
+  const [transcript, setTranscript] = useState<string>(
+    transcripts.transcriptString,
+  );
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
