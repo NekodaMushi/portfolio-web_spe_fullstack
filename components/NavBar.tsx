@@ -7,22 +7,27 @@ import Logo from "@/assets/images/Logo";
 import { useState } from "react";
 import NavLinks from "./ui/dropdown_nav";
 import NavLinksRight from "./ui/dropright_nav";
+import Avatar from "./ui/avatar";
+
+import { useSession } from "next-auth/react";
 
 const NavBar = () => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
-
+  const { data: session } = useSession();
   const springs = useSpring({
     from: { x: 200 },
     to: { x: activeSection ? 0 : 100 },
     reset: true,
   });
 
+  console.log(`Here the --------- ${session?.user.name}`);
+
   const handleSectionClick = (sectionId: string) => {
     setActiveSection(activeSection === sectionId ? null : sectionId);
   };
 
   return (
-    <div className=" sticky top-0 z-10 border-b px-4 py-3 backdrop-blur supports-[backgrop-filter]:bg-background/60 ">
+    <div className="sticky top-0 z-10 border-b px-4 py-3 backdrop-blur supports-[backgrop-filter]:bg-background/60">
       <Container>
         <div className="relative flex h-16 w-full items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center">
@@ -40,6 +45,7 @@ const NavBar = () => {
               springs={springs}
             />
             <ModeToggle />
+            {session?.user && <Avatar user={session.user} />}
           </div>
         </div>
       </Container>
