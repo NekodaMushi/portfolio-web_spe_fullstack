@@ -13,7 +13,7 @@ export const authConfig = {
     },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user
-      const paths = ["/use/quiz", "/learn/recall"]
+      const paths = ["/use/quiz", "/use/chat","/learn/recall"]
       const isProtected = paths.some((path) => nextUrl.pathname.startsWith(path))
 
       if (isProtected && !isLoggedIn) {
