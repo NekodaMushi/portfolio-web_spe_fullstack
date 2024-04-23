@@ -8,7 +8,7 @@ export default async function ProfilePage() {
   const session = await auth();
 
   if (!session?.user) {
-    redirect("/api/auth/signin?callbackUrl=/testing");
+    redirect("/api/auth/signin?callbackUrl=/profil");
   }
   console.log(session.user);
 
@@ -19,7 +19,7 @@ export default async function ProfilePage() {
       {session.user.name}
       {session.user.email}
       {/* <Image src={session.user.image} /> */}
-
+      <br />
       <SignoutButton
         signOut={async () => {
           "use server";
