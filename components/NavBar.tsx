@@ -8,12 +8,15 @@ import { useState } from "react";
 import NavLinks from "./ui/dropdown_nav";
 import NavLinksRight from "./ui/dropright_nav";
 import Avatar from "./ui/avatar";
+import { FaGithub } from "react-icons/fa";
 
 import { useSession } from "next-auth/react";
+import { Button } from "./ui/button";
 
 const NavBar = () => {
-  const [activeSection, setActiveSection] = useState<string | null>(null);
   const { data: session } = useSession();
+
+  const [activeSection, setActiveSection] = useState<string | null>(null);
   const springs = useSpring({
     from: { x: 200 },
     to: { x: activeSection ? 0 : 100 },
@@ -45,7 +48,21 @@ const NavBar = () => {
               springs={springs}
             />
             <ModeToggle />
-            {session?.user && <Avatar user={session.user} />}
+
+            {session?.user ? (
+              <div className="-mt-1 ml-4">
+                <Avatar user={session.user} />
+              </div>
+            ) : (
+              <div className="ml-4">
+                <Link href="/profil">
+                  <Button variant="outline">
+                    <FaGithub className="mr-2" />
+                    <span>Login</span>
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </Container>

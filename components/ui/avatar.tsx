@@ -13,7 +13,7 @@ type UserProps = {
 
 const Avatar: React.FC<UserProps> = ({ user }) => {
   return (
-    <Link href={user.image || "https://www.gravatar.com/avatar/?d=mp"}>
+    <Link href="/profil">
       <div className="relative h-10 w-10 overflow-hidden rounded-full">
         <Image
           className="object-cover"
