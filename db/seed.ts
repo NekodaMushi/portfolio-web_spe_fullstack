@@ -24,7 +24,7 @@ const main = async () => {
     // Delete all data
     // await db.delete(transcripts);
     // await db.delete(users);
-    // test
+    // test with head
 
     await db.insert(users).values([
       {
