@@ -17,5 +17,5 @@ jobs:
         uses: neondatabase/delete-branch-action@v3
         with:
           project_id: lingering-hill-03805833
-          branch: ${{ github.ref_name }}
+          branch: ${{ github.head_ref }}
           api_key: ${{ secrets.NEON_API_KEY }}
