@@ -1,48 +1,26 @@
-name: "Neon Database Reset Branch Action"
-author: "Neon Database"
-description: "Resets a Neon branch"
-branding:
-  icon: "box"
-  color: "green"
+name: Reset Neon Branch with GitHub Actions Demo
 
-inputs:
-  project_id:
-    required: true
-    description: "The project id"
-  branch:
-    required: true
-    description: "The branch name or id to reset"
-  api_key:
-    description: "The Neon API key"
-    required: true
-  parent:
-    description: "If specified, the branch will be reset to the parent branch"
-    required: false
+run-name: Reset a Neon Branch 🚀
 
-outputs:
-  branch_id:
-    description: "Returns the branch id"
-    value: ${{ steps.reset-branch.outputs.branch_id }}
+on:
+  workflow_dispatch:
 
-runs:
-  using: "composite"
-  steps:
-    - uses: actions/setup-node@v4
-    - run: npm i -g neonctl@v1
-      shell: bash
-    - name: Reset branch
-      env:
-        NEON_API_KEY: ${{ inputs.api_key }}
-      id: reset-branch
-      shell: bash
-      run: |
-        neonctl branches reset ${{ inputs.branch }} \
-          --project-id ${{ inputs.project_id }} \
-          $(if [[ -n "${{ inputs.parent }}" ]] && [[ "${{ inputs.parent }}" != "false" ]]; then echo "--parent"; fi) \
-          --output json \
-          > branch_out
+jobs:
 
-        echo "branch reset out:"
-        cat branch_out
+  Reset-Neon-Branch:
 
-        echo "branch_id=$(cat branch_out | jq --raw-output '.id')" >> $GITHUB_OUTPUT
+    uses: neondatabase/reset-branch-action@v1
+
+    with:
+
+      project_id: rapid-haze-373089
+
+      parent: true
+
+      branch: child_branch
+
+      api_key: {{ secrets.NEON_API_KEY }}
+
+    id: reset-branch
+
+  - run: echo branch_id ${{ steps.reset-branch.outputs.branch_id }}

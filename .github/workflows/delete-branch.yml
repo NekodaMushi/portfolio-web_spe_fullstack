@@ -1,26 +1,21 @@
-name: Delete Neon Branch
+name: Delete Neon Branch with GitHub Actions Demo
+
+run-name: Delete a Neon Branch 🚀
 
 on:
-  workflow_dispatch:
-    inputs:
-      project_id:
-        description: "NexLearn Neon"
-        required: true
-      branch:
-        description: "Dev Branch"
-        required: true
+  pull_request:
+    types: [closed]
+    branches:
+      - main
 
 jobs:
-  delete-branch:
+  delete-neon-branch:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
       - name: Delete Neon Branch
-        uses: neon-tech/delete-neon-branch@v1
+        uses: neondatabase/delete-branch-action@v3
         with:
-          project_id: ${{ github.event.inputs.project_id }}
-          branch: ${{ github.event.inputs.branch }}
+          project_id: lingering-hill-03805833
+          branch: ${{ github.ref_name }}
           api_key: ${{ secrets.NEON_API_KEY }}

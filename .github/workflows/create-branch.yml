@@ -3,7 +3,9 @@ name: Create Neon Branch with GitHub Actions Demo
 run-name: Create a Neon Branch 🚀
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - "*"
 
 jobs:
   Create-Neon-Branch:
@@ -13,7 +15,7 @@ jobs:
         with:
           project_id: lingering-hill-03805833
           parent_id: br-flat-forest-a2t3nst3
-          branch_name: dev_testing
+          branch_name: ${{ github.ref_name }}
           api_key: ${{ secrets.NEON_API_KEY }}
         id: create-branch
 
