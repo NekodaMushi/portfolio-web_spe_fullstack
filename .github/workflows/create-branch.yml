@@ -2,24 +2,20 @@ name: Create Neon Branch with GitHub Actions Demo
 
 run-name: Create a Neon Branch 🚀
 
+on:
+  workflow_dispatch:
+
 jobs:
-
   Create-Neon-Branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: neondatabase/create-branch-action@v4
+        with:
+          project_id: lingering-hill-03805833
+          parent_id: br-flat-forest-a2t3nst3
+          branch_name: dev_testing
+          api_key: ${{ secrets.NEON_API_KEY }}
+        id: create-branch
 
-    uses: neondatabase/create-branch-action@v4
-
-    with:
-
-      project_id: lingering-hill-03805833
-
-      parent_id: br-flat-forest-a2t3nst3
-
-      branch_name: dev_testing
-
-      api_key: {{ secrets.NEON_API_KEY }}
-
-    id: create-branch
-
-  - run: echo project_id ${{ steps.create-branch.outputs.project_id}}
-
-  - run: echo branch_id ${{ steps.create-branch.outputs.branch_id}}
+      - run: echo project_id ${{ steps.create-branch.outputs.project_id}}
+      - run: echo branch_id ${{ steps.create-branch.outputs.branch_id}}
