@@ -1,26 +1,25 @@
-name: Create Neon Branch
+name: Create Neon Branch with GitHub Actions Demo
 
-on:
-  workflow_dispatch:
-    inputs:
-      project_id:
-        description: "NexLearn Neon"
-        required: true
-      branch:
-        description: "Dev Branch"
-        required: true
+run-name: Create a Neon Branch 🚀
 
 jobs:
-  create-branch:
-    runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  Create-Neon-Branch:
 
-      - name: Create Neon Branch
-        uses: neon-tech/create-neon-branch@v1
-        with:
-          project_id: ${{ github.event.inputs.project_id }}
-          branch: ${{ github.event.inputs.branch }}
-          api_key: ${{ secrets.NEON_API_KEY }}
+    uses: neondatabase/create-branch-action@v4
+
+    with:
+
+      project_id: lingering-hill-03805833
+
+      parent_id: br-flat-forest-a2t3nst3
+
+      branch_name: dev_testing
+
+      api_key: {{ secrets.NEON_API_KEY }}
+
+    id: create-branch
+
+  - run: echo project_id ${{ steps.create-branch.outputs.project_id}}
+
+  - run: echo branch_id ${{ steps.create-branch.outputs.branch_id}}
