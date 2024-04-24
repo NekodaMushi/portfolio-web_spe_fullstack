@@ -1,9 +1,4 @@
-name: "Neon Database Create Branch Action"
-author: "Neon Database"
-description: "Creates a new Neon Postgres branch based a parent branch. If the branch already exists it will return the branch details"
-branding:
-  icon: "box"
-  color: "green"
+name: Create Neon Branch
 
 inputs:
   project_id:
@@ -64,7 +59,7 @@ runs:
       shell: bash
     - name: Create new Neon branch
       env:
-        NEON_API_KEY: ${{ inputs.api_key }}
+        NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
       id: create-branch
       shell: bash
       run: |

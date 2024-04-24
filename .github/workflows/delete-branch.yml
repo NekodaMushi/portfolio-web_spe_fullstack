@@ -1,36 +1,26 @@
-name: "Neon Database Delete Branch"
-author: "Neon Database"
-description: "Deletes Neon Postgres branch with Id"
-branding:
-  icon: "box"
-  color: "red"
+name: Delete Neon Branch
 
-inputs:
-  project_id:
-    required: true
-    description: "The Neon project id"
-  branch_id:
-    description: "The Neon branch id"
-    deprecationMessage: "The `branch_id` input is deprecated in favor of `branch`"
-  api_key:
-    description: "The Neon API key, read more at https://neon.tech/docs/manage/api-keys"
-    required: true
-  branch:
-    description: "The Neon branch name or id"
+on:
+  workflow_dispatch:
+    inputs:
+      project_id:
+        description: "NexLearn Neon"
+        required: true
+      branch:
+        description: "Dev Branch"
+        required: true
 
-runs:
-  using: "composite"
-  steps:
-    - uses: actions/setup-node@v4
-    - run: npm i -g neonctl@v1
-      shell: bash
-    - name: Delete branch
-      shell: bash
-      env:
-        NEON_API_KEY: ${{ inputs.api_key }}
-      run: |
-        if [ -z "${{ inputs.branch }}" ]; then
-          neonctl branches delete ${{ inputs.branch_id }} --project-id ${{ inputs.project_id }}
-        else
-          neonctl branches delete "${{ inputs.branch }}" --project-id ${{ inputs.project_id }}
-        fi
+jobs:
+  delete-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Delete Neon Branch
+        uses: neon-tech/delete-neon-branch@v1
+        with:
+          project_id: ${{ github.event.inputs.project_id }}
+          branch: ${{ github.event.inputs.branch }}
+          api_key: ${{ secrets.NEON_API_KEY }}
