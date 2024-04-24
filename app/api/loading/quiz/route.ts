@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db/index";
 import { transcripts } from "@/db/schemas/schema";
+import { auth } from "@/lib/auth/auth"
 import fs from "fs";
 
 export async function POST(req: NextRequest) {
@@ -19,11 +20,21 @@ export async function POST(req: NextRequest) {
       "transcripts.json",
       JSON.stringify(jsonData, null, 2),
     );
+
+    const session = await auth();
+    const user = session?.user;
+
+
+    if (!user) {
+      console.error("User is not authenticated");
+      return NextResponse.json({ error: "User is not authenticated" }, { status: 401 });
+    }
+
     // Needs to insert dynamically userId once auth is ready
     await db.insert(transcripts).values({
       videoId: videoTitle,
       content: transcriptString,
-      userId : 1,
+      userId : user.id,
     });
     console.log("Transcript stored in database successfully");
     return NextResponse.json({ response: "Data stored successfully" });
