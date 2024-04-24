@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db/index";
-import { transcripts } from "@/db/schema";
+import { transcripts } from "@/db/schemas/schema";
 import fs from "fs";
 
 export async function POST(req: NextRequest) {
