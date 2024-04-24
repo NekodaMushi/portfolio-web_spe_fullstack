@@ -3,7 +3,7 @@ name: Create Neon Branch with GitHub Actions Demo
 run-name: Create a Neon Branch 🚀
 
 on:
-  push:
+  create:
     branches:
       - "*"
       - "!main"
