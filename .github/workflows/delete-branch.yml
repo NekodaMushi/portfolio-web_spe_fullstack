@@ -1,0 +1,36 @@
+name: "Neon Database Delete Branch"
+author: "Neon Database"
+description: "Deletes Neon Postgres branch with Id"
+branding:
+  icon: "box"
+  color: "red"
+
+inputs:
+  project_id:
+    required: true
+    description: "The Neon project id"
+  branch_id:
+    description: "The Neon branch id"
+    deprecationMessage: "The `branch_id` input is deprecated in favor of `branch`"
+  api_key:
+    description: "The Neon API key, read more at https://neon.tech/docs/manage/api-keys"
+    required: true
+  branch:
+    description: "The Neon branch name or id"
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v4
+    - run: npm i -g neonctl@v1
+      shell: bash
+    - name: Delete branch
+      shell: bash
+      env:
+        NEON_API_KEY: ${{ inputs.api_key }}
+      run: |
+        if [ -z "${{ inputs.branch }}" ]; then
+          neonctl branches delete ${{ inputs.branch_id }} --project-id ${{ inputs.project_id }}
+        else
+          neonctl branches delete "${{ inputs.branch }}" --project-id ${{ inputs.project_id }}
+        fi
