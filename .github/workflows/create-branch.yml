@@ -7,21 +7,11 @@ on:
     branches:
       - "*"
       - "!main"
-
 jobs:
   Create-Neon-Branch:
     runs-on: ubuntu-latest
     steps:
-      - name: Check if branch exists
-        id: check_branch
-        run: |
-          branch_name="${{ github.ref_name }}"
-          branch_exists=$(curl -s -H "Authorization: Bearer ${{ secrets.NEON_API_KEY }}" "https://console.neon.tech/api/v2/projects/lingering-hill-03805833/branches" | jq -r --arg branch_name "$branch_name" '.branches[] | select(.name == $branch_name) | .name')
-          echo "branch_exists=$branch_exists" >> $GITHUB_OUTPUT
-
-      - name: Create Neon Branch
-        if: steps.check_branch.outputs.branch_exists == ''
-        uses: neondatabase/create-branch-action@v4
+      - uses: neondatabase/create-branch-action@v4
         with:
           project_id: lingering-hill-03805833
           parent_id: br-flat-forest-a2t3nst3
