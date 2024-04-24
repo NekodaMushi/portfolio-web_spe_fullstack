@@ -12,7 +12,7 @@ jobs:
         with:
           project_id: lingering-hill-03805833
           parent: true
-          branch: ${{ github.event.inputs.branch_name }}
+          branch: child_branch
           api_key: ${{ secrets.NEON_API_KEY }}
         id: reset-branch
 
