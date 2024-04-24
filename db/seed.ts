@@ -25,18 +25,19 @@ const main = async () => {
     await db.delete(transcripts);
     await db.delete(users);
 
-    // await db.insert(users).values([
-    //   {
-    //     id: randomUUID(),
-    //     name: "Alice Johnson",
-    //     email: "alice.johnson@example.com",
-    //   },
-    //   {
-    //     id: randomUUID(),
-    //     name: "Bob Smith",
-    //     email: "bob.smith@example.com",
-    //   },
-    // ]);
+    await db.insert(users).values([
+      {
+        id: randomUUID(),
+        name: "Alice Johnson",
+        email: "alice.johnson@example.com",
+      },
+      {
+        id: randomUUID(),
+        name: "Bob Smith",
+        email: "bob.smith@example.com",
+      },
+    ]);
+    
 
     
     // const aliceUserId = (await db.select().from(users).where(eq(users.email,"alice.johnson@example.com")).limit(1))[0].id;
