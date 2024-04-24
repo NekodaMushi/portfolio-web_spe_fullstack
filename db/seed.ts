@@ -25,69 +25,19 @@ const main = async () => {
     await db.delete(transcripts);
     await db.delete(users);
 
-    await db.insert(users).values([
-      {
-        id: randomUUID(),
-        name: "Alice Johnson",
-        email: "alice.johnson@example.com",
-      },
-      {
-        id: randomUUID(),
-        name: "Bob Smith",
-        email: "bob.smith@example.com",
-      },
-    ]);
+    // await db.insert(users).values([
+    //   {
+    //     id: randomUUID(),
+    //     name: "Alice Johnson",
+    //     email: "alice.johnson@example.com",
+    //   },
+    //   {
+    //     id: randomUUID(),
+    //     name: "Bob Smith",
+    //     email: "bob.smith@example.com",
+    //   },
+    // ]);
     
-
-    await db.insert(users).values([
-      {
-        id: randomUUID(),
-
-        name: "Alice Johnson",
-
-        email: "alice.johnson@example.com",
-
-        emailVerified: new Date("2023-01-01"),
-
-        image: "https://example.com/path/to/alice.jpg",
-      },
-
-      {
-        id: randomUUID(),
-
-        name: "John Babel",
-
-        email: "john.babel@example.com",
-
-        emailVerified: new Date("2023-02-01"),
-
-        image: "https://example.com/path/to/john.jpg",
-      },
-
-      {
-        id: randomUUID(),
-
-        name: "Tom Paul",
-
-        email: "tom.paul@example.com",
-
-        emailVerified: new Date("2023-03-01"),
-
-        image: "https://example.com/path/to/tom.jpg",
-      },
-
-      {
-        id: randomUUID(),
-
-        name: "Jane Doe",
-
-        email: "jane.doe@example.com",
-
-        emailVerified: new Date("2023-04-01"),
-
-        image: "https://example.com/path/to/jane.jpg",
-      },
-    ]);
 
     // const aliceUserId = (await db.select().from(users).where(eq(users.email,"alice.johnson@example.com")).limit(1))[0].id;
     // const bobUserId = (await db.select().from(users).where(eq(users.email, "bob.smith@example.com")).limit(1))[0].id;
