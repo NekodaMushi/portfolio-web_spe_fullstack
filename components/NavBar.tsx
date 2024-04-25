@@ -23,8 +23,6 @@ const NavBar = () => {
     reset: true,
   });
 
-  console.log(`Here the --------- ${session?.user.name}`);
-
   const handleSectionClick = (sectionId: string) => {
     setActiveSection(activeSection === sectionId ? null : sectionId);
   };

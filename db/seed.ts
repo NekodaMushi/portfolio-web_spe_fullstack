@@ -2,8 +2,8 @@ import { drizzle } from "drizzle-orm/neon-http";
 import { eq } from 'drizzle-orm';
 import { neon } from "@neondatabase/serverless";
 import { randomUUID } from "crypto";
-import * as schema from "./schemas/schema";
-import * as usersTable from "./schemas/users";
+import * as schema from "@/db/schema";
+
 
 import { config } from "dotenv";
 
@@ -16,8 +16,8 @@ const db = drizzle(sql, {
 });
 
 const main = async () => {
-  const { transcripts } = schema;
-  const { users } = usersTable;
+  const { transcripts , users } = schema;
+  
   try {
     console.log("Seeding database");
 
