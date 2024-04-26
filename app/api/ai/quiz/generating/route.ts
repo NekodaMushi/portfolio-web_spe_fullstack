@@ -63,4 +63,6 @@ export async function POST(request: Request) {
     console.log('Error in POST route:', error);
     return new Response(JSON.stringify({ error: 'Failed to fetch chat completion' }), { status: 500 });
   }
+
+  // Store in the DB to retrieve it now & later on
 }
