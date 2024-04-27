@@ -79,22 +79,26 @@ export async function POST(request: Request) {
         { role: "user", content: transcriptString },
       ],
     };
-    // console.log('CALLING AI');
+ 
+    //    -- Receiving AI response --
     const response = await fetchChatCompletion(requestData);
     const quizContent = response.choices[0].message.content;
     const quizData = JSON.parse(quizContent);
 
+    // Return the quiz immediately
+    const quiz = new Response(quizContent, { status: 200 });
+    console.log(`☑️ Quiz has been generated successfully as '${videoTitle}`);
 
-    // -- Store the quiz in the database --
-    await db.insert(quizzes).values({
+    // Store the quiz in the database asynchronously
+    db.insert(quizzes).values({
       userId: sessionUser.id,
       quizData: quizData,
       videoId: videoTitle,
+    }).then(() => {
+      console.log("✅ Quiz has been stored successfully");
+    }).catch((error) => {
+      console.log("Error storing quiz in the database:", error);
     });
-    console.log("✅ Quiz has been stored successfully");
-
-    const quiz = new Response(quizContent, { status: 200 });
-    console.log(`☑️ Quiz has been generated successfully as '${videoTitle}`);
 
     return quiz;
   } catch (error: any) {
