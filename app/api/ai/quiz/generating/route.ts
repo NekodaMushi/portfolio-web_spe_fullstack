@@ -79,7 +79,7 @@ export async function POST(request: Request) {
         { role: "user", content: transcriptString },
       ],
     };
-    console.log('CALLING AI');
+    // console.log('CALLING AI');
     const response = await fetchChatCompletion(requestData);
     const quizContent = response.choices[0].message.content;
     const quizData = JSON.parse(quizContent);
