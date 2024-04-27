@@ -16,15 +16,27 @@ const db = drizzle(sql, {
 });
 
 const main = async () => {
-  const { transcripts , users } = schema;
+  const { transcripts , users, quizzes } = schema;
   
   try {
     console.log("Seeding database");
 
     // Delete all data
+    await db.delete(quizzes)
     await db.delete(transcripts);
-    await db.delete(users);
+    // await db.delete(users);
 
+
+
+
+
+
+
+
+
+
+
+    
     // await db.insert(users).values([
     //   {
     //     id: randomUUID(),

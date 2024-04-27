@@ -9,9 +9,9 @@ import {
   pgTable,
   text,
   primaryKey,
- integer, index, serial
+ integer, index, serial, json, uniqueIndex
 } from "drizzle-orm/pg-core"
-
+import { sql } from "drizzle-orm"
  
 export const users = pgTable("user", {
  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
@@ -21,6 +21,55 @@ export const users = pgTable("user", {
  image: text("image"),
 })
  
+
+export const transcripts = pgTable("transcripts", {
+  id: serial('id').primaryKey(),
+  videoId: text("video_id").notNull(),
+  content: text("content").notNull(),
+  userId: text("user_id").notNull().references(() => users.id),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow()
+});
+
+// NEW
+
+export const quizzes = pgTable("quizzes", {
+  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
+  intId: serial("idInt").notNull(),
+  userId: text("user_id").notNull().references(() => users.id),
+  videoId: text("video_id").notNull(),
+  quizData: json("quizData").notNull(),
+  createdAt: timestamp('created_at').default(sql`date_trunc('minute', now())`),
+  updatedAt: timestamp("updated_at").notNull().defaultNow()
+}, (table) => ({
+  userVideoIdUnique: uniqueIndex("user_video_id_unique").on(table.userId, table.videoId)
+}));
+
+
+// ,
+//   userQuizPerMinuteUnique: uniqueIndex("user_quiz_per_minute_unique").on(table.userId, table.createdAt)
+
+//      --- TABLE RELATIONS ---
+
+
+export const usersRelations = relations(users, ({ many }) => ({
+  transcripts: many(transcripts),
+  quizzes: many(quizzes)
+}));
+
+
+export const transcriptsRelations = relations(transcripts, ({ one }) => ({
+  user: one(users, { fields: [transcripts.userId], references: [users.id] }),
+}));
+
+export const quizzesRelations = relations(quizzes, ({ one }) => ({
+  user: one(users, { fields: [quizzes.userId], references: [users.id] })
+}));
+
+
+
+//  ---- GITHUB AUTH TABLES BELLOW ----
+
 export const accounts = pgTable(
 "account",
 {
@@ -66,26 +115,3 @@ export const verificationTokens = pgTable(
    compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
  })
 )
-
-
-
-
-export const transcripts = pgTable("transcripts", {
-  id: serial('id').primaryKey(),
-  videoId: text("video_id").notNull(),
-  content: text("content").notNull(),
-  userId: text("user_id").notNull().references(() => users.id),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow()
-});
-
-
-export const usersRelations = relations(users, ({ many }) => ({
-  transcripts: many(transcripts)
-}));
-
-
-// I'm not sure it's useful to define this relationship allowing to find an user from a transcript but I will leave it here in case I haven't think about another usecase around it.
-export const transcriptsRelations = relations(transcripts, ({ one }) => ({
-  user: one(users, { fields: [transcripts.userId], references: [users.id] }),
-}));

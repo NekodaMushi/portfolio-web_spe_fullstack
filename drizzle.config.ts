@@ -4,7 +4,7 @@ import { config } from "dotenv";
 
 config({ path: ".env.local" });
 export default {
-  schema: "./schemas/*",
+  schema: "./db/schema.ts",
   out: "./db/migrations",
   driver: 'pg',
   dbCredentials: {

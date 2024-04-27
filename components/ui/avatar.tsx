@@ -22,6 +22,7 @@ const Avatar: React.FC<UserProps> = ({ user }) => {
           quality={100}
           priority={true}
           fill={true}
+          sizes="40px"
         />
       </div>
     </Link>

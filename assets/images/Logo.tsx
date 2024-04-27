@@ -17,6 +17,7 @@ const Logo: React.FC<LogoProps> = ({ width = 80, height = 80 }) => {
           width={width}
           height={height}
           unoptimized={true}
+          priority={true}
         />
       </span>
     </div>
