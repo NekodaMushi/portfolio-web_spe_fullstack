@@ -1,0 +1,1 @@
+DROP INDEX IF EXISTS "user_quiz_per_minute_unique";

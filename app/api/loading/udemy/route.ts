@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
     //   videoId: videoTitle
     // }).execute();
     if (existingTranscripts.length > 0) {
-      console.error("User already have this transcript in the DB");
+      console.error("❎ User already have this transcript in the DB");
       return NextResponse.json({ error: "Transcript already exists" }, { status: 409 });
     }
 
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
       userId: sessionUser.id,
     }).execute();
 
-    console.log("Transcript stored in database successfully");
+    console.log("✅ Transcript stored in database successfully");
     return NextResponse.json({ response: "Data stored successfully" });
 
   } catch (error) {
