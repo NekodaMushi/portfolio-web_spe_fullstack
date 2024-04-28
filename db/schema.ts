@@ -9,7 +9,7 @@ import {
   pgTable,
   text,
   primaryKey,
- integer, index, serial, json, uniqueIndex
+ integer, index, serial, jsonb, uniqueIndex
 } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
  
@@ -38,7 +38,7 @@ export const quizzes = pgTable("quizzes", {
   intId: serial("idInt").notNull(),
   userId: text("user_id").notNull().references(() => users.id),
   videoId: text("video_id").notNull(),
-  quizData: json("quizData").notNull(),
+  quizData: jsonb("quizData").notNull(),
   createdAt: timestamp('created_at').default(sql`date_trunc('minute', now())`),
   updatedAt: timestamp("updated_at").notNull().defaultNow()
 }, (table) => ({

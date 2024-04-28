@@ -47,14 +47,20 @@ export async function POST(req: NextRequest) {
     }
 
     // Insert the new transcript since it does not exist
-    await db.insert(transcripts).values({
+    if(transcriptString)
+    {await db.insert(transcripts).values({
       videoId: videoTitle,
       content: transcriptString,
       userId: sessionUser.id,
     }).execute();
 
     console.log("✅ Transcript stored in database successfully");
-    return NextResponse.json({ response: "Data stored successfully" });
+      return NextResponse.json({ response: "Data stored successfully" });
+    }
+    else {
+      console.log("❌ This isn't a transcript");
+      return NextResponse.json({ response: "Data not Stored" });
+    }
 
   } catch (error) {
     console.error("Error writing to file:", error);
