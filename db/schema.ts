@@ -31,8 +31,6 @@ export const transcripts = pgTable("transcripts", {
   updatedAt: timestamp("updated_at").notNull().defaultNow()
 });
 
-// NEW
-
 export const quizzes = pgTable("quizzes", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   intId: serial("idInt").notNull(),
@@ -44,10 +42,18 @@ export const quizzes = pgTable("quizzes", {
 }, (table) => ({
   userVideoIdUnique: uniqueIndex("user_video_id_unique").on(table.userId, table.videoId)
 }));
-
-
 // ,
 //   userQuizPerMinuteUnique: uniqueIndex("user_quiz_per_minute_unique").on(table.userId, table.createdAt)
+
+
+// NEW
+
+
+
+
+
+
+
 
 //      --- TABLE RELATIONS ---
 
