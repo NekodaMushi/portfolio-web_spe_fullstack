@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import QuizButton from "../ui/custom/quizButton";
+import QuizButton from "./quizButton";
 import QuestionCard from "./QuestionCard";
 import { QuestionsState } from "@/types/quiz";
 
-import QuizEnd from "./QuizEnd"; // Import the QuizEnd component
+import QuizEnd from "./QuizEnd";
 import { useReward } from "react-rewards";
 
 type Props = {
@@ -50,7 +50,7 @@ const QuizCard = ({ questions, totalQuestions }: Props) => {
   return (
     <div className="text-center">
       {quizEnded ? (
-        <QuizEnd score={score} totalQuestions={totalQuestions} /> // Pass score and totalQuestions as props
+        <QuizEnd score={score} totalQuestions={totalQuestions} />
       ) : (
         <>
           <p className="p-8 text-[20px] font-bold">Score: {score}</p>
