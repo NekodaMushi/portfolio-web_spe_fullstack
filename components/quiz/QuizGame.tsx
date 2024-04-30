@@ -1,16 +1,13 @@
-import generatedQuiz from "@/quiz.json"; // Ensure this path correctly points to your JSON file
-// import { Button } from "../ui/button";
-
 import QuizCard from "./QuizCard";
-import { Card, CardContent } from "../ui/card";
+import { Card } from "../ui/card";
+import { QuestionsState } from "@/types/quiz";
 
-//
+type Props = {
+  quizData: QuestionsState;
+};
 
-// import { useRouter } from "next/router";
-// useRouter;
-
-const QuizGame = () => {
-  const questions = generatedQuiz; // Assuming generatedQuiz has a 'questions' property
+const QuizGame: React.FC<Props> = ({ quizData }) => {
+  const questions = quizData;
   const totalQuestions = questions.length;
   return (
     <div className="m-auto flex w-full flex-col items-center">

@@ -13,6 +13,7 @@ import {
 } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
+
 // export type User = InferSelectModel<typeof users>;
 // export type Transcript = InferSelectModel<typeof transcripts>;
 // export type Quiz = InferSelectModel<typeof quizzes>;
@@ -53,8 +54,34 @@ export const quizzes = pgTable("quizzes", {
 
 // NEW
 
+export const quizzesCompleted = pgTable("quizzesCompleted", {
+  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
+  intId: serial("idInt").notNull(),
+  userId: text("user_id").notNull().references(() => users.id),
+  quizId: text("quiz_id").notNull().references(() => quizzes.id),
+  attemptNumber: integer("attempt_number").notNull().default(1),
+  totalQuestions: integer("total_questions").notNull(),
+  incorrectAnswers: integer("incorrect_answers").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (table) => ({
+  userQuizIdAttemptUnique: uniqueIndex("user_quiz_id_attempt_unique").on(table.userId, table.quizId, table.attemptNumber),
+}));
 
 
+
+export const spacedRepetition = pgTable("spacedRepetition", {
+  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
+  userId: text("user_id").notNull().references(() => users.id),
+  quizCompletedId: text("quiz_completed_id").notNull().references(() => quizzesCompleted.id),
+  interval: integer("interval").notNull().default(1),
+  easeFactor: integer("ease_factor").notNull().default(2500),
+  dueDate: timestamp("due_date").notNull().defaultNow(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (table) => ({
+  userQuizCompletedIdIndex: index("user_quiz_completed_id_index").on(table.userId, table.quizCompletedId),
+}));
 
 
 

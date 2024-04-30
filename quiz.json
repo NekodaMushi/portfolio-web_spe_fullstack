@@ -1,14 +1,4 @@
-[
-  {
-    "question": "Why did developers start writing more JavaScript code to be executed by the browser in the late 2000s?",
-    "choices": [
-      "To add simple animations and hover effects",
-      "To build fully fledged web applications",
-      "To improve server side rendering",
-      "To simplify data handling"
-    ],
-    "correct_answer": "To build fully fledged web applications"
-  },
+[{"question": "value","choices": ["value","value","value","value"],"correct_answer": "value"},
   {
     "question": "Which of the following is a problem with using Vanilla JavaScript to build large scale applications?",
     "choices": [

@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect } from "react";
-import Bar from "./Bar";
+import Bar from "./bar";
 import { Button } from "../ui/button";
 import Image from "next/image";
-// import { useRouter } from "next/router";
+
 import { useReward } from "react-rewards";
 import Link from "next/link";
 
