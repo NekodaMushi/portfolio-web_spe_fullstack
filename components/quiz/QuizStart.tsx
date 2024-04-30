@@ -78,7 +78,7 @@ export function QuizStart({ onQuizGenerated, onSetQuizReady }: Props) {
 
   return (
     <div className="flex h-[30rem] flex-col items-center justify-center  ">
-      <Loader loadingStates={loadingStates} loading={loading} duration={800} />
+      <Loader loadingStates={loadingStates} loading={loading} duration={750} />
       <p className="text-xs text-neutral-600 dark:text-neutral-200 sm:text-base  ">
         Once you used the chrome extension
       </p>

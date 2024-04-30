@@ -5,7 +5,6 @@ import QuestionCard from "./QuestionCard";
 import { QuestionsState } from "@/types/quiz";
 
 import QuizEnd from "./QuizEnd";
-import { useReward } from "react-rewards";
 
 type Props = {
   questions: QuestionsState;
@@ -20,8 +19,6 @@ const QuizCard = ({ questions, totalQuestions }: Props) => {
   const [userAnswers, setUserAnswers] = useState<Record<number, string>>({});
 
   const isQuestionAnswered = userAnswers[currentQuestionIndex] ? true : false;
-
-  const { reward } = useReward("rewardId", "confetti");
 
   const handleOnAnswerClick = (
     answer: string,
@@ -39,7 +36,7 @@ const QuizCard = ({ questions, totalQuestions }: Props) => {
     const newQuestionIndex = currentQuestionIndex + step;
 
     if (newQuestionIndex < 0 || newQuestionIndex >= totalQuestions) return;
-    reward();
+
     setCurrentQuestionIndex(newQuestionIndex);
   };
 
