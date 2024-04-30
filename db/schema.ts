@@ -1,6 +1,6 @@
 
 import { relations } from "drizzle-orm";
-
+// import { InferSelectModel } from 'drizzle-orm';
 
 import type { AdapterAccount } from '@auth/core/adapters'
 import { randomUUID } from "crypto"
@@ -12,6 +12,11 @@ import {
  integer, index, serial, jsonb, uniqueIndex
 } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
+
+// export type User = InferSelectModel<typeof users>;
+// export type Transcript = InferSelectModel<typeof transcripts>;
+// export type Quiz = InferSelectModel<typeof quizzes>;
+
  
 export const users = pgTable("user", {
  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
@@ -31,8 +36,6 @@ export const transcripts = pgTable("transcripts", {
   updatedAt: timestamp("updated_at").notNull().defaultNow()
 });
 
-// NEW
-
 export const quizzes = pgTable("quizzes", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   intId: serial("idInt").notNull(),
@@ -44,10 +47,18 @@ export const quizzes = pgTable("quizzes", {
 }, (table) => ({
   userVideoIdUnique: uniqueIndex("user_video_id_unique").on(table.userId, table.videoId)
 }));
-
-
 // ,
 //   userQuizPerMinuteUnique: uniqueIndex("user_quiz_per_minute_unique").on(table.userId, table.createdAt)
+
+
+// NEW
+
+
+
+
+
+
+
 
 //      --- TABLE RELATIONS ---
 

@@ -1,6 +1,6 @@
 import React from "react";
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from "./sheet";
-import { Button } from "./button";
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from "./../sheet";
+import { Button } from "./../button";
 import { Menu } from "lucide-react";
 import { animated } from "@react-spring/web";
 import Link from "next/link";
