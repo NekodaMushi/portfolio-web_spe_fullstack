@@ -18,25 +18,5 @@
       "It reduces the amount of DOM manipulation"
     ],
     "correct_answer": "It makes the code harder to understand"
-  },
-  {
-    "question": "Which of the following is a problem with using Vanilla JavaScript to build large scale applications?",
-    "choices": [
-      "It makes the code harder to understand",
-      "It simplifies data handling",
-      "It eliminates the need for a central data store",
-      "It reduces the amount of DOM manipulation"
-    ],
-    "correct_answer": "It makes the code harder to understand"
-  },
-  {
-    "question": "Which of the following is a problem with using Vanilla JavaScript to build large scale applications?",
-    "choices": [
-      "It makes the code harder to understand",
-      "It simplifies data handling",
-      "It eliminates the need for a central data store",
-      "It reduces the amount of DOM manipulation"
-    ],
-    "correct_answer": "It makes the code harder to understand"
   }
 ]
