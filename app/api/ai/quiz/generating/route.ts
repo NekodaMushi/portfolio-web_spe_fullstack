@@ -4,10 +4,12 @@ import { quizzes, transcripts } from "@/db/schema";
 import { eq, desc, and } from "drizzle-orm";
 import { auth } from "auth";
 
-
 export async function POST(request: Request) {
   try {
-    // -- Auth and get user from session --
+    const url = new URL(request.url);
+    const numQuestions = url.searchParams.get('numQuestions') || '5';  
+    
+
     const session = await auth();
     if (!session) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -19,8 +21,6 @@ export async function POST(request: Request) {
     }
 
     const sessionUser = session?.user;
-
-    // -- Fetch last transcript from DB --
     const lastTranscript = await db
       .select({
         videoId: transcripts.videoId,
@@ -46,50 +46,27 @@ export async function POST(request: Request) {
     const { videoId, content } = lastTranscript[0];
     const transcriptString = content;
     const videoTitle = videoId;
+    console.log(numQuestions);
 
-    // Check if a quiz already exists for the user and video
-    const existingQuiz = await db
-      .select()
-      .from(quizzes)
-      .where(and(
-        eq(quizzes.userId, sessionUser.id),
-        eq(quizzes.videoId, videoTitle)
-      ))
-      .limit(1);
-
-    if (existingQuiz.length > 0) {
-      console.log("⚠️ Quiz already exists for the user with the same videoId");
-      return new Response(JSON.stringify(existingQuiz[0].quizData), {
-        status: 200,
-        headers: {
-          "content-type": "application/json",
-        },
-      });
-    }
-
-    // ---- Sending to AI ----
     const requestData = {
-      model: "mistral-7b-instruct",
+      model: "mixtral-8x22b-instruct",
       messages: [
         {
           role: "system",
           content:
-            'Generate a multiple choice quiz from the provided transcript with at least 5 questions. Each question should have one correct answer among four options. Format the output as JSON: [{"question": "Q", "choices": ["A", "B", "C", "D"], "correct_answer": "A"}, ...]. Only JSON output is required.',
+            `Generate a multiple choice quiz from the provided transcript with exactly ${numQuestions} questions. Each question should have one correct answer among four options. Format the output as JSON: [{"question": "Q", "choices": ["A", "B", "C", "D"], "correct_answer": "A"}, ...]. Only JSON output is required.`,
         },
         { role: "user", content: transcriptString },
       ],
     };
- 
-    //    -- Receiving AI response --
+
     const response = await fetchChatCompletion(requestData);
     const quizContent = response.choices[0].message.content;
     const quizData = JSON.parse(quizContent);
 
-    // Return the quiz immediately
     const quiz = new Response(quizContent, { status: 200 });
     console.log(`☑️ Quiz has been generated successfully as '${videoTitle}`);
 
-    // Store the quiz in the database asynchronously
     db.insert(quizzes).values({
       userId: sessionUser.id,
       quizData: quizData,
@@ -102,18 +79,10 @@ export async function POST(request: Request) {
 
     return quiz;
   } catch (error: any) {
-    if (error.code === '23505' && error.message.includes('user_video_id_unique')) {
-      console.log("🐛 Trying to save a second time for unknown reason but unique constraint stopped, maybe ");
-      return new Response(
-        JSON.stringify({ error: "Quiz already exists for the user and video" }),
-        { status: 409, headers: { 'content-type': 'application/json' } }
-      );
-    } else {
-      console.log("Error in POST route:", error);
-      return new Response(
-        JSON.stringify({ error: "Failed to fetch chat completion" }),
-        { status: 500, headers: { 'content-type': 'application/json' } }
-      );
-    }
+    console.log("Error in POST route:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to fetch chat completion" }),
+      { status: 500, headers: { 'content-type': 'application/json' } }
+    );
   }
 }

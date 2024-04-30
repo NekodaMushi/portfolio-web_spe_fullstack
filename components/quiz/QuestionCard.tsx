@@ -21,6 +21,9 @@ const QuestionCard = ({
         ? "bg-green-500 text-white"
         : "bg-red-500 text-white";
     }
+    if (userAnswer && answer === correctAnswer) {
+      return "bg-green-500 text-white";
+    }
     return "bg-white text-black";
   };
 
