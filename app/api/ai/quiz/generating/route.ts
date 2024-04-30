@@ -74,7 +74,7 @@ export async function POST(request: Request) {
         {
           role: "system",
           content:
-            "Generate a multiple choice quiz based on the provided transcript, with at least 2 questions. Ensure there is only one correct answer out of the four options. The quiz should be in json format with 4 choices for each question, with the correct answer marked as correct_answer property,YOUR ANSWER IS ONLY A JSON, NO ADDITIONNAL TEXT ALLOWED",
+            "Generate a multiple choice quiz based on the provided transcript, with at least 5 questions. Ensure there is only one correct answer out of the four options, named it by its index. The quiz should be in json format with 4 choices for each question, with the correct answer marked as correct_answer property,YOUR ANSWER IS ONLY A JSON, NO ADDITIONNAL TEXT ALLOWED",
         },
         { role: "user", content: transcriptString },
       ],

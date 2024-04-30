@@ -5,9 +5,9 @@ import { ModeToggle } from "./themes/theme-toggle";
 import { useSpring, animated } from "@react-spring/web";
 import Logo from "@/assets/images/Logo";
 import { useState } from "react";
-import NavLinks from "./ui/dropdown_nav";
-import NavLinksRight from "./ui/dropright_nav";
-import Avatar from "./ui/avatar";
+import NavLinks from "./ui/custom/dropdown_nav";
+import NavLinksRight from "./ui/custom/dropright_nav";
+import Avatar from "./ui/custom/avatar";
 import { FaGithub } from "react-icons/fa";
 
 import { useSession } from "next-auth/react";

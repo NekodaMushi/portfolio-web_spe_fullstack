@@ -1,6 +1,6 @@
 
 import { relations } from "drizzle-orm";
-
+// import { InferSelectModel } from 'drizzle-orm';
 
 import type { AdapterAccount } from '@auth/core/adapters'
 import { randomUUID } from "crypto"
@@ -12,6 +12,11 @@ import {
  integer, index, serial, jsonb, uniqueIndex
 } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
+
+// export type User = InferSelectModel<typeof users>;
+// export type Transcript = InferSelectModel<typeof transcripts>;
+// export type Quiz = InferSelectModel<typeof quizzes>;
+
  
 export const users = pgTable("user", {
  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
