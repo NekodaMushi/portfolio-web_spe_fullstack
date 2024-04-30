@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import QuizButton from "./quizButton";
+import QuizButton from "./ui/quizButton";
 import QuestionCard from "./QuestionCard";
 import { QuestionsState } from "@/types/quiz";
 

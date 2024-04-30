@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import Bar from "./bar";
+import Bar from "./ui/bar";
 import { Button } from "../ui/button";
 import Image from "next/image";
 
