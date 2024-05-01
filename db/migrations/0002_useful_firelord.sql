@@ -1,1 +1,0 @@
-ALTER TABLE "quizzes" ALTER COLUMN "quizData" SET DATA TYPE json;

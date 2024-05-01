@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { TypewriterEffectSmooth } from "../ui/typewriter-effect";
 import { MultiStepLoader as Loader } from "../ui/multi-step-loader";
 import { IconSquareRoundedX } from "@tabler/icons-react";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { SelectNumber } from "./ui/selectNumber";
+// import { Toaster, toast } from 'sonner'
 
 type Props = {
   onQuizGenerated: (data: any) => void;
@@ -55,12 +56,38 @@ export function QuizStart({ onQuizGenerated, onSetQuizReady }: Props) {
   ];
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [quizReady, setQuizReady] = useState<boolean>(false);
+
   const [numQuestions, setNumQuestions] = useState<NumQuestions>("5");
   const [animationDuration, setAnimationDuration] = useState<number>(750);
+  const [generated, setGenerated] = useState<boolean>(false);
+
+  const [quizReady, setQuizReady] = useState<{
+    [key in NumQuestions]?: boolean;
+  }>({});
+
+  // NOW START
+  //
+
+  useEffect(() => {
+    const fetchQuizReady = async () => {
+      try {
+        const response = await fetch("/api/ai/quiz/ready");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setQuizReady(data.quizReady);
+      } catch (error) {
+        console.error("Error fetching quiz ready state:", error);
+      }
+    };
+
+    fetchQuizReady();
+  }, []);
 
   const handleGenerateClick = async () => {
     setLoading(true);
+
     try {
       const response = await fetch(
         `/api/ai/quiz/generating?numQuestions=${numQuestions}`,
@@ -71,14 +98,20 @@ export function QuizStart({ onQuizGenerated, onSetQuizReady }: Props) {
           },
         },
       );
+      console.log("BEFORE");
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
+      console.log("111111111111");
       const data = await response.json();
+      console.log("22222222222222");
 
       onQuizGenerated(data);
       setLoading(false);
-      setQuizReady(true);
+      setQuizReady((prevState) => ({
+        ...prevState,
+        [numQuestions]: true,
+      }));
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
@@ -94,11 +127,11 @@ export function QuizStart({ onQuizGenerated, onSetQuizReady }: Props) {
   };
 
   const durationMap: { [key in NumQuestions]: number } = {
-    "2": 750, // 750ms for 2 questions
+    "2": 1000, // 750ms for 2 questions
     "5": 2000, // Good
-    "10": 3000, // Perfect
-    "20": 5000, // Good
-    "30": 9000, //
+    "10": 4000, // Perfect
+    "20": 7000, // Good
+    "30": 10000, //
   };
 
   return (
@@ -112,7 +145,7 @@ export function QuizStart({ onQuizGenerated, onSetQuizReady }: Props) {
         Once you used the chrome extension
       </p>
       <TypewriterEffectSmooth words={words} />
-      <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+      <div className="flex flex-col gap-4 space-x-0 space-y-4 md:flex-row md:space-x-4 md:space-y-0">
         <SelectNumber
           value={numQuestions}
           onValueChange={(value: NumQuestions) => {
@@ -121,17 +154,29 @@ export function QuizStart({ onQuizGenerated, onSetQuizReady }: Props) {
           }}
         />
         <button
-          className="animate-shimmer inline-flex items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
+          className="animate-shimmer inline-flex w-48 items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 py-2 font-medium text-slate-400 transition-colors hover:text-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
           onClick={handleGenerateClick}
+          onMouseEnter={() => setGenerated(true)}
+          onMouseLeave={() => setGenerated(false)}
         >
-          {quizReady ? "Generated" : "Generate"}
+          <span className="inline-block w-full text-center">
+            {quizReady[numQuestions]
+              ? generated
+                ? "Generate again"
+                : "Generated"
+              : "Generate"}
+          </span>
         </button>
-        {quizReady ? (
-          <Button onClick={handleStartClick}>Start</Button>
+        {quizReady[numQuestions] ? (
+          <Button className="w-48 py-2" onClick={handleStartClick}>
+            <span className="inline-block w-full text-center">Start</span>
+          </Button>
         ) : (
-          <Button disabled>
-            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-            Please Generate
+          <Button className="w-48 py-2" disabled>
+            <span className="inline-block w-full text-center">
+              <ReloadIcon className="mr-2 inline-block h-4 w-4 animate-spin" />
+              Please Generate
+            </span>
           </Button>
         )}
       </div>

@@ -1,27 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db, eq, and } from "@/db/index";
 import { transcripts, users } from "@/db/schema";
-import { auth } from "@/lib/auth/auth"
-import fs from "fs";
+import { auth } from "@/lib/auth/auth";
 
 export async function POST(req: NextRequest) {
   const { spanData, videoTitle } = await req.json();
   const transcriptString = spanData.join(" ");
 
   try {
-    const jsonData = {
-      transcriptString,
-      videoTitle,
-    };
-
-    // await fs.promises.writeFile(
-    //   "transcripts.json",
-    //   JSON.stringify(jsonData, null, 2),
-    // );
-
     const session = await auth();
     const sessionUser = session?.user;
-    console.log(sessionUser);
 
     if (!sessionUser) {
       console.error("User is not authenticated");
@@ -29,41 +17,46 @@ export async function POST(req: NextRequest) {
     }
 
 
-    
-    const existingTranscripts = await db.select({
+    const existingTranscript = await db.select({
       videoId: transcripts.videoId,
-    }).from(transcripts).innerJoin(users, eq(transcripts.userId, users.id)).where(and(
-      eq(transcripts.videoId, jsonData.videoTitle),
-      eq(users.id, sessionUser.id)
+    }).from(transcripts).where(and(
+      eq(transcripts.videoId, videoTitle),
+      eq(transcripts.userId, sessionUser.id),
+      eq(transcripts.latest, 1)
+      // Check if latest transcript
     )).execute();
-    
-    // Bad select bellow
-    // const existingTranscripts = await db.select(transcripts).where({
-    //   videoId: videoTitle
-    // }).execute();
-    if (existingTranscripts.length > 0) {
-      console.error("❎ User already have this transcript in the DB");
+
+    if (existingTranscript.length > 0) {
+      console.error("❎ User already has this transcript in the DB");
       return NextResponse.json({ error: "Transcript already exists" }, { status: 409 });
     }
 
-    // Insert the new transcript since it does not exist
-    if(transcriptString)
-    {await db.insert(transcripts).values({
-      videoId: videoTitle,
-      content: transcriptString,
-      userId: sessionUser.id,
-    }).execute();
+    // Set prev to 0
+    await db.update(transcripts)
+      .set({ latest: 0 })
+      .where(and(
+        eq(transcripts.userId, sessionUser.id),
+        eq(transcripts.latest, 1)
+      ))
+      .execute();
 
-    console.log("✅ Transcript stored in database successfully");
+    // Set new to 1
+    if (transcriptString) {
+      await db.insert(transcripts).values({
+        videoId: videoTitle,
+        content: transcriptString,
+        userId: sessionUser.id,
+        latest: 1,
+      }).execute();
+
+      console.log("✅ Transcript stored in database successfully");
       return NextResponse.json({ response: "Data stored successfully" });
-    }
-    else {
+    } else {
       console.log("❌ This isn't a transcript");
       return NextResponse.json({ response: "Data not Stored" });
     }
-
   } catch (error) {
-    console.error("Error writing to file:", error);
+    console.error("Error:", error);
     return NextResponse.json(
       { error: "Failed to store data" },
       { status: 500 },

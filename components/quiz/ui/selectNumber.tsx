@@ -28,8 +28,8 @@ export function SelectNumber({ value, onValueChange }: SelectNumberProps) {
           <SelectItem value="2">test</SelectItem>
           <SelectItem value="5">Short</SelectItem>
           <SelectItem value="10">Medium</SelectItem>
-          <SelectItem value="20">Long</SelectItem>
-          <SelectItem value="30">Extra-Long</SelectItem>
+          <SelectItem value="20">Large</SelectItem>
+          <SelectItem value="35">Exam</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

@@ -34,7 +34,8 @@ export const transcripts = pgTable("transcripts", {
   content: text("content").notNull(),
   userId: text("user_id").notNull().references(() => users.id),
   createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow()
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  latest: integer("latest").notNull().default(0),
 });
 
 export const quizzes = pgTable("quizzes", {
@@ -42,15 +43,24 @@ export const quizzes = pgTable("quizzes", {
   intId: serial("idInt").notNull(),
   userId: text("user_id").notNull().references(() => users.id),
   videoId: text("video_id").notNull(),
-  quizData: jsonb("quizData").notNull(),
+  quizDataShort: jsonb("quiz_data_short"),
+  quizDataMedium: jsonb("quiz_data_medium"),
+  quizDataLarge: jsonb("quiz_data_large"),
+  quizDataExam: jsonb("quiz_data_exam"),
+  quizDataTest: jsonb("quiz_data_test"),
   createdAt: timestamp('created_at').default(sql`date_trunc('minute', now())`),
   updatedAt: timestamp("updated_at").notNull().defaultNow()
-}, (table) => ({
-  userVideoIdUnique: uniqueIndex("user_video_id_unique").on(table.userId, table.videoId)
-}));
+});
 // ,
 //   userQuizPerMinuteUnique: uniqueIndex("user_quiz_per_minute_unique").on(table.userId, table.createdAt)
 
+// , (table) => ({
+//   userVideoIdShortUnique: uniqueIndex("user_video_id_short_unique").on(table.userId, table.videoId, table.quizDataShort),
+//   userVideoIdMediumUnique: uniqueIndex("user_video_id_medium_unique").on(table.userId, table.videoId, table.quizDataMedium),
+//   userVideoIdLargeUnique: uniqueIndex("user_video_id_large_unique").on(table.userId, table.videoId, table.quizDataLarge),
+//   userVideoIdExamUnique: uniqueIndex("user_video_id_exam_unique").on(table.userId, table.videoId, table.quizDataExam),
+//   userVideoIdTestUnique: uniqueIndex("user_video_id_test_unique").on(table.userId, table.videoId, table.quizDataTest),
+// })
 
 // NEW
 
@@ -82,9 +92,6 @@ export const spacedRepetition = pgTable("spacedRepetition", {
 }, (table) => ({
   userQuizCompletedIdIndex: index("user_quiz_completed_id_index").on(table.userId, table.quizCompletedId),
 }));
-
-
-
 
 
 //      --- TABLE RELATIONS ---

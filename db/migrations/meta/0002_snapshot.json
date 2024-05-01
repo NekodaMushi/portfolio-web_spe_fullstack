@@ -1,6 +1,6 @@
 {
-  "id": "4ec4f261-ffc0-49ea-bb2b-fd4d0e856c27",
-  "prevId": "ad25b3a4-aff6-40b8-8af9-329812f7f11b",
+  "id": "88c356eb-4f24-42fc-b9e1-b5fd50be063c",
+  "prevId": "0707dc01-a275-4864-becd-6e06968f66f2",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -138,11 +138,35 @@
           "primaryKey": false,
           "notNull": true
         },
-        "quizData": {
-          "name": "quizData",
-          "type": "json",
+        "quiz_data_short": {
+          "name": "quiz_data_short",
+          "type": "jsonb",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "quiz_data_medium": {
+          "name": "quiz_data_medium",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quiz_data_large": {
+          "name": "quiz_data_large",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quiz_data_exam": {
+          "name": "quiz_data_exam",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quiz_data_test": {
+          "name": "quiz_data_test",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -159,24 +183,7 @@
           "default": "now()"
         }
       },
-      "indexes": {
-        "user_video_id_unique": {
-          "name": "user_video_id_unique",
-          "columns": [
-            "user_id",
-            "video_id"
-          ],
-          "isUnique": true
-        },
-        "user_quiz_per_minute_unique": {
-          "name": "user_quiz_per_minute_unique",
-          "columns": [
-            "user_id",
-            "created_at"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "quizzes_user_id_user_id_fk": {
           "name": "quizzes_user_id_user_id_fk",
@@ -184,6 +191,110 @@
           "tableTo": "user",
           "columnsFrom": [
             "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "quizzesCompleted": {
+      "name": "quizzesCompleted",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "idInt": {
+          "name": "idInt",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quiz_id": {
+          "name": "quiz_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "attempt_number": {
+          "name": "attempt_number",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "total_questions": {
+          "name": "total_questions",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "incorrect_answers": {
+          "name": "incorrect_answers",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "user_quiz_id_attempt_unique": {
+          "name": "user_quiz_id_attempt_unique",
+          "columns": [
+            "user_id",
+            "quiz_id",
+            "attempt_number"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "quizzesCompleted_user_id_user_id_fk": {
+          "name": "quizzesCompleted_user_id_user_id_fk",
+          "tableFrom": "quizzesCompleted",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "quizzesCompleted_quiz_id_quizzes_id_fk": {
+          "name": "quizzesCompleted_quiz_id_quizzes_id_fk",
+          "tableFrom": "quizzesCompleted",
+          "tableTo": "quizzes",
+          "columnsFrom": [
+            "quiz_id"
           ],
           "columnsTo": [
             "id"
@@ -259,6 +370,105 @@
         }
       }
     },
+    "spacedRepetition": {
+      "name": "spacedRepetition",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quiz_completed_id": {
+          "name": "quiz_completed_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "interval": {
+          "name": "interval",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "ease_factor": {
+          "name": "ease_factor",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 2500
+        },
+        "due_date": {
+          "name": "due_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "user_quiz_completed_id_index": {
+          "name": "user_quiz_completed_id_index",
+          "columns": [
+            "user_id",
+            "quiz_completed_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "spacedRepetition_user_id_user_id_fk": {
+          "name": "spacedRepetition_user_id_user_id_fk",
+          "tableFrom": "spacedRepetition",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "spacedRepetition_quiz_completed_id_quizzesCompleted_id_fk": {
+          "name": "spacedRepetition_quiz_completed_id_quizzesCompleted_id_fk",
+          "tableFrom": "spacedRepetition",
+          "tableTo": "quizzesCompleted",
+          "columnsFrom": [
+            "quiz_completed_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "transcripts": {
       "name": "transcripts",
       "schema": "",
@@ -300,6 +510,13 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "latest": {
+          "name": "latest",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
         }
       },
       "indexes": {},

@@ -12,29 +12,15 @@
     {
       "idx": 1,
       "version": "5",
-      "when": 1714154715262,
-      "tag": "0001_wide_veda",
+      "when": 1714556586437,
+      "tag": "0001_striped_grandmaster",
       "breakpoints": true
     },
     {
       "idx": 2,
       "version": "5",
-      "when": 1714202557426,
-      "tag": "0002_useful_firelord",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1714202657755,
-      "tag": "0003_silly_captain_stacy",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1714290490031,
-      "tag": "0004_bored_vivisector",
+      "when": 1714572087970,
+      "tag": "0002_steep_songbird",
       "breakpoints": true
     }
   ]
