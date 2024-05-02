@@ -9,27 +9,17 @@ import { QuestionsState } from "@/types/quiz";
 
 export default function Quiz() {
   const [quizReady, setQuizReady] = useState<boolean>(false);
-  const [quizData, setQuizData] = useState<QuestionsState | null>(null);
-
-  const handleQuizGenerated = (data: QuestionsState) => {
-    setQuizData(data);
-  };
 
   const handleQuizReady = () => {
-    if (quizData !== null) {
-      setQuizReady(true);
-    }
+    setQuizReady(true);
   };
 
   return (
     <>
-      {quizReady && quizData ? (
-        <QuizGame quizData={quizData} />
+      {quizReady ? (
+        <QuizGame />
       ) : (
-        <QuizStart
-          onQuizGenerated={handleQuizGenerated}
-          onSetQuizReady={handleQuizReady}
-        />
+        <QuizStart onSetQuizReady={handleQuizReady} />
       )}
     </>
   );

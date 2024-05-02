@@ -21,31 +21,27 @@ export async function POST(request: Request) {
 
     const sessionUser = session?.user;
     const lastTranscript = await db
-  .select({
-    videoId: transcripts.videoId,
-    content: transcripts.content,
-  })
-  .from(transcripts)
-  .where(
-    and(
-      eq(transcripts.userId, sessionUser.id),
-      eq(transcripts.latest, 1)
-    )
-  )
-  .limit(1);
+      .select({
+        videoId: transcripts.videoId,
+        content: transcripts.content,
+      })
+      .from(transcripts)
+      .where(
+        and(eq(transcripts.userId, sessionUser.id), eq(transcripts.latest, 1)),
+      )
+      .limit(1);
 
-if (lastTranscript.length === 0) {
-  console.error("No latest transcript found for user:", sessionUser.id);
-  return new Response(
-    JSON.stringify({ message: "No latest transcript found for the user" }),
-    {
-      status: 404,
-      headers: {
-        "content-type": "application/json",
-      },
-    },
-  );
-}
+    if (lastTranscript.length === 0) {
+      return new Response(
+        JSON.stringify({ message: "No transcripts found for the user" }),
+        {
+          status: 404,
+          headers: {
+            "content-type": "application/json",
+          },
+        },
+      );
+    }
 
     const { videoId, content } = lastTranscript[0];
     const transcriptString = content;
@@ -67,9 +63,16 @@ if (lastTranscript.length === 0) {
 
     const response = await fetchChatCompletion(requestData);
     const quizContent = response.choices[0].message.content;
-    const quizData = JSON.parse(quizContent);
 
-    const quiz = new Response(quizContent, { status: 200 });
+    const quizResponse = {
+      quizData: quizContent,
+      videoId: videoTitle,
+    };
+
+    const quiz = new Response(JSON.stringify(quizResponse), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    });
     console.log(`☑️ Quiz has been generated successfully as '${videoTitle}`);
 
     let quizDataField:
@@ -108,16 +111,18 @@ if (lastTranscript.length === 0) {
       await db
         .update(quizzes)
         .set({
-          [quizDataField]: quizData,
+          [quizDataField]: quizResponse.quizData,
           updatedAt: new Date(),
         })
         .where(eq(quizzes.id, existingQuiz[0].id));
+      console.log("🆙 Quiz has been updated successfully");
     } else {
       await db.insert(quizzes).values({
         userId: sessionUser.id,
         videoId: videoTitle,
-        [quizDataField]: quizData,
+        [quizDataField]: quizResponse.quizData,
       });
+      console.log("✅ Quiz has been stored successfully");
     }
 
     return quiz;

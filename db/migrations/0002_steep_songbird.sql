@@ -1,1 +1,0 @@
-ALTER TABLE "transcripts" ADD COLUMN "latest" integer DEFAULT 0 NOT NULL;

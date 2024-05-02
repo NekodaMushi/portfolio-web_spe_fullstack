@@ -8,8 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-type NumQuestions = "2" | "5" | "10" | "20" | "30";
+import { NumQuestions } from "@/types/quiz";
 
 type SelectNumberProps = {
   value: NumQuestions;
@@ -17,14 +16,23 @@ type SelectNumberProps = {
 };
 
 export function SelectNumber({ value, onValueChange }: SelectNumberProps) {
+  const [selectedValue, setSelectedValue] = React.useState<NumQuestions | "">(
+    "",
+  );
+
+  const handleValueChange = (value: NumQuestions) => {
+    setSelectedValue(value);
+    onValueChange(value);
+  };
+
   return (
-    <Select value={value} onValueChange={onValueChange}>
+    <Select value={selectedValue} onValueChange={handleValueChange}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Number of questions" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Number</SelectLabel>
+          <SelectLabel>Size</SelectLabel>
           <SelectItem value="2">test</SelectItem>
           <SelectItem value="5">Short</SelectItem>
           <SelectItem value="10">Medium</SelectItem>

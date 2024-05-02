@@ -23,7 +23,7 @@ const main = async () => {
 
     // Delete all data
     await db.delete(quizzes)
-    await db.delete(transcripts);
+    // await db.delete(transcripts);
     // await db.delete(users);
 
 

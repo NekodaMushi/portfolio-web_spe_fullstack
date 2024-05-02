@@ -1,13 +1,11 @@
 import QuizCard from "./QuizCard";
 import { Card } from "../ui/card";
-import { QuestionsState } from "@/types/quiz";
+import { useAppSelector } from "hooks";
 
-type Props = {
-  quizData: QuestionsState;
-};
+const QuizGame = () => {
+  const quizSelected = useAppSelector((state) => state.quiz.quizSelected);
 
-const QuizGame: React.FC<Props> = ({ quizData }) => {
-  const questions = quizData;
+  const questions = quizSelected;
   const totalQuestions = questions.length;
   return (
     <div className="m-auto flex w-full flex-col items-center">
