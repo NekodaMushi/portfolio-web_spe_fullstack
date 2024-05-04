@@ -51,16 +51,7 @@ export const quizzes = pgTable("quizzes", {
   createdAt: timestamp('created_at').default(sql`date_trunc('minute', now())`),
   updatedAt: timestamp("updated_at").notNull().defaultNow()
 });
-// ,
-//   userQuizPerMinuteUnique: uniqueIndex("user_quiz_per_minute_unique").on(table.userId, table.createdAt)
 
-// , (table) => ({
-//   userVideoIdShortUnique: uniqueIndex("user_video_id_short_unique").on(table.userId, table.videoId, table.quizDataShort),
-//   userVideoIdMediumUnique: uniqueIndex("user_video_id_medium_unique").on(table.userId, table.videoId, table.quizDataMedium),
-//   userVideoIdLargeUnique: uniqueIndex("user_video_id_large_unique").on(table.userId, table.videoId, table.quizDataLarge),
-//   userVideoIdExamUnique: uniqueIndex("user_video_id_exam_unique").on(table.userId, table.videoId, table.quizDataExam),
-//   userVideoIdTestUnique: uniqueIndex("user_video_id_test_unique").on(table.userId, table.videoId, table.quizDataTest),
-// })
 
 // NEW
 
@@ -69,6 +60,7 @@ export const quizzesCompleted = pgTable("quizzesCompleted", {
   intId: serial("idInt").notNull(),
   userId: text("user_id").notNull().references(() => users.id),
   quizId: text("quiz_id").notNull().references(() => quizzes.id),
+  videoId: text("video_id").notNull(),
   attemptNumber: integer("attempt_number").notNull().default(1),
   totalQuestions: integer("total_questions").notNull(),
   incorrectAnswers: integer("incorrect_answers").notNull(),
@@ -99,7 +91,9 @@ export const spacedRepetition = pgTable("spacedRepetition", {
 
 export const usersRelations = relations(users, ({ many }) => ({
   transcripts: many(transcripts),
-  quizzes: many(quizzes)
+  quizzes: many(quizzes),
+  quizzesCompleted: many(quizzesCompleted)
+
 }));
 
 
@@ -110,6 +104,12 @@ export const transcriptsRelations = relations(transcripts, ({ one }) => ({
 export const quizzesRelations = relations(quizzes, ({ one }) => ({
   user: one(users, { fields: [quizzes.userId], references: [users.id] })
 }));
+
+export const quizzesCompletedRelations = relations(quizzesCompleted, ({ one }) => ({
+  user: one(users, { fields: [quizzesCompleted.userId], references: [users.id]}),
+}))
+
+
 
 
 

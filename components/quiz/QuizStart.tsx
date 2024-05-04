@@ -5,7 +5,7 @@ import { MultiStepLoader as Loader } from "../ui/multi-step-loader";
 import { IconSquareRoundedX } from "@tabler/icons-react";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { SelectNumber } from "./ui/selectNumber";
-// import { Toaster, toast } from 'sonner'
+import { Toaster, toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { setQuizData, setQuizSelected } from "slices/quizSlice";
 import { NumQuestions } from "@/types/quiz";
@@ -22,7 +22,7 @@ export function QuizStart({ onSetQuizReady }: Props) {
       text: "Fetch Last Transcript",
     },
     {
-      text: "Sending to transcript to AI",
+      text: "Sending transcript to AI",
     },
     {
       text: "Receiving AI response",
@@ -65,9 +65,8 @@ export function QuizStart({ onSetQuizReady }: Props) {
   }>({});
 
   const dispatch = useAppDispatch();
-  const { videoId, quizData } = useAppSelector((state) => state.quiz);
+  const { quizData } = useAppSelector((state) => state.quiz);
 
-  // NOW START
   useEffect(() => {
     const checkQuizReady = () => {
       const updatedQuizReady = { ...quizReady };
@@ -79,7 +78,6 @@ export function QuizStart({ onSetQuizReady }: Props) {
 
     checkQuizReady();
   }, [quizData]);
-  //
 
   const handleSelectNumber = (value: NumQuestions) => {
     setNumQuestions(value);
@@ -92,23 +90,6 @@ export function QuizStart({ onSetQuizReady }: Props) {
       [value]: quizData[value] !== undefined,
     }));
   };
-
-  useEffect(() => {
-    const fetchQuizReady = async () => {
-      try {
-        const response = await fetch("/api/ai/quiz/ready");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const quizData = await response.json();
-        setQuizReady(quizData.quizReady);
-      } catch (error) {
-        console.error("Error fetching quiz ready state:", error);
-      }
-    };
-
-    fetchQuizReady();
-  }, []);
 
   const handleGenerateClick = async () => {
     // Remove the possibility to re generate quiz
@@ -125,7 +106,7 @@ export function QuizStart({ onSetQuizReady }: Props) {
 
     try {
       const response = await fetch(
-        `/api/ai/quiz/generating?numQuestions=${numQuestions}`,
+        `/api/ai/generate/quiz?numQuestions=${numQuestions}`,
         {
           method: "POST",
           headers: {
@@ -135,14 +116,19 @@ export function QuizStart({ onSetQuizReady }: Props) {
       );
 
       if (!response.ok) {
+        toast.info("You need to download a transcript first");
+        setLoading(false);
         throw new Error("Network response was not ok");
       }
 
       const data = await response.json();
+      const quizId = data.quizId;
       const videoId = data.videoId;
       const quizData = JSON.parse(data.quizData);
 
-      dispatch(setQuizData({ videoId, numQuestions, quizData }));
+      console.log(quizId);
+
+      dispatch(setQuizData({ videoId, numQuestions, quizData, quizId }));
       dispatch(setQuizSelected(numQuestions));
 
       setLoading(false);
@@ -165,7 +151,7 @@ export function QuizStart({ onSetQuizReady }: Props) {
   };
 
   const durationMap: { [key in NumQuestions]: number } = {
-    "2": 1000, // 750ms for 2 questions
+    "1": 1000, // 750ms for 2 questions
     "5": 2000, // Good
     "10": 4000, // Perfect
     "20": 7000, // Good
@@ -184,11 +170,11 @@ export function QuizStart({ onSetQuizReady }: Props) {
         Once you used the chrome extension
       </p>
       <TypewriterEffectSmooth words={words} />
-      <div className="flex flex-col gap-4 space-x-0 space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+      <div className="flex flex-col  space-x-0 space-y-4 md:flex-row md:space-x-4 md:space-y-0">
         <SelectNumber value={numQuestions} onValueChange={handleSelectNumber} />
         <button
           disabled={numQuestions === "Select"}
-          className="animate-shimmer inline-flex w-48 items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 py-2 font-medium text-slate-400 transition-colors hover:text-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
+          className="animate-shimmer inline-flex w-52 items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 py-2 font-medium text-slate-400 transition-colors hover:text-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
           onClick={handleGenerateClick}
           onMouseEnter={() => setGenerated(true)}
           onMouseLeave={() => setGenerated(false)}
@@ -202,17 +188,18 @@ export function QuizStart({ onSetQuizReady }: Props) {
           </span>
         </button>
         {quizReady[numQuestions] ? (
-          <Button className="w-48 py-2" onClick={handleStartClick}>
+          <Button className="w-52 py-2" onClick={handleStartClick}>
             <span className="inline-block w-full text-center">Start</span>
           </Button>
         ) : (
-          <Button className="w-48 py-2" disabled>
+          <Button className="w-52 py-2" disabled>
             <span className="inline-block w-full text-center">
               <ReloadIcon className="mr-2 inline-block h-4 w-4 animate-spin" />
               Please Generate
             </span>
           </Button>
         )}
+        <Toaster position="bottom-right" />
       </div>
     </div>
   );

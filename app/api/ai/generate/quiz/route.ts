@@ -46,9 +46,6 @@ export async function POST(request: Request) {
     const { videoId, content } = lastTranscript[0];
     const transcriptString = content;
     const videoTitle = videoId;
-    console.log(numQuestions);
-
-    //testmodel: mistral-7b-instruct
 
     const requestData = {
       model: "mixtral-8x22b-instruct",
@@ -63,17 +60,8 @@ export async function POST(request: Request) {
 
     const response = await fetchChatCompletion(requestData);
     const quizContent = response.choices[0].message.content;
-
-    const quizResponse = {
-      quizData: quizContent,
-      videoId: videoTitle,
-    };
-
-    const quiz = new Response(JSON.stringify(quizResponse), {
-      status: 200,
-      headers: { "content-type": "application/json" },
-    });
     console.log(`☑️ Quiz has been generated successfully as '${videoTitle}`);
+
 
     let quizDataField:
       | "quizDataShort"
@@ -90,7 +78,7 @@ export async function POST(request: Request) {
       quizDataField = "quizDataLarge";
     } else if (numQuestions === "35") {
       quizDataField = "quizDataExam";
-    } else if (numQuestions === "2") {
+    } else if (numQuestions === "1") {
       quizDataField = "quizDataTest";
     } else {
       throw new Error("Wrong number of question");
@@ -107,25 +95,40 @@ export async function POST(request: Request) {
       )
       .limit(1);
 
+    let quizId: string | undefined;
+
     if (existingQuiz.length > 0) {
+      quizId = existingQuiz[0].id;
       await db
         .update(quizzes)
         .set({
-          [quizDataField]: quizResponse.quizData,
+          [quizDataField]: quizContent,
           updatedAt: new Date(),
         })
-        .where(eq(quizzes.id, existingQuiz[0].id));
+        .where(eq(quizzes.id, quizId));
       console.log("🆙 Quiz has been updated successfully");
     } else {
-      await db.insert(quizzes).values({
+      const result = await db.insert(quizzes).values({
         userId: sessionUser.id,
         videoId: videoTitle,
-        [quizDataField]: quizResponse.quizData,
-      });
+        [quizDataField]: quizContent,
+      }).returning({ id: quizzes.id });
+      quizId = result[0].id;
       console.log("✅ Quiz has been stored successfully");
-    }
 
-    return quiz;
+    }
+    
+
+    const quizResponse = {
+      quizData: quizContent,
+      videoId: videoTitle,
+      quizId,
+    };
+
+    return new Response(JSON.stringify(quizResponse), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    });
   } catch (error: any) {
     console.log("Error in POST route:", error);
     return new Response(
