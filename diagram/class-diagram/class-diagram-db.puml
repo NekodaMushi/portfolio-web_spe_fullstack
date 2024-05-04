@@ -1,0 +1,64 @@
+@startuml
+class Users {
+  +id: text
+  +name: text
+  +email: text
+  +emailVerified: timestamp
+  +image: text
+}
+
+class Transcripts {
+  +id: serial
+  +videoId: text
+  +content: text
+  +userId: text
+  +createdAt: timestamp
+  +updatedAt: timestamp
+  +latest: integer
+}
+
+class Quizzes {
+  +id: text
+  +intId: serial
+  +userId: text
+  +videoId: text
+  +quizDataShort: jsonb
+  +quizDataMedium: jsonb
+  +quizDataLarge: jsonb
+  +quizDataExam: jsonb
+  +quizDataTest: jsonb
+  +createdAt: timestamp
+  +updatedAt: timestamp
+}
+
+class QuizzesCompleted {
+  +id: text
+  +intId: serial
+  +userId: text
+  +quizId: text
+  +attemptNumber: integer
+  +totalQuestions: integer
+  +incorrectAnswers: integer
+  +createdAt: timestamp
+  +updatedAt: timestamp
+}
+
+class SpacedRepetition {
+  +id: text
+  +userId: text
+  +quizCompletedId: text
+  +interval: integer
+  +easeFactor: integer
+  +dueDate: timestamp
+  +createdAt: timestamp
+  +updatedAt: timestamp
+}
+
+Users "1" -- "*" Transcripts : creates >
+Users "1" -- "*" Quizzes : creates >
+Transcripts "1" -- "1" Users : belongs to >
+Quizzes "1" -- "1" Users : belongs to >
+QuizzesCompleted "1" -- "1" Quizzes : relates to >
+QuizzesCompleted "1" -- "1" Users : belongs to >
+SpacedRepetition "1" -- "1" QuizzesCompleted : tracks >
+@enduml

@@ -1,0 +1,72 @@
+@startuml
+entity "users" {
+  * id : text (PK)
+  * email : text (Unique)
+  name : text
+  emailVerified : timestamp
+  image : text
+}
+
+entity "transcripts" {
+  * id : serial (PK)
+  * videoId : text
+  * content : text
+  * userId : text (FK)
+  createdAt : timestamp
+  updatedAt : timestamp
+  latest : integer
+}
+entity "quizzes" {
+  * id : text (PK)
+  * intId : serial
+  * userId : text (FK)
+  * videoId : text
+  --
+  quizDataShort : jsonb
+  quizDataMedium : jsonb
+  quizDataLarge : jsonb
+  quizDataExam : jsonb
+  quizDataTest : jsonb
+  createdAt : timestamp
+  updatedAt : timestamp
+}
+
+entity "quizzesCompleted" {
+  * id : text (PK)
+  * intId : serial
+  * userId : text (FK)
+  * quizId : text (FK)
+  --
+  attemptNumber : integer
+  totalQuestions : integer
+  incorrectAnswers : integer
+  createdAt : timestamp
+  updatedAt : timestamp
+}
+
+entity "spacedRepetition" {
+  * id : text (PK)
+  * userId : text (FK)
+  * quizCompletedId : text (FK)
+  --
+  interval : integer
+  easeFactor : integer
+  dueDate : timestamp
+  createdAt : timestamp
+  updatedAt : timestamp
+}
+
+users ||--o{ transcripts : "creates"
+users ||--o{ quizzes : "creates"
+users ||--o{ quizzesCompleted : "completes"
+users ||--o{ spacedRepetition : "schedules"
+
+transcripts }|--|| users : "belongs to"
+quizzes }|--|| users : "belongs to"
+quizzesCompleted }|--|| quizzes : "pertains to"
+quizzesCompleted }|--|| users : "belongs to"
+spacedRepetition }|--|| quizzesCompleted : "tracks"
+
+' Implicit relationship represented with a dotted line
+quizzes -[dotted]-> transcripts : "based from"
+@enduml

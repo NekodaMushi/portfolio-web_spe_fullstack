@@ -1,0 +1,35 @@
+@startuml
+actor User
+participant Browser
+participant API
+database Database
+
+User -> Browser: Complete a quiz
+Browser -> API: Submit quiz completion data
+API -> Database: Save result into QuizCompleted
+Database --> API: Confirm QuizCompleted update
+API --> Browser: Quiz completion processed
+Browser --> User: Display quiz result
+
+Browser -> API: Request next review date
+API -> Database: Retrieve user's SpacedRepetition entries
+Database --> API: User's SpacedRepetition entries
+API --> Browser: Next review date
+Browser --> User: Display next review date (recall page and profile page)
+
+User -> Browser: Access recall page
+Browser -> API: Get quizzes due for review
+API -> Database: Retrieve user's SpacedRepetition entries
+Database --> API: User's SpacedRepetition entries
+API -> Database: Retrieve quiz data for each entry
+Database --> API: Quiz data for each entry
+API --> Browser: Quizzes and quiz data for review
+Browser --> User: Display quizzes for review
+
+User -> Browser: Select a quiz to review
+Browser -> API: Get selected quiz data
+API -> Database: Retrieve selected quiz data
+Database --> API: Selected quiz data
+API --> Browser: Selected quiz data
+Browser --> User: Display quiz for review
+@enduml

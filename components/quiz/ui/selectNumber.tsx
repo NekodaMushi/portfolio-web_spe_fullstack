@@ -27,13 +27,13 @@ export function SelectNumber({ value, onValueChange }: SelectNumberProps) {
 
   return (
     <Select value={selectedValue} onValueChange={handleValueChange}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-52">
         <SelectValue placeholder="Number of questions" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Size</SelectLabel>
-          <SelectItem value="2">test</SelectItem>
+          <SelectItem value="1">test</SelectItem>
           <SelectItem value="5">Short</SelectItem>
           <SelectItem value="10">Medium</SelectItem>
           <SelectItem value="20">Large</SelectItem>

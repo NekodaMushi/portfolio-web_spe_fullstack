@@ -9,9 +9,11 @@ import QuizEnd from "./QuizEnd";
 type Props = {
   questions: QuestionsState;
   totalQuestions: number;
+  quizId: string;
+  videoId: string;
 };
 
-const QuizCard = ({ questions, totalQuestions }: Props) => {
+const QuizCard = ({ questions, totalQuestions, quizId, videoId }: Props) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [quizEnded, setQuizEnded] = useState<boolean>(false);
@@ -40,8 +42,32 @@ const QuizCard = ({ questions, totalQuestions }: Props) => {
     setCurrentQuestionIndex(newQuestionIndex);
   };
 
-  const handleEndOfQuiz = () => {
+  const handleEndOfQuiz = async () => {
     setQuizEnded(true);
+    try {
+      const response = await fetch(`/api/recall/quiz/completed`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          totalQuestions: totalQuestions,
+          attemptNumber: 1,
+          incorrectAnswers: totalQuestions - score,
+          quizId: quizId,
+          videoId: videoId,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Quiz data saved successfully:", data);
+      } else {
+        console.error("Failed to save quiz data");
+      }
+    } catch (error) {
+      console.error("Error saving quiz data:", error);
+    }
   };
 
   return (
