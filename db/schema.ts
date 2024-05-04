@@ -30,9 +30,9 @@ export const users = pgTable("user", {
 
 export const transcripts = pgTable("transcripts", {
   id: serial('id').primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id),
   videoId: text("video_id").notNull(),
   content: text("content").notNull(),
-  userId: text("user_id").notNull().references(() => users.id),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
   latest: integer("latest").notNull().default(0),
@@ -59,8 +59,8 @@ export const quizzesCompleted = pgTable("quizzesCompleted", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   intId: serial("idInt").notNull(),
   userId: text("user_id").notNull().references(() => users.id),
-  quizId: text("quiz_id").notNull().references(() => quizzes.id),
   videoId: text("video_id").notNull(),
+  quizId: text("quiz_id").notNull().references(() => quizzes.id),
   attemptNumber: integer("attempt_number").notNull().default(1),
   totalQuestions: integer("total_questions").notNull(),
   incorrectAnswers: integer("incorrect_answers").notNull(),

@@ -1,1 +1,0 @@
-ALTER TABLE "quizzesCompleted" ADD COLUMN "video_id" text NOT NULL;

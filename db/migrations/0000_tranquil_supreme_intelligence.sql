@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS "quizzesCompleted" (
 	"id" text PRIMARY KEY NOT NULL,
 	"idInt" serial NOT NULL,
 	"user_id" text NOT NULL,
+	"video_id" text NOT NULL,
 	"quiz_id" text NOT NULL,
 	"attempt_number" integer DEFAULT 1 NOT NULL,
 	"total_questions" integer NOT NULL,
@@ -60,9 +61,9 @@ CREATE TABLE IF NOT EXISTS "spacedRepetition" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "transcripts" (
 	"id" serial PRIMARY KEY NOT NULL,
+	"user_id" text NOT NULL,
 	"video_id" text NOT NULL,
 	"content" text NOT NULL,
-	"user_id" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"latest" integer DEFAULT 0 NOT NULL

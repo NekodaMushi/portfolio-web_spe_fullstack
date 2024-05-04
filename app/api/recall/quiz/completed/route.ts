@@ -49,7 +49,7 @@ export async function POST(request: Request) {
       attemptNumberUpdated = 1;
       await db.insert(quizzesCompleted).values({
       userId: sessionUser.id,
-        quizId: quizId,
+      quizId: quizId,
       videoId: videoId,
       attemptNumber: attemptNumberUpdated,
       totalQuestions: totalQuestions,
