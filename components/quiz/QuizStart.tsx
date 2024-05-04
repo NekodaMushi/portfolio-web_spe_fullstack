@@ -116,7 +116,6 @@ export function QuizStart({ onSetQuizReady }: Props) {
       );
 
       if (!response.ok) {
-        toast.info("You need to download a transcript first");
         setLoading(false);
         throw new Error("Network response was not ok");
       }
@@ -131,14 +130,29 @@ export function QuizStart({ onSetQuizReady }: Props) {
       dispatch(setQuizData({ videoId, numQuestions, quizData, quizId }));
       dispatch(setQuizSelected(numQuestions));
 
-      setLoading(false);
       setQuizReady((prevState) => ({
         ...prevState,
         [numQuestions]: true,
       }));
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
+
+      if (error instanceof TypeError && error.message.includes("Network")) {
+        toast.error("Network error: Please check your connection.");
+      } else if (
+        error instanceof SyntaxError &&
+        error.message.includes("JSON")
+      ) {
+        // Note for later in this condition:
+        // Implement a new API request :
+        // to fetch a new quiz from the AI.
+        toast.info("Please try another length.");
+        toast.error("AI error: Received malformed data.");
+      } else {
+        toast.info("You need to download a transcript first");
+      }
     }
+    setLoading(false);
   };
 
   const handleStartClick = () => {
@@ -155,8 +169,8 @@ export function QuizStart({ onSetQuizReady }: Props) {
     "5": 2000, // Good
     "10": 4000, // Perfect
     "20": 7000, // Good
-    "30": 11000,
-    Select: 0, // Component doesn't allow to initially display something without value
+    "30": 12000,
+    Select: 0, // Component doesn't allow to display something without value
   };
 
   return (

@@ -9,7 +9,8 @@ import {
   pgTable,
   text,
   primaryKey,
- integer, index, serial, jsonb, uniqueIndex
+ integer, index, serial, jsonb, uniqueIndex,
+ real
 } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
@@ -62,6 +63,7 @@ export const quizzesCompleted = pgTable("quizzesCompleted", {
   videoId: text("video_id").notNull(),
   quizId: text("quiz_id").notNull().references(() => quizzes.id),
   attemptNumber: integer("attempt_number").notNull().default(1),
+  successRate: real("success_rate").notNull(),
   totalQuestions: integer("total_questions").notNull(),
   incorrectAnswers: integer("incorrect_answers").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),

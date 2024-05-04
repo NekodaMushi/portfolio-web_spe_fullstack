@@ -2,18 +2,30 @@
 import React, { useState } from "react";
 import QuizButton from "./ui/quizButton";
 import QuestionCard from "./QuestionCard";
-import { QuestionsState } from "@/types/quiz";
-
 import QuizEnd from "./QuizEnd";
 
-type Props = {
+import { QuestionsState } from "@/types/quiz";
+
+import { IconSquareRoundedX } from "@tabler/icons-react";
+
+import { useAppDispatch } from "@/lib/redux/hooks";
+import { resetQuiz } from "slices/quizSlice";
+
+interface QuizCardProps {
   questions: QuestionsState;
   totalQuestions: number;
   quizId: string;
   videoId: string;
-};
+  onSetQuizCancel: () => void;
+}
 
-const QuizCard = ({ questions, totalQuestions, quizId, videoId }: Props) => {
+const QuizCard = ({
+  questions,
+  totalQuestions,
+  quizId,
+  videoId,
+  onSetQuizCancel,
+}: QuizCardProps) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [quizEnded, setQuizEnded] = useState<boolean>(false);
@@ -21,6 +33,8 @@ const QuizCard = ({ questions, totalQuestions, quizId, videoId }: Props) => {
   const [userAnswers, setUserAnswers] = useState<Record<number, string>>({});
 
   const isQuestionAnswered = userAnswers[currentQuestionIndex] ? true : false;
+
+  const dispatch = useAppDispatch();
 
   const handleOnAnswerClick = (
     answer: string,
@@ -70,12 +84,33 @@ const QuizCard = ({ questions, totalQuestions, quizId, videoId }: Props) => {
     }
   };
 
+  const handleReset = () => {
+    dispatch(resetQuiz());
+
+    setCurrentQuestionIndex(0);
+    setScore(0);
+
+    setUserAnswers({});
+
+    onSetQuizCancel();
+  };
+
   return (
-    <div className="text-center">
+    <div className="relative text-center">
       {quizEnded ? (
-        <QuizEnd score={score} totalQuestions={totalQuestions} />
+        <QuizEnd
+          score={score}
+          totalQuestions={totalQuestions}
+          handleReset={handleReset}
+        />
       ) : (
         <>
+          <button
+            className="absolute right-0 top-0 z-10 "
+            onClick={() => handleReset()}
+          >
+            <IconSquareRoundedX className="h-7 w-7" />
+          </button>
           <p className="p-8 text-[20px] font-bold">Score: {score}</p>
 
           <p className="pb-2 text-[18px] font-bold text-[rgb(80,172,128)]">

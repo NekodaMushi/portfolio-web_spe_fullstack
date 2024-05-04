@@ -16,7 +16,9 @@ export async function POST(request: Request) {
       });
     }
     const sessionUser = session?.user;
+
     const { totalQuestions, incorrectAnswers, quizId, videoId } = await request.json();
+    const currentSuccessRate = ( 1 - (incorrectAnswers / totalQuestions)) * 100
 
 
     const latestQuizCompleted = await db
@@ -34,27 +36,40 @@ export async function POST(request: Request) {
     
 
     let attemptNumberUpdated;
+    let newSuccessRate;
 
     if (latestQuizCompleted.length > 0) {
+      // Quiz completed before
+      const previousSuccessRate = latestQuizCompleted[0].successRate;
+      const previousAttemptNumber = latestQuizCompleted[0].attemptNumber;
+
       attemptNumberUpdated = latestQuizCompleted[0].attemptNumber + 1;
-      await db.update(quizzesCompleted).set({
-      // userId: sessionUser.id,
-      // quizId: quizId,
-      attemptNumber: attemptNumberUpdated,
-      totalQuestions: totalQuestions,
-      incorrectAnswers: incorrectAnswers,
-    });
-      
+      newSuccessRate = (previousSuccessRate * previousAttemptNumber + currentSuccessRate) / attemptNumberUpdated;
+
+      await db
+        .update(quizzesCompleted)
+        .set({
+          attemptNumber: attemptNumberUpdated,
+          totalQuestions: totalQuestions,
+          incorrectAnswers: incorrectAnswers,
+          successRate: newSuccessRate,
+          updatedAt: new Date(),
+        })
+        .where(eq(quizzesCompleted.id, latestQuizCompleted[0].id));
     } else {
+      // Quiz completed first time
       attemptNumberUpdated = 1;
+      newSuccessRate = currentSuccessRate;
+
       await db.insert(quizzesCompleted).values({
-      userId: sessionUser.id,
-      quizId: quizId,
-      videoId: videoId,
-      attemptNumber: attemptNumberUpdated,
-      totalQuestions: totalQuestions,
-      incorrectAnswers: incorrectAnswers,
-    });
+        userId: sessionUser.id,
+        quizId: quizId,
+        videoId: videoId,
+        attemptNumber: attemptNumberUpdated,
+        totalQuestions: totalQuestions,
+        incorrectAnswers: incorrectAnswers,
+        successRate: newSuccessRate,
+      });
     }
 
     
