@@ -7,6 +7,7 @@ import QuizEnd from "./QuizEnd";
 import { QuestionsState } from "@/types/quiz";
 
 import { IconSquareRoundedX } from "@tabler/icons-react";
+import { AlertCancel } from "@/components/ui/custom/alert-dialog";
 
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { resetQuiz } from "slices/quizSlice";
@@ -89,7 +90,6 @@ const QuizCard = ({
 
     setCurrentQuestionIndex(0);
     setScore(0);
-
     setUserAnswers({});
 
     onSetQuizCancel();
@@ -105,12 +105,21 @@ const QuizCard = ({
         />
       ) : (
         <>
-          <button
-            className="absolute right-0 top-0 z-10 "
-            onClick={() => handleReset()}
-          >
-            <IconSquareRoundedX className="h-7 w-7" />
-          </button>
+          <AlertCancel
+            trigger={
+              <button
+                className="absolute right-0 top-0 z-10"
+                // onClick={() => handleReset()}
+              >
+                <IconSquareRoundedX className="h-7 w-7" />
+              </button>
+            }
+            title="Are you sure you want to quit?"
+            description="All your progression will be lost"
+            cancelText="No"
+            actionText="Yes"
+            onAction={handleReset}
+          />
           <p className="p-8 text-[20px] font-bold">Score: {score}</p>
 
           <p className="pb-2 text-[18px] font-bold text-[rgb(80,172,128)]">
