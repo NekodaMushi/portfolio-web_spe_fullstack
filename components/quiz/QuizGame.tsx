@@ -2,7 +2,9 @@ import QuizCard from "./QuizCard";
 import { Card } from "../ui/card";
 import { useAppSelector } from "hooks";
 
-const QuizGame = () => {
+import { QuizGameProps } from "@/types/quiz";
+
+const QuizGame = ({ onSetQuizCancel }: QuizGameProps) => {
   const quizSelected = useAppSelector((state) => state.quiz.quizSelected);
   const quizId = useAppSelector((state) => state.quiz.quizId);
   const videoId = useAppSelector((state) => state.quiz.videoId);
@@ -10,6 +12,7 @@ const QuizGame = () => {
 
   const questions = quizSelected;
   const totalQuestions = questions.length;
+
   return (
     <div className="m-auto flex w-full flex-col items-center">
       <Card className="p-8">
@@ -18,6 +21,7 @@ const QuizGame = () => {
           totalQuestions={totalQuestions}
           quizId={quizId}
           videoId={videoId}
+          onSetQuizCancel={onSetQuizCancel}
         />
       </Card>
     </div>

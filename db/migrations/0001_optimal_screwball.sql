@@ -1,0 +1,1 @@
+ALTER TABLE "quizzesCompleted" ADD COLUMN "success_rate" real NOT NULL;

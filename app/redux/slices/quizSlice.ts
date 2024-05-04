@@ -43,9 +43,15 @@ const quizSlice = createSlice({
       const numQuestions = action.payload;
       state.quizSelected = state.quizData[numQuestions] || [];
     },
+    resetQuiz: (state) => {
+      state.videoId = '';
+      state.quizId = '';
+      state.quizData = {};
+      state.quizSelected = [];
+    },
   },
 });
 
-export const { setQuizData, setQuizSelected } = quizSlice.actions;
+export const { setQuizData, setQuizSelected, resetQuiz } = quizSlice.actions;
 
 export default quizSlice.reducer;

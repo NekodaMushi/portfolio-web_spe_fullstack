@@ -14,10 +14,14 @@ export default function Quiz() {
     setQuizReady(true);
   };
 
+  const handleQuizCancel = () => {
+    setQuizReady(false);
+  };
+
   return (
     <>
       {quizReady ? (
-        <QuizGame />
+        <QuizGame onSetQuizCancel={handleQuizCancel} />
       ) : (
         <QuizStart onSetQuizReady={handleQuizReady} />
       )}
