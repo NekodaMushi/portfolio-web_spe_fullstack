@@ -31,7 +31,7 @@ const NavLinksRight_nav: React.FC<NavLinksRight_navProps> = ({
       }}
     >
       <SheetTrigger>
-        <Menu className="mr-4 h-6 w-6 md:hidden" />
+        <Menu className="mr-4 h-6 w-6 sm:hidden" />
       </SheetTrigger>
       <SheetContent side="right" className="w-[300px] sm:w-[400px]">
         <nav className="mt-12 flex flex-col gap-5">
@@ -143,7 +143,7 @@ const NavLinksRight_nav: React.FC<NavLinksRight_navProps> = ({
                 <Link href="/">
                   <div className="group relative flex items-center gap-10 p-2 pl-2">
                     <div className="group-hover:delay-400 absolute top-1/2 h-0 w-0.5 -translate-y-1/2 transform rounded-md bg-primary duration-700 group-hover:h-full group-hover:w-full group-hover:transition-[width]"></div>
-                    <div className="z-10 flex items-center justify-center md:max-lg:ml-3">
+                    <div className="z-10 flex items-center justify-center sm:max-lg:ml-3">
                       <Github width={70} height={70} />
                     </div>
                     <div className="z-10">

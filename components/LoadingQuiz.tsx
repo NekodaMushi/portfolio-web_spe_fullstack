@@ -53,7 +53,7 @@ const LoadingQuiz: React.FC = () => {
         <section className="relative basis-1/3">
           <section className="absolute inset-0 flex items-center justify-center">
             <FaArrowDown className="arrow-icon animate-pulse text-6xl sm:hidden" />
-            <p className="mx-1 animate-pulse md:mx-0">Feeding Quiz</p>
+            <p className="mx-1 animate-pulse sm:mx-0">Feeding Quiz</p>
             <FaArrowDown className="arrow-icon animate-pulse text-6xl sm:-rotate-90" />
           </section>
         </section>

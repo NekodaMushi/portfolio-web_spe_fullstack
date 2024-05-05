@@ -20,7 +20,7 @@ interface FlyoutLinkProps {
 
 const NavLinks = () => {
   return (
-    <nav className="mx-6 hidden items-center space-x-4 md:flex lg:space-x-6  ">
+    <nav className="mx-6 hidden items-center space-x-4 sm:flex lg:space-x-6  ">
       <NavLink FlyoutContent={UseContent}>Use</NavLink>
       <NavLink FlyoutContent={LearnContent}>Learn</NavLink>
       <NavLink FlyoutContent={DevContent}>Dev</NavLink>
