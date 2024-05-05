@@ -184,7 +184,7 @@ export function QuizStart({ onSetQuizReady }: Props) {
         Once you used the chrome extension
       </p>
       <TypewriterEffectSmooth words={words} />
-      <div className="flex flex-col  space-x-0 space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+      <div className="flex flex-col  space-x-0 space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
         <SelectNumber value={numQuestions} onValueChange={handleSelectNumber} />
         <button
           disabled={numQuestions === "Select"}
