@@ -66,12 +66,13 @@ export const quizzesCompleted = pgTable("quizzesCompleted", {
   successRate: real("success_rate").notNull(),
   totalQuestions: integer("total_questions").notNull(),
   incorrectAnswers: integer("incorrect_answers").notNull(),
+  highestScore: integer("highest_score").notNull().default(0),
+  highestScoreTotal: integer("highest_score_total").notNull().default(0),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 }, (table) => ({
   userQuizIdAttemptUnique: uniqueIndex("user_quiz_id_attempt_unique").on(table.userId, table.quizId, table.attemptNumber),
 }));
-
 
 
 export const spacedRepetition = pgTable("spacedRepetition", {

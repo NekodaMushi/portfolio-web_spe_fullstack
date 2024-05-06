@@ -1,44 +1,85 @@
 "use client";
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import CustomCard from "./CustomCard";
+import Autoplay from "embla-carousel-autoplay";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronRight,
+  faChevronLeft,
+} from "@fortawesome/free-solid-svg-icons";
+
+interface CarouselDataItem {
+  successRate: number;
+  attemptNumber: number;
+  totalQuestions: number;
+  incorrectAnswers: number;
+  updatedAt: string;
+  videoId: string;
+}
+
+type CarouselData = CarouselDataItem[];
 
 export function Carousel() {
-  const [emblaRef] = useEmblaCarousel();
+  const [data, setData] = useState<CarouselData>([]);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/recall/quiz/all");
+        const fetchedData = await response.json();
+        setData(fetchedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
 
   return (
     <div className="embla w-full overflow-hidden sm:mt-2" ref={emblaRef}>
       <div className="embla__container">
-        <div className="embla__slide flex h-full flex-col items-center justify-center">
-          <CustomCard
-            title="305. Reusing Styles With React Components"
-            length={20}
-            lastScore={4}
-            highestScore={14}
-            lastAttempt="2"
-            attemptNumber={6}
-          />
-        </div>
-        <div className="embla__slide flex h-full flex-col items-center justify-center">
-          <CustomCard
-            title="306. Reusing Styles With React Components"
-            length={20}
-            lastScore={4}
-            highestScore={14}
-            lastAttempt="2"
-            attemptNumber={6}
-          />
-        </div>
-        <div className="embla__slide flex h-full flex-col items-center justify-center">
-          <CustomCard
-            title="307. Reusing Styles With React Components"
-            length={20}
-            lastScore={4}
-            highestScore={14}
-            lastAttempt="2"
-            attemptNumber={6}
-          />
-        </div>
+        {data.map((item, index) => (
+          <div
+            key={index}
+            className="embla__slide relative flex h-full flex-col items-center justify-center"
+          >
+            <CustomCard
+              title={item.videoId}
+              length={item.totalQuestions}
+              lastScore={item.totalQuestions - item.incorrectAnswers}
+              highestScore={Math.max(
+                ...data.map((d) => d.totalQuestions - d.incorrectAnswers),
+              )}
+              lastAttempt={new Date(item.updatedAt).toLocaleDateString()}
+              attemptNumber={item.attemptNumber}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="flex justify-between">
+        <button
+          className="embla__prev m-2 rounded-full border-2 border-solid p-3 text-xl"
+          onClick={scrollPrev}
+        >
+          <FontAwesomeIcon icon={faChevronLeft} />
+        </button>
+        <button
+          className="embla__next m-2 rounded-full border-2 border-solid p-3 text-xl"
+          onClick={scrollNext}
+        >
+          <FontAwesomeIcon icon={faChevronRight} />
+        </button>
       </div>
     </div>
   );

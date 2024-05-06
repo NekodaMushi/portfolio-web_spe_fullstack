@@ -168,7 +168,7 @@ export function QuizStart({ onSetQuizReady }: Props) {
     "1": 1000, // 750ms for 2 questions
     "5": 2000, // Good
     "10": 4000, // Perfect
-    "20": 7000, // Good
+    "20": 9000, // Good
     "30": 12000,
     Select: 0, // Component doesn't allow to display something without value
   };
