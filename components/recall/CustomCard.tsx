@@ -1,4 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import { Button } from "../ui/button";
+import { SelectNumber } from "../quiz/ui/selectNumber";
+import { NumQuestions } from "@/types/quiz";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 
 interface CardProps {
   title: string;
@@ -17,19 +22,37 @@ const CustomCard: React.FC<CardProps> = ({
   lastAttempt,
   attemptNumber,
 }) => {
+  const CustomColor =
+    lastScore / length >= 0.5
+      ? `border-[2px] border-green-500`
+      : `border-[2px] border-red-500`;
+
+  const [numQuestions, setNumQuestions] = useState<NumQuestions>("Select");
+
+  const handleSelectNumber = (value: NumQuestions) => {};
+
   return (
-    <div className="mx-auto my-2 max-w-2xl rounded-lg bg-black p-4 text-white sm:flex sm:h-64 sm:w-full sm:flex-col sm:items-center sm:justify-between">
+    <div
+      className={`relative z-10 my-2 rounded-lg border-2 p-4 shadow-lg sm:flex sm:h-64 sm:w-full sm:max-w-2xl sm:flex-col sm:items-center sm:justify-between lg:h-80 lg:max-w-5xl ${CustomColor}`}
+    >
+      <div
+        className={`absolute bottom-0 left-0 right-0 top-0 z-[-1] rounded-lg ${CustomColor} blur-lg filter`}
+      ></div>
+
       <div className="mb-4 flex flex-col sm:mb-0 sm:w-full">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold">{title}</h2>
-          <button className="-mt-6 rounded bg-gray-700 px-3 py-1 text-sm sm:mt-0">
-            X
+          <button
+            className={`${CustomColor} -mt-6 rounded px-3 py-1 text-sm sm:mt-0`}
+          >
+            <FontAwesomeIcon icon={faRotateRight} />
+            {/* <FontAwesomeIcon icon={faRotateRight} spin /> */}
           </button>
         </div>
-        <p className="text-sm">Length: {length}</p>
+        <p className="text-base">Length: {length}</p>
       </div>
       <div className="mb-4 sm:mb-0 sm:flex sm:w-full sm:items-center sm:justify-end">
-        <div className="text-sm">
+        <div className="text-sm ">
           <p>
             Last Score: {lastScore}/{length}
           </p>
@@ -40,16 +63,17 @@ const CustomCard: React.FC<CardProps> = ({
       </div>
       <div className="mb-4 sm:mb-0 sm:flex sm:w-full sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm">Last attempt: {lastAttempt} days ago</p>
+          <p className="text-sm">Last attempt: {lastAttempt}</p>
           <p className="text-sm">Attempt Number: {attemptNumber}</p>
         </div>
         <div className="mt-4 flex gap-3">
-          <button className=" w-full rounded bg-gray-700 px-3 py-1 text-sm sm:h-10 sm:w-auto">
-            Change Length
-          </button>
-          <button className="w-full rounded bg-blue-500 px-3 py-1 text-sm sm:h-10 sm:w-auto">
+          <SelectNumber
+            value={numQuestions}
+            onValueChange={handleSelectNumber}
+          />
+          <Button className="w-full rounded  px-3 py-1 text-sm sm:h-9 sm:w-auto">
             START
-          </button>
+          </Button>
         </div>
       </div>
     </div>

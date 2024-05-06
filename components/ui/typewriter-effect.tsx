@@ -1,5 +1,4 @@
 "use client";
-
 import { cn } from "@/lib/utils";
 import { motion, stagger, useAnimate, useInView } from "framer-motion";
 import { useEffect } from "react";
@@ -72,7 +71,7 @@ export const TypewriterEffect = ({
   return (
     <div
       className={cn(
-        "text-center text-base font-bold sm:text-3xl sm:text-xl lg:text-5xl",
+        "text-center text-base font-bold sm:text-xl md:text-3xl lg:text-5xl",
         className,
       )}
     >
@@ -90,7 +89,7 @@ export const TypewriterEffect = ({
           repeatType: "reverse",
         }}
         className={cn(
-          "inline-block h-4 w-[4px] rounded-sm bg-blue-500 sm:h-6 lg:h-10",
+          "inline-block h-4 w-[4px] rounded-sm bg-blue-500 md:h-6 lg:h-10",
           cursorClassName,
         )}
       ></motion.span>
@@ -156,7 +155,7 @@ export const TypewriterEffectSmooth = ({
         }}
       >
         <div
-          className="lg:text:3xl text-xs font-bold sm:text-base sm:text-xl xl:text-5xl"
+          className="lg:text:3xl text-xs font-bold sm:text-base md:text-xl xl:text-5xl"
           style={{
             whiteSpace: "nowrap",
           }}
@@ -178,7 +177,7 @@ export const TypewriterEffectSmooth = ({
           repeatType: "reverse",
         }}
         className={cn(
-          "block h-4 w-[4px]  rounded-sm bg-primary sm:h-6 xl:h-12",
+          "block h-4 w-[4px]  rounded-sm bg-blue-500 sm:h-6 xl:h-12",
           cursorClassName,
         )}
       ></motion.span>

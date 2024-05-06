@@ -1,0 +1,2 @@
+ALTER TABLE "quizzesCompleted" ADD COLUMN "highest_score" integer DEFAULT 0 NOT NULL;--> statement-breakpoint
+ALTER TABLE "quizzesCompleted" ADD COLUMN "highest_score_total" integer DEFAULT 0 NOT NULL;

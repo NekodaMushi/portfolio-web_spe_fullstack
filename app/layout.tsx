@@ -24,6 +24,10 @@ export default function RootLayout({
         <html lang="en" className={jetBrainsMono.variable}>
           <head>
             <link rel="icon" href="/favicon/favicon.ico" />
+            <link
+              rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+            />
           </head>
           <body>
             <ThemeProvider
