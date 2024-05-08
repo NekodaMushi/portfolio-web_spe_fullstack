@@ -1,7 +1,7 @@
 "use client";
 
 import LoadingQuiz from "@/components/LoadingQuiz";
-import QuizGame from "@/components/quiz/QuizGame";
+import QuizLayout from "@/components/quiz/QuizLayout";
 import { QuizStart } from "@/components/quiz/QuizStart";
 import { useState } from "react";
 
@@ -21,7 +21,7 @@ export default function Quiz() {
   return (
     <>
       {quizReady ? (
-        <QuizGame onSetQuizCancel={handleQuizCancel} />
+        <QuizLayout onSetQuizCancel={handleQuizCancel} />
       ) : (
         <QuizStart onSetQuizReady={handleQuizReady} />
       )}

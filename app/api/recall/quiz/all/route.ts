@@ -23,6 +23,8 @@ export async function GET(request: Request) {
         attemptNumber: quizzesCompleted.attemptNumber,
         totalQuestions: quizzesCompleted.totalQuestions,
         incorrectAnswers: quizzesCompleted.incorrectAnswers,
+        highestScore: quizzesCompleted.highestScore,
+        highestScoreTotal: quizzesCompleted.highestScoreTotal,
         updatedAt: quizzesCompleted.updatedAt,
         videoId: quizzesCompleted.videoId,
       })

@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import quizReducer from 'slices/quizSlice'
+import recallReducer from 'slices/recallSlice'
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       quiz: quizReducer,
+      recall: recallReducer,
     }
   })
 }
