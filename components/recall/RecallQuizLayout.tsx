@@ -4,15 +4,16 @@ import { useAppSelector } from "hooks";
 
 import { QuizLayoutProps } from "@/types/quiz";
 
-const RecallQuizLayout = ({ onSetQuizCancel }: QuizLayoutProps) => {
+const RecallQuizLayout = () => {
   const selectedQuizData = useAppSelector(
     (state) => state.recall.selectedQuizData,
   );
   const videoId = useAppSelector((state) => state.recall.videoId);
   const quizId = useAppSelector((state) => state.recall.quizId);
-  // const quiz = useAppSelector((state) => state.recall.quizData);
+  const quiz = useAppSelector((state) => state.recall.quizData);
 
   console.log("-------------0");
+  console.log(typeof quiz);
   // console.log(quiz?.quizDataShort);
   console.log(videoId);
   console.log(quizId);
@@ -39,7 +40,6 @@ const RecallQuizLayout = ({ onSetQuizCancel }: QuizLayoutProps) => {
           totalQuestions={totalQuestions}
           quizId={quizId}
           videoId={videoId}
-          onSetQuizCancel={onSetQuizCancel}
         />
       </Card>
     </div>

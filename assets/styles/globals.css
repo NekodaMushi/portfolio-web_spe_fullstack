@@ -58,6 +58,8 @@
   }
 }
 
+/* Carousel */
+
 .embla {
   overflow: hidden;
 }
@@ -67,6 +69,8 @@
 .embla__slide {
   flex: 0 0 100%;
 }
+
+/* Cards scroll in Recall */
 .vertical-scroll::-webkit-scrollbar {
   width: 0.4em;
   height: 1em;
@@ -86,4 +90,20 @@
 
 .vertical-scroll::-webkit-scrollbar-thumb:hover {
   background: #e11d48;
+}
+
+/* CustomCard in Recall */
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.icon-blink {
+  animation: blink 6s linear infinite;
 }

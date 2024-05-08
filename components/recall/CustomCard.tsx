@@ -33,11 +33,15 @@ const CustomCard: React.FC<CardProps> = ({
   attemptNumber,
 }) => {
   const dispatch = useAppDispatch();
-
+  const { selectedQuizData } = useAppSelector((state) => state.recall);
   const [isQuizDataFetched, setIsQuizDataFetched] = useState<boolean>(false);
+
+  const [quizAvailable, setQuizAvailable] = useState<string[]>([]);
   const [numQuestions, setNumQuestions] = useState<NumQuestions>("Select");
 
   // ...
+
+  const [quizReady, setQuizReady] = useState<{ [key: string]: boolean }>({});
 
   const fetchQuizData = async (value: any) => {
     try {
@@ -51,31 +55,53 @@ const CustomCard: React.FC<CardProps> = ({
         },
       );
       const data = await response.json();
-      console.log(data);
+
+      const quizKeys = [
+        "quizDataShort",
+        "quizDataMedium",
+        "quizDataLarge",
+        "quizDataExam",
+        "quizDataTest",
+      ];
+      const quizDataAvailable = quizKeys.filter((key) => data[key] !== null);
+
+      setQuizAvailable(quizDataAvailable);
       dispatch(
         setRecallData({ videoId: title, quizId: data.quizId, quizData: data }),
       );
       setNumQuestions(value);
       dispatch(setSelectedQuizData(value));
       setIsQuizDataFetched(true);
+
+      // Update quiz readiness state
+      setQuizReady((prevState) => ({
+        ...prevState,
+        [value]: quizDataAvailable.includes(value),
+      }));
     } catch (error) {
       console.error("Failed to fetch quiz data:", error);
     }
   };
 
-  // ...
-
-  const handleSelectNumber = (value: NumQuestions) => {
-    fetchQuizData(value);
-  };
-
   const startQuiz = () => {
-    if (isQuizDataFetched) {
+    // Check if the selected number of questions is ready
+    if (quizReady[numQuestions]) {
       dispatch(setQuizStart(true));
     } else {
       console.error(
         "No quiz data available for the selected number of questions",
       );
+    }
+  };
+
+  const handleSelectNumber = (value: NumQuestions) => {
+    fetchQuizData(value);
+  };
+
+  const test = () => {
+    if (selectedQuizData) console.log("HERE =>", selectedQuizData);
+    else {
+      console.log("NOT SELECTED");
     }
   };
 
@@ -98,7 +124,15 @@ const CustomCard: React.FC<CardProps> = ({
           <button
             className={`${CustomColor} -mt-6 rounded px-3 py-1 text-sm sm:mt-0`}
           >
-            <FontAwesomeIcon icon={faRotateRight} />
+            {!quizReady[numQuestions] ? (
+              <FontAwesomeIcon
+                icon={faRotateRight}
+                className="icon-blink"
+                style={{ color: "orange" }}
+              />
+            ) : (
+              <FontAwesomeIcon icon={faRotateRight} />
+            )}
           </button>
         </div>
         <p className="text-base">Last quiz length: {length}</p>
@@ -125,7 +159,8 @@ const CustomCard: React.FC<CardProps> = ({
           />
           <Button
             onClick={() => startQuiz()}
-            className="w-full rounded px-3 py-1 text-sm sm:h-9 sm:w-auto"
+            disabled={!quizReady[numQuestions]} // Disable the button based on the readiness of the selected quiz data
+            className={`w-full rounded px-3 py-1 text-sm sm:h-9 sm:w-auto ${!quizReady[numQuestions] ? "cursor-not-allowed opacity-50" : ""}`}
           >
             START
           </Button>

@@ -10,14 +10,13 @@ import { IconSquareRoundedX } from "@tabler/icons-react";
 import { AlertCancel } from "@/components/ui/custom/alert-dialog";
 
 import { useAppDispatch } from "@/lib/redux/hooks";
-import { resetQuiz } from "slices/quizSlice";
+import { resetRecall } from "slices/recallSlice";
 
 interface QuizCardProps {
   questions: QuestionsState;
   totalQuestions: number;
   quizId: string;
   videoId: string;
-  onSetQuizCancel: () => void;
 }
 
 const RecallQuizCard = ({
@@ -25,7 +24,6 @@ const RecallQuizCard = ({
   totalQuestions,
   quizId,
   videoId,
-  onSetQuizCancel,
 }: QuizCardProps) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -86,13 +84,11 @@ const RecallQuizCard = ({
   };
 
   const handleReset = () => {
-    dispatch(resetQuiz());
+    dispatch(resetRecall());
 
     setCurrentQuestionIndex(0);
     setScore(0);
     setUserAnswers({});
-
-    onSetQuizCancel();
   };
 
   return (
