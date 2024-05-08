@@ -2,9 +2,9 @@ import QuizCard from "./QuizCard";
 import { Card } from "../ui/card";
 import { useAppSelector } from "hooks";
 
-import { QuizGameProps } from "@/types/quiz";
+import { QuizLayoutProps } from "@/types/quiz";
 
-const QuizGame = ({ onSetQuizCancel }: QuizGameProps) => {
+const QuizLayout = ({ onSetQuizCancel }: QuizLayoutProps) => {
   const quizSelected = useAppSelector((state) => state.quiz.quizSelected);
   const quizId = useAppSelector((state) => state.quiz.quizId);
   const videoId = useAppSelector((state) => state.quiz.videoId);
@@ -28,4 +28,4 @@ const QuizGame = ({ onSetQuizCancel }: QuizGameProps) => {
   );
 };
 
-export default QuizGame;
+export default QuizLayout;

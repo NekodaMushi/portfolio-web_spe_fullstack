@@ -1,0 +1,51 @@
+@startuml
+start
+:ActualQuiz;
+
+if (User clicks StartButton?) then (yes)
+  :Restart ActualQuiz from ActualLengthState;
+  stop
+else (no)
+endif
+
+if (User clicks RegenerateButton?) then (yes)
+  :Regenerate from ActualQuiz to NewQuiz;
+  if (QuizReady?) then (yes)
+    :StartButton enabled;
+    if (User clicks StartButton?) then (yes)
+      :Start NewQuiz;
+      stop
+    else (no)
+    endif
+  else (no)
+    :StartButton disabled;
+  endif
+else (no)
+endif
+
+if (User clicks SelectSizeButton and chooses short?) then (yes)
+  if (NewLengthState exists?) then (yes)
+    if (User clicks StartButton?) then (yes)
+      :Restart ActualQuiz from NewLengthState;
+      stop
+    else (no)
+    endif
+  else (no)
+    :StartButton disabled;
+    if (User clicks RegenerateButton?) then (yes)
+      :Regenerate NewQuiz;
+      if (QuizReady?) then (yes)
+        :StartButton enabled;
+        if (User clicks StartButton?) then (yes)
+          :Start NewQuiz;
+          stop
+        else (no)
+        endif
+      else (no)
+      endif
+    else (no)
+    endif
+  endif
+else (no)
+endif
+@enduml

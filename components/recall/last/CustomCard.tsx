@@ -1,17 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { SelectNumber } from "./selectNumber";
-import { NumQuestions, QuestionsState } from "@/types/quiz";
+import { SelectLength } from "./selectNumber";
+import { QuestionsState } from "@/types/quiz";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppDispatch, useAppSelector } from "hooks";
-import {
-  setRecallData,
-  setSelectedQuizData,
-  setQuizStart,
-} from "slices/recallSlice";
+import { setRecallData, setSelectedQuizData } from "slices/recallSlice";
 
 interface CardProps {
   title: string;
@@ -21,7 +17,10 @@ interface CardProps {
   highestScoreTotal: number;
   lastAttempt: string;
   attemptNumber: number;
+  onSetQuizReady: () => void;
 }
+
+type NumLength = "dataQuizTest" | "dataQuizShort" | "Select";
 
 const CustomCard: React.FC<CardProps> = ({
   title,
@@ -31,15 +30,16 @@ const CustomCard: React.FC<CardProps> = ({
   highestScoreTotal,
   lastAttempt,
   attemptNumber,
+  onSetQuizReady,
 }) => {
   const dispatch = useAppDispatch();
-
+  const { quizData, selectedQuizData } = useAppSelector(
+    (state) => state.recall,
+  );
   const [isQuizDataFetched, setIsQuizDataFetched] = useState<boolean>(false);
-  const [numQuestions, setNumQuestions] = useState<NumQuestions>("Select");
+  const [numQuestions, setNumQuestions] = useState<NumLength>("Select");
 
-  // ...
-
-  const fetchQuizData = async (value: any) => {
+  const fetchQuizData = async () => {
     try {
       const response = await fetch(
         `/api/recall/quiz?videoId=${encodeURIComponent(title)}`,
@@ -51,27 +51,30 @@ const CustomCard: React.FC<CardProps> = ({
         },
       );
       const data = await response.json();
-      console.log(data);
+      console.log("Fetched data:", data); // Detailed log of fetched data
       dispatch(
         setRecallData({ videoId: title, quizId: data.quizId, quizData: data }),
       );
-      setNumQuestions(value);
-      dispatch(setSelectedQuizData(value));
       setIsQuizDataFetched(true);
     } catch (error) {
       console.error("Failed to fetch quiz data:", error);
     }
   };
 
-  // ...
-
-  const handleSelectNumber = (value: NumQuestions) => {
-    fetchQuizData(value);
+  const handleSelectNumber = (value: NumLength) => {
+    setNumQuestions(value);
+    console.log("NumQuestions selected:", value); // Log selected value
+    dispatch(setSelectedQuizData(value));
+    fetchQuizData();
   };
+
+  useEffect(() => {
+    console.log("Updated selectedQuizData:", selectedQuizData); // Detailed log of state update
+  }, [selectedQuizData]);
 
   const startQuiz = () => {
     if (isQuizDataFetched) {
-      dispatch(setQuizStart(true));
+      onSetQuizReady();
     } else {
       console.error(
         "No quiz data available for the selected number of questions",
@@ -119,12 +122,12 @@ const CustomCard: React.FC<CardProps> = ({
           <p className="text-sm">Last attempt: {lastAttempt}</p>
         </div>
         <div className="mt-4 flex gap-3">
-          <SelectNumber
+          <SelectLength
             value={numQuestions}
             onValueChange={handleSelectNumber}
           />
           <Button
-            onClick={() => startQuiz()}
+            onClick={startQuiz}
             className="w-full rounded px-3 py-1 text-sm sm:h-9 sm:w-auto"
           >
             START
