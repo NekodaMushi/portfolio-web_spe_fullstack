@@ -106,7 +106,7 @@ export function QuizStart({ onSetQuizReady }: Props) {
 
     try {
       const response = await fetch(
-        `/api/ai/generate/quiz?numQuestions=${numQuestions}`,
+        `/api/ai/quiz/generate?numQuestions=${numQuestions}`,
         {
           method: "POST",
           headers: {

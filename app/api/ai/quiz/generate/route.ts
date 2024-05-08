@@ -27,7 +27,7 @@ export async function POST(request: Request) {
       })
       .from(transcripts)
       .where(
-        and(eq(transcripts.userId, sessionUser.id), eq(transcripts.latest, 1)),
+        and(eq(transcripts.userId, sessionUser.id), eq(transcripts.latest, 1))
       )
       .limit(1);
 

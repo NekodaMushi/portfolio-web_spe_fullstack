@@ -9,7 +9,7 @@ import {
   faChevronRight,
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import Spinner from "../ui/spinner"; 
+import Spinner from "../ui/spinner";
 interface CarouselDataItem {
   successRate: number;
   attemptNumber: number;
@@ -24,7 +24,7 @@ interface CarouselDataItem {
 type CarouselData = CarouselDataItem[];
 
 export function Carousel() {
-  const [data, setData] = useState<CarouselData | null>(null); 
+  const [data, setData] = useState<CarouselData | null>(null);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export function Carousel() {
               className="embla__slide relative flex h-full flex-col items-center justify-center"
             >
               <CustomCard
-                title={item.videoId}
+                quizTitle={item.videoId}
                 length={item.totalQuestions}
                 lastScore={item.totalQuestions - item.incorrectAnswers}
                 highestScore={item.highestScore}

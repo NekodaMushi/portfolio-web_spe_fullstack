@@ -15,7 +15,7 @@ type SelectNumberProps = {
   onValueChange: (value: NumQuestions) => void;
 };
 
-export function SelectNumber({ value, onValueChange }: SelectNumberProps) {
+export function SelectDataType({ value, onValueChange }: SelectNumberProps) {
   const [selectedValue, setSelectedValue] = React.useState<NumQuestions | "">(
     "",
   );

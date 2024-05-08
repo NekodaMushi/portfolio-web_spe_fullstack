@@ -1,7 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
-import { SelectNumber } from "./selectNumber";
+import { SelectDataType } from "./selectNumber";
+import { SelectNumber } from "../quiz/ui/selectNumber";
 import { NumQuestions, QuestionsState } from "@/types/quiz";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
@@ -12,9 +13,10 @@ import {
   setSelectedQuizData,
   setQuizStart,
 } from "slices/recallSlice";
+import { AlertRegenerate } from "../ui/custom/alert-regeneratate";
 
 interface CardProps {
-  title: string;
+  quizTitle: string;
   length: number;
   lastScore: number;
   highestScore: number;
@@ -24,7 +26,7 @@ interface CardProps {
 }
 
 const CustomCard: React.FC<CardProps> = ({
-  title,
+  quizTitle,
   length,
   lastScore,
   highestScore,
@@ -33,20 +35,22 @@ const CustomCard: React.FC<CardProps> = ({
   attemptNumber,
 }) => {
   const dispatch = useAppDispatch();
-  const { selectedQuizData } = useAppSelector((state) => state.recall);
-  const [isQuizDataFetched, setIsQuizDataFetched] = useState<boolean>(false);
+  // const { selectedQuizData } = useAppSelector((state) => state.recall);
+  // const [isQuizDataFetched, setIsQuizDataFetched] = useState<boolean>(false);
 
-  const [quizAvailable, setQuizAvailable] = useState<string[]>([]);
   const [numQuestions, setNumQuestions] = useState<NumQuestions>("Select");
 
   // ...
 
   const [quizReady, setQuizReady] = useState<{ [key: string]: boolean }>({});
 
-  const fetchQuizData = async (value: any) => {
+  const [selectedQuizLength, setSelectedQuizLength] =
+    useState<string>("Select");
+
+  const fetchQuizData = async (value: NumQuestions) => {
     try {
       const response = await fetch(
-        `/api/recall/quiz?videoId=${encodeURIComponent(title)}`,
+        `/api/recall/quiz?videoId=${encodeURIComponent(quizTitle)}`,
         {
           method: "GET",
           headers: {
@@ -65,13 +69,16 @@ const CustomCard: React.FC<CardProps> = ({
       ];
       const quizDataAvailable = quizKeys.filter((key) => data[key] !== null);
 
-      setQuizAvailable(quizDataAvailable);
       dispatch(
-        setRecallData({ videoId: title, quizId: data.quizId, quizData: data }),
+        setRecallData({
+          videoId: quizTitle,
+          quizId: data.quizId,
+          quizData: data,
+        }),
       );
       setNumQuestions(value);
       dispatch(setSelectedQuizData(value));
-      setIsQuizDataFetched(true);
+      // setIsQuizDataFetched(true);
 
       setQuizReady((prevState) => ({
         ...prevState,
@@ -92,6 +99,37 @@ const CustomCard: React.FC<CardProps> = ({
     }
   };
 
+  const generateNewQuiz = async (
+    selectedNumber: NumQuestions,
+    title: string,
+  ) => {
+    try {
+      const response = await fetch("/api/ai/quiz/regenerate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          numQuestions: selectedNumber,
+          videoTitle: title,
+        }),
+      });
+      console.log(response);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      // Handle response data or update state as needed
+    } catch (error) {
+      console.error("Failed to regenerate quiz:", error);
+    }
+  };
+
+  // const generateNewQuiz = (selectedNumber: NumQuestions, title: string) => {
+  //   console.log("TITLE ->", title);
+  //   console.log("length ->", selectedNumber);
+  // };
+
   const handleSelectNumber = (value: NumQuestions) => {
     fetchQuizData(value);
   };
@@ -111,20 +149,32 @@ const CustomCard: React.FC<CardProps> = ({
 
       <div className="mb-4 flex flex-col sm:mb-0 sm:w-full">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold">{title}</h2>
-          <button
-            className={`${CustomColor} -mt-6 rounded px-3 py-1 text-sm sm:mt-0`}
-          >
-            {!quizReady[numQuestions] ? (
-              <FontAwesomeIcon
-                icon={faRotateRight}
-                className="icon-blink"
-                style={{ color: "orange" }}
-              />
-            ) : (
-              <FontAwesomeIcon icon={faRotateRight} />
-            )}
-          </button>
+          <h2 className="text-xl font-bold">{quizTitle}</h2>
+          <AlertRegenerate
+            selectedNumber={numQuestions}
+            trigger={
+              <button
+                className={`${CustomColor} -mt-6 rounded px-3 py-1 text-sm sm:mt-0`}
+              >
+                {!quizReady[numQuestions] ? (
+                  <FontAwesomeIcon
+                    icon={faRotateRight}
+                    className="icon-blink"
+                    style={{ color: "grey" }}
+                  />
+                ) : (
+                  <FontAwesomeIcon icon={faRotateRight} />
+                )}
+              </button>
+            }
+            title="Asking AI to generate a quiz."
+            description="Which Size do you want?"
+            cancelText="No"
+            actionText="Yes"
+            onAction={(selectedNumber) =>
+              generateNewQuiz(selectedNumber, quizTitle)
+            }
+          />
         </div>
         <p className="text-base">Last quiz length: {length}</p>
       </div>
@@ -144,7 +194,7 @@ const CustomCard: React.FC<CardProps> = ({
           <p className="text-sm">Last attempt: {lastAttempt}</p>
         </div>
         <div className="mt-4 flex gap-3">
-          <SelectNumber
+          <SelectDataType
             value={numQuestions}
             onValueChange={handleSelectNumber}
           />
