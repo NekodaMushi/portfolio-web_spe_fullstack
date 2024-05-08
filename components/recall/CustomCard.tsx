@@ -73,7 +73,6 @@ const CustomCard: React.FC<CardProps> = ({
       dispatch(setSelectedQuizData(value));
       setIsQuizDataFetched(true);
 
-      // Update quiz readiness state
       setQuizReady((prevState) => ({
         ...prevState,
         [value]: quizDataAvailable.includes(value),
@@ -84,7 +83,6 @@ const CustomCard: React.FC<CardProps> = ({
   };
 
   const startQuiz = () => {
-    // Check if the selected number of questions is ready
     if (quizReady[numQuestions]) {
       dispatch(setQuizStart(true));
     } else {
@@ -96,13 +94,6 @@ const CustomCard: React.FC<CardProps> = ({
 
   const handleSelectNumber = (value: NumQuestions) => {
     fetchQuizData(value);
-  };
-
-  const test = () => {
-    if (selectedQuizData) console.log("HERE =>", selectedQuizData);
-    else {
-      console.log("NOT SELECTED");
-    }
   };
 
   const CustomColor =
@@ -159,7 +150,7 @@ const CustomCard: React.FC<CardProps> = ({
           />
           <Button
             onClick={() => startQuiz()}
-            disabled={!quizReady[numQuestions]} // Disable the button based on the readiness of the selected quiz data
+            disabled={!quizReady[numQuestions]}
             className={`w-full rounded px-3 py-1 text-sm sm:h-9 sm:w-auto ${!quizReady[numQuestions] ? "cursor-not-allowed opacity-50" : ""}`}
           >
             START
