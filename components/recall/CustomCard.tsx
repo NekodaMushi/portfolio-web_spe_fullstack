@@ -1,13 +1,11 @@
-"use client";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Button } from "../ui/button";
 import { SelectDataType } from "./selectNumber";
-import { SelectNumber } from "../quiz/ui/selectNumber";
-import { NumQuestions, QuestionsState } from "@/types/quiz";
+import { NumQuestions } from "@/types/quiz";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 
-import { useAppDispatch, useAppSelector } from "hooks";
+import { useAppDispatch } from "hooks";
 import {
   setRecallData,
   setSelectedQuizData,
@@ -35,76 +33,18 @@ const CustomCard: React.FC<CardProps> = ({
   attemptNumber,
 }) => {
   const dispatch = useAppDispatch();
-  // const { selectedQuizData } = useAppSelector((state) => state.recall);
-  // const [isQuizDataFetched, setIsQuizDataFetched] = useState<boolean>(false);
 
   const [numQuestions, setNumQuestions] = useState<NumQuestions>("Select");
-
   const [quizReady, setQuizReady] = useState<{ [key: string]: boolean }>({});
-
-  const fetchQuizData = async (value: NumQuestions) => {
-    try {
-      const response = await fetch(
-        `/api/recall/quiz?videoId=${encodeURIComponent(quizTitle)}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      );
-      const data = await response.json();
-
-      const quizKeys = [
-        "quizDataShort",
-        "quizDataMedium",
-        "quizDataLarge",
-        "quizDataExam",
-        "quizDataTest",
-      ];
-      const quizDataAvailable = quizKeys.filter((key) => data[key] !== null);
-      console.log("1111111111");
-      console.log("videoId", quizTitle);
-      console.log("quizId", data.quizId);
-      console.log("data", data);
-      console.log("value:", value);
-
-      dispatch(
-        setRecallData({
-          videoId: quizTitle,
-          quizId: data.quizId,
-          quizData: data,
-        }),
-      );
-      setNumQuestions(value);
-      dispatch(setSelectedQuizData(value));
-      // setIsQuizDataFetched(true);
-
-      setQuizReady((prevState) => ({
-        ...prevState,
-        [value]: quizDataAvailable.includes(value),
-      }));
-    } catch (error) {
-      console.error("Failed to fetch quiz data:", error);
-    }
-  };
-
-  const startQuiz = () => {
-    if (quizReady[numQuestions]) {
-      dispatch(setQuizStart(true));
-    } else {
-      console.error(
-        "No quiz data available for the selected number of questions",
-      );
-    }
-  };
+  const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   const generateNewQuiz = async (
     selectedNumber: NumQuestions,
     title: string,
   ) => {
     try {
-      // Loading start
+      setIsGenerating(true);
       const response = await fetch("/api/ai/quiz/regenerate", {
         method: "POST",
         headers: {
@@ -129,20 +69,69 @@ const CustomCard: React.FC<CardProps> = ({
           quizData: quizData,
         }),
       );
-      // Loading end
       dispatch(setQuizStart(true));
     } catch (error) {
       console.error("Failed to regenerate quiz:", error);
     }
   };
 
-  // const generateNewQuiz = (selectedNumber: NumQuestions, title: string) => {
-  //   console.log("TITLE ->", title);
-  //   console.log("length ->", selectedNumber);
-  // };
+  const fetchQuizData = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `/api/recall/quiz?videoId=${encodeURIComponent(quizTitle)}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+      const data = await response.json();
+
+      const quizKeys = [
+        "quizDataShort",
+        "quizDataMedium",
+        "quizDataLarge",
+        "quizDataExam",
+        "quizDataTest",
+      ];
+      const quizDataAvailable = quizKeys.filter((key) => data[key] !== null);
+
+      dispatch(
+        setRecallData({
+          videoId: quizTitle,
+          quizId: data.quizId,
+          quizData: data,
+        }),
+      );
+
+      setQuizReady((prevState) => ({
+        ...prevState,
+        ...quizDataAvailable.reduce((acc: { [key: string]: boolean }, key) => {
+          acc[key] = true;
+          return acc;
+        }, {}),
+      }));
+
+      setIsDataLoaded(true);
+    } catch (error) {
+      console.error("Failed to fetch quiz data:", error);
+    }
+  }, [dispatch, quizTitle]);
 
   const handleSelectNumber = (value: NumQuestions) => {
-    fetchQuizData(value);
+    setNumQuestions(value);
+    dispatch(setSelectedQuizData(value));
+  };
+
+  const startQuiz = () => {
+    if (quizReady[numQuestions]) {
+      dispatch(setQuizStart(true));
+    } else {
+      console.error(
+        "No quiz data available for the selected number of questions",
+      );
+    }
   };
 
   const CustomColor =
@@ -152,19 +141,23 @@ const CustomCard: React.FC<CardProps> = ({
 
   return (
     <div
-      className={`relative z-10 my-2 rounded-lg border-2 p-4 shadow-lg sm:flex sm:h-64 sm:w-full sm:max-w-2xl sm:flex-col sm:items-center sm:justify-between lg:h-80 lg:max-w-5xl ${CustomColor}`}
+      className={`relative z-10 my-2 rounded-lg border-2 p-4 shadow-lg sm:flex sm:h-64 sm:w-full sm:max-w-2xl sm:flex-col sm:items-center sm:justify-between lg:h-80 lg:max-w-5xl ${CustomColor} `}
     >
       <div
         className={`absolute bottom-0 left-0 right-0 top-0 z-[-1] rounded-lg ${CustomColor} blur-lg filter`}
       ></div>
 
-      <div className="mb-4 flex flex-col sm:mb-0 sm:w-full">
+      <div
+        style={{ opacity: isGenerating ? 0.5 : 1 }}
+        className="mb-4 flex flex-col sm:mb-0 sm:w-full"
+      >
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold">{quizTitle}</h2>
           <AlertRegenerate
             selectedNumber={numQuestions}
             trigger={
               <button
+                disabled={numQuestions === "Select"}
                 className={`${CustomColor} -mt-6 rounded px-3 py-1 text-sm sm:mt-0`}
               >
                 {!quizReady[numQuestions] ? (
@@ -179,17 +172,18 @@ const CustomCard: React.FC<CardProps> = ({
               </button>
             }
             title="Asking AI to generate a quiz."
-            description="Which size do you want?"
+            description="Quiz will be launched after generation"
             cancelText="No"
             actionText="Yes"
-            onAction={(selectedNumber) =>
-              generateNewQuiz(selectedNumber, quizTitle)
-            }
+            onAction={() => generateNewQuiz(numQuestions, quizTitle)}
           />
         </div>
         <p className="text-base">Last quiz length: {length}</p>
       </div>
-      <div className="mb-4 sm:mb-0 sm:flex sm:w-full sm:items-center sm:justify-end">
+      <div
+        style={{ opacity: isGenerating ? 0.5 : 1 }}
+        className="mb-4 sm:mb-0 sm:flex sm:w-full sm:items-center sm:justify-end"
+      >
         <div className="text-sm ">
           <p>
             Last score: {lastScore}/{length}
@@ -199,7 +193,10 @@ const CustomCard: React.FC<CardProps> = ({
           </p>
         </div>
       </div>
-      <div className="mb-4 sm:mb-0 sm:flex sm:w-full sm:items-end sm:justify-between">
+      <div
+        style={{ opacity: isGenerating ? 0.5 : 1 }}
+        className="mb-4 sm:mb-0 sm:flex sm:w-full sm:items-end sm:justify-between"
+      >
         <div>
           <p className="text-sm">Attempt number: {attemptNumber}</p>
           <p className="text-sm">Last attempt: {lastAttempt}</p>
@@ -209,13 +206,25 @@ const CustomCard: React.FC<CardProps> = ({
             value={numQuestions}
             onValueChange={handleSelectNumber}
           />
-          <Button
-            onClick={() => startQuiz()}
-            disabled={!quizReady[numQuestions]}
-            className={`w-full rounded px-3 py-1 text-sm sm:h-9 sm:w-auto ${!quizReady[numQuestions] ? "cursor-not-allowed opacity-50" : ""}`}
-          >
-            START
-          </Button>
+          {!isDataLoaded && (
+            <Button
+              onClick={fetchQuizData}
+              className="w-full rounded px-3 py-1 text-sm sm:h-9 sm:w-40"
+            >
+              Load
+            </Button>
+          )}
+          {isDataLoaded && (
+            <Button
+              onClick={startQuiz}
+              disabled={!quizReady[numQuestions] || isGenerating}
+              className={`w-full rounded px-3 py-1 text-sm sm:h-9 sm:w-40 ${
+                !quizReady[numQuestions] ? "cursor-not-allowed opacity-50" : ""
+              }`}
+            >
+              START
+            </Button>
+          )}
         </div>
       </div>
     </div>

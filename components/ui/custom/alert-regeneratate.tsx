@@ -35,9 +35,6 @@ export const AlertRegenerate: React.FC<AlertProps> = ({
   const [numQuestions, setNumQuestions] =
     useState<NumQuestions>(selectedNumber);
 
-  const handleSelectNumber = (value: NumQuestions) => {
-    setNumQuestions(value);
-  };
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
@@ -47,10 +44,6 @@ export const AlertRegenerate: React.FC<AlertProps> = ({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <SelectNumber
-            value={numQuestions}
-            onValueChange={handleSelectNumber}
-          />
           <AlertDialogCancel>{cancelText}</AlertDialogCancel>
           <AlertDialogAction onClick={() => onAction && onAction(numQuestions)}>
             {actionText}

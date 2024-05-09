@@ -57,6 +57,8 @@ export async function GET(request: Request) {
       });
     }
 
+    console.log('THIS IS API WORKING -----------------');
+
     return new Response(JSON.stringify(quizData[0]), {
       status: 200,
       headers: {

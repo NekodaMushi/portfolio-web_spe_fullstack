@@ -4,11 +4,20 @@ import { quizzes, transcripts } from "@/db/schema";
 import { eq, desc, and } from "drizzle-orm";
 import { auth } from "auth";
 
+const inverseQuizDataMapping: Record<string, string> = {
+  "quizDataTest": "1",
+  "quizDataShort": "5",
+  "quizDataMedium": "10",
+  "quizDataLarge": "20",
+  "quizDataExam": "30",
+};
+
+
 export async function POST(request: Request) {
   try {
     const { numQuestions, videoTitle } = await request.json();
 
-    console.log(`${numQuestions} AND ${videoTitle}`);
+    console.log(`${numQuestions} AND ${videoTitle}`)
 
     const session = await auth();
     if (!session) {
@@ -21,16 +30,11 @@ export async function POST(request: Request) {
     }
 
     const sessionUser = session?.user;
-    const transcriptNeeded = await db
-      .select({ content: transcripts.content, videoId: transcripts.videoId })
-      .from(transcripts)
-      .where(
-        and(
-          eq(transcripts.userId, sessionUser.id),
-          eq(transcripts.videoId, videoTitle),
-        ),
-      )
-      .limit(1);
+    const transcriptNeeded = await db.select({ content: transcripts.content, videoId: transcripts.videoId }).from(transcripts).where(and(eq(transcripts.userId, sessionUser.id), eq(transcripts.videoId, videoTitle)
+    )).limit(1);
+
+    console.log(`${sessionUser.id} AND ${transcriptNeeded}`)
+    
 
     if (transcriptNeeded.length === 0) {
       return new Response(
@@ -45,22 +49,31 @@ export async function POST(request: Request) {
     }
     const { videoId, content } = transcriptNeeded[0];
 
+
+    console.log('LENGTH IS NOT 5')
+    console.log(numQuestions)
+    
+
+    const numberQuestions = inverseQuizDataMapping[numQuestions];
+    
     const requestData = {
       model: "mixtral-8x22b-instruct",
       messages: [
         {
           role: "system",
-          content: `Generate a multiple choice quiz from the provided transcript with exactly ${numQuestions} questions. Each question should have one correct answer among four options. Format the output as JSON: [{"question": "Q", "choices": ["A", "B", "C", "D"], "correct_answer": "A"}, ...]. Only JSON output is required.`,
+          content: `Generate a multiple choice quiz from the provided transcript with exactly ${numberQuestions} questions. Each question should have one correct answer among four options. Format the output as JSON: [{"question": "Q", "choices": ["A", "B", "C", "D"], "correct_answer": "A"}, ...]. Only JSON output is required.`,
         },
         { role: "user", content: content },
       ],
     };
-    console.log("Why LENGTH always 5");
+    console.log('Why LENGTH always 5')
 
     const response = await fetchChatCompletion(requestData);
     const quizContent = response.choices[0].message.content;
-    console.log(quizContent);
+    console.log(quizContent)
     console.log(`☑️ Quiz has been generated successfully as '${videoId}`);
+
+
 
     let quizDataField:
       | "quizDataShort"
@@ -69,15 +82,15 @@ export async function POST(request: Request) {
       | "quizDataExam"
       | "quizDataTest";
 
-    if (numQuestions === "5") {
+    if (numberQuestions === "5") {
       quizDataField = "quizDataShort";
-    } else if (numQuestions === "10") {
+    } else if (numberQuestions === "10") {
       quizDataField = "quizDataMedium";
-    } else if (numQuestions === "20") {
+    } else if (numberQuestions === "20") {
       quizDataField = "quizDataLarge";
-    } else if (numQuestions === "35") {
+    } else if (numberQuestions === "35") {
       quizDataField = "quizDataExam";
-    } else if (numQuestions === "1") {
+    } else if (numberQuestions === "1") {
       quizDataField = "quizDataTest";
     } else {
       throw new Error("Wrong number of question");
@@ -118,39 +131,35 @@ export async function POST(request: Request) {
         {
           status: 201,
           headers: {
-            "Content-Type": "application/json",
-          },
-        },
+            "Content-Type": "application/json"
+          }
+        }
       );
     } else {
-      await db
-        .insert(quizzes)
-        .values({
-          userId: sessionUser.id,
-          videoId: videoTitle,
-          [quizDataField]: quizContent,
-        })
-        .execute();
+      await db.insert(quizzes).values({
+        userId: sessionUser.id,
+        videoId: videoTitle,
+        [quizDataField]: quizContent,
+      }).execute()
       console.log("✅ Quiz has been stored successfully");
 
-      return new Response(
+    return new Response(
         JSON.stringify({
           message: "Quiz has been stored successfully",
           videoId: videoTitle,
           quizDataField: quizDataField,
           quizContent: quizContent,
-          quizLength: quizDataField,
           quizId: quizId,
         }),
         {
           status: 201,
           headers: {
-            "Content-Type": "application/json",
-          },
-        },
+            "Content-Type": "application/json"
+          }
+        }
       );
     }
-  } catch (error: any) {
+  } catch(error: any) {
     console.log("Error in POST route:", error);
     return new Response(
       JSON.stringify({ error: "Failed to fetch chat completion" }),

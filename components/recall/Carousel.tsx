@@ -25,7 +25,9 @@ type CarouselData = CarouselDataItem[];
 
 export function Carousel() {
   const [data, setData] = useState<CarouselData | null>(null);
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
+    Autoplay({ delay: 4000 }),
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {
