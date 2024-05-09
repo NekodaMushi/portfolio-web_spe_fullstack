@@ -40,12 +40,7 @@ const CustomCard: React.FC<CardProps> = ({
 
   const [numQuestions, setNumQuestions] = useState<NumQuestions>("Select");
 
-  // ...
-
   const [quizReady, setQuizReady] = useState<{ [key: string]: boolean }>({});
-
-  const [selectedQuizLength, setSelectedQuizLength] =
-    useState<string>("Select");
 
   const fetchQuizData = async (value: NumQuestions) => {
     try {
@@ -68,6 +63,11 @@ const CustomCard: React.FC<CardProps> = ({
         "quizDataTest",
       ];
       const quizDataAvailable = quizKeys.filter((key) => data[key] !== null);
+      console.log("1111111111");
+      console.log("videoId", quizTitle);
+      console.log("quizId", data.quizId);
+      console.log("data", data);
+      console.log("value:", value);
 
       dispatch(
         setRecallData({
@@ -104,6 +104,7 @@ const CustomCard: React.FC<CardProps> = ({
     title: string,
   ) => {
     try {
+      // Loading start
       const response = await fetch("/api/ai/quiz/regenerate", {
         method: "POST",
         headers: {
@@ -114,12 +115,22 @@ const CustomCard: React.FC<CardProps> = ({
           videoTitle: title,
         }),
       });
-      console.log(response);
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      // Handle response data or update state as needed
+      const quizData = JSON.parse(data.quizContent);
+
+      dispatch(
+        setRecallData({
+          videoId: data.videoId,
+          quizId: data.quizId,
+          quizData: quizData,
+        }),
+      );
+      // Loading end
+      dispatch(setQuizStart(true));
     } catch (error) {
       console.error("Failed to regenerate quiz:", error);
     }
@@ -168,7 +179,7 @@ const CustomCard: React.FC<CardProps> = ({
               </button>
             }
             title="Asking AI to generate a quiz."
-            description="Which Size do you want?"
+            description="Which size do you want?"
             cancelText="No"
             actionText="Yes"
             onAction={(selectedNumber) =>

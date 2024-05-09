@@ -24,12 +24,19 @@ const recallSlice = createSlice({
   name: 'recall',
   initialState,
   reducers: {
-    setRecallData: (state, action: PayloadAction<{ videoId: string; quizId: string; quizData: { [key in NumQuestions]?: QuestionsState } }>) => {
-      const { videoId, quizId, quizData } = action.payload;
-      state.videoId = videoId;
-      state.quizId = quizId;
-      state.quizData = quizData;
-    },
+    setRecallData: (state, action: PayloadAction<{ videoId: string; quizId: string; quizData: QuestionsState | { [key in NumQuestions]?: QuestionsState } }>) => {
+  const { videoId, quizId, quizData } = action.payload;
+  state.videoId = videoId;
+  state.quizId = quizId;
+  
+  if (Array.isArray(quizData)) {
+    // Regenerate Quiz
+    state.selectedQuizData = quizData;
+  } else {
+    // Fetch Quizzes
+    state.quizData = quizData;
+  }
+},
     setSelectedQuizData: (state, action: PayloadAction<NumQuestions>) => {
       const numQuestions = action.payload;
       state.selectedQuizData = state.quizData[numQuestions] || null;

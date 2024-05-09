@@ -1,8 +1,11 @@
 import RecallQuizCard from "./RecallQuizCard";
 import { Card } from "../ui/card";
 import { useAppSelector } from "hooks";
+import { useAppDispatch } from "@/lib/redux/hooks";
+import { resetRecall } from "slices/recallSlice";
 
 import { QuizLayoutProps } from "@/types/quiz";
+import { useEffect } from "react";
 
 const RecallQuizLayout = () => {
   const selectedQuizData = useAppSelector(
@@ -10,26 +13,31 @@ const RecallQuizLayout = () => {
   );
   const videoId = useAppSelector((state) => state.recall.videoId);
   const quizId = useAppSelector((state) => state.recall.quizId);
-  const quiz = useAppSelector((state) => state.recall.quizData);
+  const dispatch = useAppDispatch();
 
-  console.log("-------------0");
-  console.log(typeof quiz);
-  // console.log(quiz?.quizDataShort);
-  console.log(videoId);
-  console.log(quizId);
-  console.log(selectedQuizData);
+  useEffect(() => {
+    if (!selectedQuizData) {
+      const timer = setTimeout(() => {
+        dispatch(resetRecall());
+      }, 4000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [selectedQuizData]);
 
   if (!selectedQuizData) {
     return (
       <div className="m-auto flex w-full flex-col items-center">
-        No quiz data available
+        No quiz data available: Reloading ...
       </div>
     );
   }
 
   const questions = selectedQuizData;
-  console.log(questions);
   const totalQuestions = questions.length;
+
+  // TO CLEAN LATER - TO REMOVE LATER
+  console.log(questions);
   console.log(totalQuestions);
 
   return (

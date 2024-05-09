@@ -52,9 +52,9 @@ export const AlertRegenerate: React.FC<AlertProps> = ({
             onValueChange={handleSelectNumber}
           />
           <AlertDialogCancel>{cancelText}</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={() => onAction && onAction(numQuestions)}
-          ></AlertDialogAction>
+          <AlertDialogAction onClick={() => onAction && onAction(numQuestions)}>
+            {actionText}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
