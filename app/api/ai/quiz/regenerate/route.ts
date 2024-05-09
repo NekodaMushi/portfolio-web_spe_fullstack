@@ -33,7 +33,6 @@ export async function POST(request: Request) {
     const transcriptNeeded = await db.select({ content: transcripts.content, videoId: transcripts.videoId }).from(transcripts).where(and(eq(transcripts.userId, sessionUser.id), eq(transcripts.videoId, videoTitle)
     )).limit(1);
 
-    console.log(`${sessionUser.id} AND ${transcriptNeeded}`)
     
 
     if (transcriptNeeded.length === 0) {
@@ -48,12 +47,6 @@ export async function POST(request: Request) {
       );
     }
     const { videoId, content } = transcriptNeeded[0];
-
-
-    console.log('LENGTH IS NOT 5')
-    console.log(numQuestions)
-    
-
     const numberQuestions = inverseQuizDataMapping[numQuestions];
     
     const requestData = {
@@ -66,10 +59,10 @@ export async function POST(request: Request) {
         { role: "user", content: content },
       ],
     };
-    console.log('Why LENGTH always 5')
 
     const response = await fetchChatCompletion(requestData);
     const quizContent = response.choices[0].message.content;
+    // Remove later
     console.log(quizContent)
     console.log(`☑️ Quiz has been generated successfully as '${videoId}`);
 
