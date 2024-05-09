@@ -1,13 +1,10 @@
-"use client";
+import RecallOrQuiz from "@/components/recall/client/RecallOrQuiz";
+import Recall from "@/components/recall/server/Recall";
 
-import LoadingQuiz from "@/components/LoadingQuiz";
-import RecallQuizLayout from "@/components/recall/RecallQuizLayout";
-
-import Recall from "@/components/recall/Recall";
-import { useAppSelector } from "@/lib/redux/hooks";
-
-export default function RecallOrQuiz() {
-  const quizStart = useAppSelector((state) => state.recall.quizStart);
-
-  return <>{quizStart ? <RecallQuizLayout /> : <Recall></Recall>}</>;
+export default function RecallServerComponent() {
+  return (
+    <RecallOrQuiz>
+      <Recall />
+    </RecallOrQuiz>
+  );
 }

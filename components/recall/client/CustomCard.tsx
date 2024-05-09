@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from "react";
-import { Button } from "../ui/button";
+"use client";
+import { useState } from "react";
+import { Button } from "../../ui/button";
 import { SelectDataType } from "./selectNumber";
 import { NumQuestions } from "@/types/quiz";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,7 +12,7 @@ import {
   setSelectedQuizData,
   setQuizStart,
 } from "slices/recallSlice";
-import { AlertRegenerate } from "../ui/custom/alert-regeneratate";
+import { AlertRegenerate } from "../../ui/custom/alert-regeneratate";
 
 interface CardProps {
   quizTitle: string;
@@ -75,7 +76,7 @@ const CustomCard: React.FC<CardProps> = ({
     }
   };
 
-  const fetchQuizData = useCallback(async () => {
+  const fetchQuizData = async () => {
     try {
       const response = await fetch(
         `/api/recall/quiz?videoId=${encodeURIComponent(quizTitle)}`,
@@ -117,7 +118,7 @@ const CustomCard: React.FC<CardProps> = ({
     } catch (error) {
       console.error("Failed to fetch quiz data:", error);
     }
-  }, [dispatch, quizTitle]);
+  };
 
   const handleSelectNumber = (value: NumQuestions) => {
     setNumQuestions(value);
@@ -157,7 +158,7 @@ const CustomCard: React.FC<CardProps> = ({
             selectedNumber={numQuestions}
             trigger={
               <button
-                disabled={numQuestions === "Select"}
+                disabled={numQuestions === "Select" || isGenerating}
                 className={`${CustomColor} -mt-6 rounded px-3 py-1 text-sm sm:mt-0`}
               >
                 {!quizReady[numQuestions] ? (

@@ -2,6 +2,7 @@ import { db } from "@/db/index";
 import { quizzes } from "@/db/schema";
 import { and, desc, eq } from "drizzle-orm";
 import { auth } from "auth";
+import jwt from 'jsonwebtoken';
 
 export async function GET(request: Request) {
   try {
@@ -17,6 +18,7 @@ export async function GET(request: Request) {
     const sessionUser = session?.user;
     const url = new URL(request.url);
     const videoId = url.searchParams.get("videoId"); 
+    
 
 
     if (!videoId) {
@@ -57,7 +59,7 @@ export async function GET(request: Request) {
       });
     }
 
-    console.log('THIS IS API WORKING -----------------');
+    console.log('THIS API IS RUNNING-----------------');
 
     return new Response(JSON.stringify(quizData[0]), {
       status: 200,

@@ -1,5 +1,6 @@
+"use client";
 import RecallQuizCard from "./RecallQuizCard";
-import { Card } from "../ui/card";
+import { Card } from "../../ui/card";
 import { useAppSelector } from "hooks";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { resetRecall } from "slices/recallSlice";
