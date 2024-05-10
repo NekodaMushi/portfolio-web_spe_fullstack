@@ -44,8 +44,8 @@ export async function GET(request: Request) {
         })
         .from(quizzesCompleted)
         .where(eq(quizzesCompleted.userId, userId))
-        .orderBy(desc(quizzesCompleted.createdAt))
-        .limit(3);
+        .orderBy(desc(quizzesCompleted.createdAt));
+        // .limit(3);
 
       return new Response(JSON.stringify(quizCompletedData), {
         status: 200,

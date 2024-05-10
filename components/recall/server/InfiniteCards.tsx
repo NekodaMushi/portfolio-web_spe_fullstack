@@ -1,7 +1,8 @@
+"use server";
 // import Search from "/search";
 // import { data } from "./_data";
 import CustomCard from "../client/CustomCard";
-import LoadMore from "../client/LoadMore";
+// import LoadMore from "../client/LoadMore";
 // import CustomCard from "./CustomCard";
 
 import TestRoute from "./action";
@@ -25,26 +26,34 @@ async function InfiniteCards() {
     console.error("Failed to fetch data");
   }
   const data: CarouselData = await response.json();
-  console.log("Darta====>", data);
+  // console.log("Darta====>", data);
 
   return (
-    <main className="flex flex-col gap-10 px-8 py-16 sm:p-16">
-      <h2 className="text-3xl font-bold text-white">Explore </h2>
-
-      <section className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {data.map((item, index) => (
-          <CustomCard
-            key={index}
-            quizTitle={item.videoId}
-            length={item.totalQuestions}
-            lastScore={item.totalQuestions - item.incorrectAnswers}
-            highestScore={item.highestScore}
-            highestScoreTotal={item.highestScoreTotal}
-            lastAttempt={new Date(item.updatedAt).toLocaleDateString()}
-            attemptNumber={item.attemptNumber}
-          />
-        ))}
-      </section>
+    <main className="vertical-scroll -mt-20 flex h-screen flex-col items-center justify-center gap-64 overflow-y-scroll pr-4 sm:pt-56">
+      {/* pt-80 */}
+      <CustomCard
+        key={1}
+        quizTitle="3070. Reusing Styles With React Components"
+        length={20}
+        lastScore={4}
+        highestScore={14}
+        highestScoreTotal={20}
+        lastAttempt="2"
+        attemptNumber={6}
+      />
+      {data.map((item, index) => (
+        <CustomCard
+          key={index}
+          quizTitle={item.videoId}
+          length={item.totalQuestions}
+          lastScore={item.totalQuestions - item.incorrectAnswers}
+          highestScore={item.highestScore}
+          highestScoreTotal={item.highestScoreTotal}
+          lastAttempt={new Date(item.updatedAt).toLocaleDateString()}
+          attemptNumber={item.attemptNumber}
+        />
+      ))}
+      {/* <LoadMore /> */}
     </main>
   );
 }

@@ -1,28 +1,18 @@
 import { Carousel } from "@/components/recall/client/Carousel";
 import { Card } from "@/components/ui/card";
-
 import InfiniteCards from "./InfiniteCards";
 
 export default function Recall() {
   return (
-    <div
-      className="flex flex-col gap-14 overflow-hidden"
-      style={{ height: "1000px" }}
-    >
-      <Card className="flex-1 py-6" style={{ flex: "2" }}>
+    <div className="flex flex-col divide-y">
+      <div className="flex-1 py-6 ">
         <Carousel />
-      </Card>
+      </div>
 
       {/* Bottom Part */}
-      <div className="flex-1  py-4" style={{ flex: "3" }}>
+      <div className="flex-1 overflow-y-auto py-4">
         <InfiniteCards />
       </div>
     </div>
   );
-}
-{
-  /* <FuturServerComponent>test</FuturServerComponent>; */
-}
-{
-  /*  */
 }

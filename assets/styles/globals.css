@@ -71,6 +71,7 @@
 }
 
 /* Cards scroll in Recall */
+
 .vertical-scroll::-webkit-scrollbar {
   width: 0.4em;
   height: 1em;
@@ -107,3 +108,33 @@
 .icon-blink {
   animation: blink 6s linear infinite;
 }
+
+/* Neon Line */
+/* .neon-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.line {
+  width: 80%;
+  height: 4px;
+  background: linear-gradient(90deg, #08f, #0ff, #f0f, #08f);
+  background-size: 400%;
+  animation: neon-line 5s infinite alternate linear;
+}
+
+@keyframes neon-line {
+  from {
+    background-position: 0%;
+  }
+  to {
+    background-position: 400%;
+  }
+} */
+
+/* <div className="neon-line">
+        <div className="turn left"></div>
+        <div className="line"></div>
+        <div className="turn right"></div>
+      </div> */

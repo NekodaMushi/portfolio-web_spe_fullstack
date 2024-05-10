@@ -135,17 +135,25 @@ const CustomCard: React.FC<CardProps> = ({
     }
   };
 
+  const scoreRatio = lastScore / length;
+
   const CustomColor =
-    lastScore / length >= 0.5
+    scoreRatio >= 0.8
       ? `border-[2px] border-green-500`
-      : `border-[2px] border-red-500`;
+      : scoreRatio >= 0.6
+        ? `border-[2px] border-yellow-200`
+        : scoreRatio >= 0.4
+          ? `border-[2px] border-yellow-500`
+          : scoreRatio >= 0.2
+            ? `border-[2px] border-orange-500`
+            : `border-[2px] border-red-500`;
 
   return (
     <div
-      className={`relative z-10 my-2 rounded-lg border-2 p-4 shadow-lg sm:flex sm:h-64 sm:w-full sm:max-w-2xl sm:flex-col sm:items-center sm:justify-between lg:h-80 lg:max-w-5xl ${CustomColor} `}
+      className={`relative z-30 my-2 rounded-lg border-2 p-4 shadow-lg sm:flex sm:h-64 sm:w-full sm:max-w-2xl sm:flex-col sm:items-center sm:justify-between lg:h-80 lg:max-w-5xl ${CustomColor} `}
     >
       <div
-        className={`absolute bottom-0 left-0 right-0 top-0 z-[-1] rounded-lg ${CustomColor} blur-lg filter`}
+        className={`absolute bottom-0 left-0 right-0 top-0 rounded-lg ${CustomColor} blur-lg filter`}
       ></div>
 
       <div
