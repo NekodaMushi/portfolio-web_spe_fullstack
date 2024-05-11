@@ -1,8 +1,7 @@
-// InfiniteCards.tsx
 "use server";
 import CustomCard from "../client/CustomCard";
 import LoadMore from "../client/LoadMore";
-import TempFixFront from "../client/TempFixFront";
+// import TempFixFront from "../client/TempFixFront";
 import fetchCards from "./action";
 
 interface CarouselDataItem {
