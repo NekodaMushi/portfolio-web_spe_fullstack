@@ -3,10 +3,9 @@ import CustomCard from "./CustomCard";
 
 function TempFixFront() {
   return (
-    <div>
-      <div className="pt-32"></div>
+    <>
       <CustomCard
-        key={1}
+        key={4}
         quizTitle="3070. Reusing Styles With React Components"
         length={20}
         lastScore={4}
@@ -15,8 +14,9 @@ function TempFixFront() {
         lastAttempt="2"
         attemptNumber={6}
       />
+
       <CustomCard
-        key={2}
+        key={5}
         quizTitle="3070. Reusing Styles With React Components"
         length={20}
         lastScore={4}
@@ -25,8 +25,9 @@ function TempFixFront() {
         lastAttempt="2"
         attemptNumber={6}
       />
+
       <CustomCard
-        key={3}
+        key={6}
         quizTitle="3070. Reusing Styles With React Components"
         length={20}
         lastScore={4}
@@ -35,7 +36,7 @@ function TempFixFront() {
         lastAttempt="2"
         attemptNumber={6}
       />
-    </div>
+    </>
   );
 }
 
