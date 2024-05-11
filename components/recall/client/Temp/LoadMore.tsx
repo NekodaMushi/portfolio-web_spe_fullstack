@@ -28,28 +28,39 @@ type CarouselData = CarouselDataItem[];
 
 function LoadMore() {
   const { ref, inView } = useInView();
+
   const [data, setData] = useState<CarouselData>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (inView && !isLoading) {
-      setIsLoading(true);
+    if (inView) {
+      const delay = 500;
+      const timeoutId = setTimeout(() => {
+        fetchCards(page)
+          .then((response) => {
+            if (!response.ok) {
+              alert("Failed------------");
+              throw new Error("Failed to fetch data");
+            }
+            alert("Good------------");
+            return response.json(); // Parse the JSON data from the response
+          })
+          .then((resData) => {
+            setData((prevData) => [...prevData, ...resData]); // Update state with the new data
+            page++;
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            setIsLoading(false);
+          });
+      }, delay);
 
-      console.log(page);
-      console.log("LOAD");
-      fetchCards(page)
-        .then((resData) => {
-          setData((prevData) => [...prevData, ...resData]);
-          page++;
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-          setIsLoading(false);
-        });
+      console.log("LOAD------------");
+      return () => clearTimeout(timeoutId);
     }
-  }, [inView]);
-
+  }, [inView, data, isLoading]);
+  console.log("LOAD------------OUT");
   return (
     <>
       {data.map((item, index) => (
@@ -64,8 +75,9 @@ function LoadMore() {
           attemptNumber={item.attemptNumber}
         />
       ))}
-      {isLoading && <Spinner />}
-      <div ref={ref} style={{ height: "1px" }}></div>
+      <section className="flex w-full items-center justify-center">
+        <div ref={ref}>{inView && isLoading && <Spinner />}</div>
+      </section>
     </>
   );
 }

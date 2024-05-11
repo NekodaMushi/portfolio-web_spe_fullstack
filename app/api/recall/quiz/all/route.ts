@@ -10,7 +10,6 @@ interface TokenPayload {
 
 export async function GET(request: Request) {
   try {
-
     const authHeader = request.headers.get("Authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -21,15 +20,21 @@ export async function GET(request: Request) {
 
     const token = authHeader.substring(7); // Remove 'Bearer '
 
-      if (!process.env.AUTH_SECRET) {
-    throw new Error("AUTH_SECRET is not defined in the environment variables.");
-  }
+    if (!process.env.AUTH_SECRET) {
+      throw new Error("AUTH_SECRET is not defined in the environment variables.");
+    }
+
     const decoded = jwt.verify(token, process.env.AUTH_SECRET) as TokenPayload;
     if (typeof decoded === "object" && decoded !== null && "id" in decoded) {
-
       const userId = decoded.id;
-      console.log("-------------------")
-      console.log(userId)
+      console.log("-------------------");
+      console.log(userId);
+
+      const url = new URL(request.url);
+      const page = parseInt(url.searchParams.get("page") || "1");
+      const limit = 3; 
+
+      const offset = (page - 1) * limit;
 
       const quizCompletedData = await db
         .select({
@@ -44,8 +49,9 @@ export async function GET(request: Request) {
         })
         .from(quizzesCompleted)
         .where(eq(quizzesCompleted.userId, userId))
-        .orderBy(desc(quizzesCompleted.createdAt));
-        // .limit(3);
+        .orderBy(desc(quizzesCompleted.createdAt))
+        .offset(offset)
+        .limit(limit);
 
       return new Response(JSON.stringify(quizCompletedData), {
         status: 200,
