@@ -4,7 +4,6 @@ import CustomCard from "./CustomCard";
 function TempFixFront() {
   return (
     <>
-      <div className="bt-20"></div>
       <CustomCard
         key={4}
         quizTitle="3070. Reusing Styles With React Components"

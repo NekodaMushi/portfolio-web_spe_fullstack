@@ -1,12 +1,8 @@
 "use server";
-// import Search from "/search";
-// import { data } from "./_data";
 import CustomCard from "../client/CustomCard";
-import TempFixFront from "../client/TempFixFront";
-// import LoadMore from "../client/LoadMore";
-// import CustomCard from "./CustomCard";
-
-import TestRoute from "./action";
+import LoadMore from "../client/LoadMore";
+// import TempFixFront from "../client/TempFixFront";
+import fetchCards from "./action";
 
 interface CarouselDataItem {
   successRate: number;
@@ -22,32 +18,30 @@ interface CarouselDataItem {
 type CarouselData = CarouselDataItem[];
 
 async function InfiniteCards() {
-  const response = await TestRoute();
-  if (!response.ok) {
-    console.error("Failed to fetch data");
-  }
-  const data: CarouselData = await response.json();
-  // console.log("Darta====>", data);
+  try {
+    const data: CarouselData = await fetchCards(1);
 
-  return (
-    <main className="vertical-scroll -mt-20 flex h-screen flex-col items-center justify-center gap-64 overflow-y-scroll pr-4 sm:pt-56">
-      {/* pt-80 */}
-      <TempFixFront />
-      {data.map((item, index) => (
-        <CustomCard
-          key={index}
-          quizTitle={item.videoId}
-          length={item.totalQuestions}
-          lastScore={item.totalQuestions - item.incorrectAnswers}
-          highestScore={item.highestScore}
-          highestScoreTotal={item.highestScoreTotal}
-          lastAttempt={new Date(item.updatedAt).toLocaleDateString()}
-          attemptNumber={item.attemptNumber}
-        />
-      ))}
-      {/* <LoadMore /> */}
-    </main>
-  );
+    return (
+      <div className="flex flex-col items-center gap-2">
+        {data.map((item, index) => (
+          <CustomCard
+            key={index}
+            quizTitle={item.videoId}
+            length={item.totalQuestions}
+            lastScore={item.totalQuestions - item.incorrectAnswers}
+            highestScore={item.highestScore}
+            highestScoreTotal={item.highestScoreTotal}
+            lastAttempt={new Date(item.updatedAt).toLocaleDateString()}
+            attemptNumber={item.attemptNumber}
+          />
+        ))}
+        <LoadMore />
+      </div>
+    );
+  } catch (error) {
+    console.error("Failed to fetch data:", error);
+    return null;
+  }
 }
 
 export default InfiniteCards;

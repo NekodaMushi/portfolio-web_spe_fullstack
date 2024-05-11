@@ -1,53 +1,73 @@
-// "use client";
+"use client";
 
-// import Image from "next/image";
-// import { useInView } from "react-intersection-observer";
-// import { useEffect, useState } from "react";
-// import Spinner from "@/components/ui/spinner";
+import Image from "next/image";
+import { useInView } from "react-intersection-observer";
+import { useEffect, useState } from "react";
+import Spinner from "@/components/ui/spinner";
+import fetchCards from "../server/action";
+import CustomCard from "./CustomCard";
 
-// // import { fetchRecall } from "./action";
-// // import AnimeCard, { AnimeProp } from "./AnimeCard";
-// // import Spinner from "../ui/spinner";
+// import { fetchRecall } from "./action";
+// import AnimeCard, { AnimeProp } from "./AnimeCard";
+// import Spinner from "../ui/spinner";
 
-// let page = 2;
+let page = 2;
 
-// function LoadMore() {
-//   const { ref, inView } = useInView();
+interface CarouselDataItem {
+  successRate: number;
+  attemptNumber: number;
+  totalQuestions: number;
+  incorrectAnswers: number;
+  highestScore: number;
+  highestScoreTotal: number;
+  updatedAt: string;
+  videoId: string;
+}
 
-//   // const [data, setData] = useState<AnimeProp[]>([]);
-//   const [isLoading, setIsLoading] = useState(true);
+type CarouselData = CarouselDataItem[];
 
-//   useEffect(() => {
-//     if (inView) {
-//       // alert("Load");
-//       // setIsLoading(true);
-//       // Add a delay of 500 milliseconds
-//       // const delay = 500;
-//       // const timeoutId = setTimeout(() => {
-//       //   fetchRecall(page).then((res) => {
-//       //     setData([...data, ...res]);
-//       //     page++;
-//       //   });
-//       //   setIsLoading(false);
-//       // }, delay);
-//       // Clear the timeout if the component is unmounted or inView becomes false
-//       // return () => clearTimeout(timeoutId);
-//     }
-//   }, [inView]);
-//   // , data, isLoading]);
+function LoadMore() {
+  const { ref, inView } = useInView();
+  const [data, setData] = useState<CarouselData>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-//   return (
-//     <>
-//       {/* <section className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"> */}
-//       {/* {data.map((item: AnimeProp, index: number) => (
-//           <AnimeCard key={item.id} anime={item} index={index} />
-//         ))}
-//       </section>*/}
-//       <section className="flex w-full items-center justify-center">
-//         <div ref={ref}>{inView && isLoading && <Spinner />}</div>
-//       </section>
-//     </>
-//   );
-// }
+  useEffect(() => {
+    if (inView && !isLoading) {
+      setIsLoading(true);
 
-// export default LoadMore;
+      console.log(page);
+      console.log("LOAD");
+      fetchCards(page)
+        .then((resData) => {
+          setData((prevData) => [...prevData, ...resData]);
+          page++;
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          setIsLoading(false);
+        });
+    }
+  }, [inView]);
+
+  return (
+    <>
+      {data.map((item, index) => (
+        <CustomCard
+          key={index}
+          quizTitle={item.videoId}
+          length={item.totalQuestions}
+          lastScore={item.totalQuestions - item.incorrectAnswers}
+          highestScore={item.highestScore}
+          highestScoreTotal={item.highestScoreTotal}
+          lastAttempt={new Date(item.updatedAt).toLocaleDateString()}
+          attemptNumber={item.attemptNumber}
+        />
+      ))}
+      {isLoading && <Spinner />}
+      <div ref={ref} style={{ height: "1px" }}></div>
+    </>
+  );
+}
+
+export default LoadMore;

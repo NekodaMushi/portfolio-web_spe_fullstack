@@ -1,3 +1,5 @@
+// action.ts
+"use server";
 import { auth } from "auth";
 import jwt from "jsonwebtoken";
 
@@ -14,17 +16,13 @@ interface CarouselDataItem {
 
 type CarouselData = CarouselDataItem[];
 
-export default async function TestRoute() {
+export default async function fetchCards(page: number): Promise<CarouselData> {
   const session = await auth();
 
   if (!session) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-      headers: {
-        "content-type": "application/json",
-      },
-    });
+    throw new Error("Unauthorized");
   }
+
   const sessionUser = session?.user;
 
   if (!process.env.AUTH_SECRET) {
@@ -40,19 +38,12 @@ export default async function TestRoute() {
     { expiresIn: "1h" },
   );
 
-  const data = await fetchRecallAll(token);
-  return new Response(JSON.stringify(data), {
-    status: 200,
-    headers: {
-      "content-type": "application/json",
-    },
-  });
+  return fetchRecallAll(token, page);
 }
 
-export async function fetchRecallAll(token: string): Promise<CarouselData> {
-  "use server";
+export async function fetchRecallAll(token: string, page: number): Promise<CarouselData> {
   try {
-    const response = await fetch("http://localhost:3000/api/recall/quiz/all", {
+    const response = await fetch(`http://localhost:3000/api/recall/quiz/all?page=${page}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
