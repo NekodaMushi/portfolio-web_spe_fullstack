@@ -2,6 +2,7 @@
 // import Search from "/search";
 // import { data } from "./_data";
 import CustomCard from "../client/CustomCard";
+import TempFixFront from "../client/TempFixFront";
 // import LoadMore from "../client/LoadMore";
 // import CustomCard from "./CustomCard";
 
@@ -31,16 +32,7 @@ async function InfiniteCards() {
   return (
     <main className="vertical-scroll -mt-20 flex h-screen flex-col items-center justify-center gap-64 overflow-y-scroll pr-4 sm:pt-56">
       {/* pt-80 */}
-      <CustomCard
-        key={1}
-        quizTitle="3070. Reusing Styles With React Components"
-        length={20}
-        lastScore={4}
-        highestScore={14}
-        highestScoreTotal={20}
-        lastAttempt="2"
-        attemptNumber={6}
-      />
+      <TempFixFront />
       {data.map((item, index) => (
         <CustomCard
           key={index}
