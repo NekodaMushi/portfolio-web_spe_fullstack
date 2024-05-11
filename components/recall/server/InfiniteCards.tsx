@@ -23,9 +23,7 @@ async function InfiniteCards() {
     const data: CarouselData = await fetchCards(1);
 
     return (
-      <main className="vertical-scroll -mt-20 flex h-screen flex-col items-center justify-center gap-64 overflow-y-scroll pr-4 sm:pt-56">
-        <TempFixFront />
-        
+      <div className="flex flex-col items-center gap-2">
         {data.map((item, index) => (
           <CustomCard
             key={index}
@@ -39,7 +37,7 @@ async function InfiniteCards() {
           />
         ))}
         <LoadMore />
-      </main>
+      </div>
     );
   } catch (error) {
     console.error("Failed to fetch data:", error);

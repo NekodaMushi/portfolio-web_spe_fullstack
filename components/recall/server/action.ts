@@ -53,7 +53,6 @@ export async function fetchRecallAll(token: string, page: number): Promise<Carou
       throw new Error("Network response was not ok");
     }
     const fetchedData: CarouselData = await response.json();
-    console.log("Server ACTION");
     return fetchedData;
   } catch (error) {
     console.error("Error fetching data:", error);

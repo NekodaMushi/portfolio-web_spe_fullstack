@@ -1,6 +1,5 @@
 "use client";
-import { useState } from "react";
-import { Button } from "../../ui/button";
+import React, { useState, useCallback } from "react";
 import { SelectDataType } from "./selectNumber";
 import { NumQuestions } from "@/types/quiz";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +11,9 @@ import {
   setSelectedQuizData,
   setQuizStart,
 } from "slices/recallSlice";
+
 import { AlertRegenerate } from "../../ui/custom/alert-regeneratate";
+import { Button } from "../../ui/button";
 
 interface CardProps {
   quizTitle: string;
@@ -73,10 +74,12 @@ const CustomCard: React.FC<CardProps> = ({
       dispatch(setQuizStart(true));
     } catch (error) {
       console.error("Failed to regenerate quiz:", error);
+    } finally {
+      setIsGenerating(false); // Ensure isGenerating is reset
     }
   };
 
-  const fetchQuizData = async () => {
+  const fetchQuizData = useCallback(async () => {
     try {
       const response = await fetch(
         `/api/recall/quiz?videoId=${encodeURIComponent(quizTitle)}`,
@@ -118,7 +121,7 @@ const CustomCard: React.FC<CardProps> = ({
     } catch (error) {
       console.error("Failed to fetch quiz data:", error);
     }
-  };
+  }, [dispatch, quizTitle]);
 
   const handleSelectNumber = (value: NumQuestions) => {
     setNumQuestions(value);
@@ -150,10 +153,10 @@ const CustomCard: React.FC<CardProps> = ({
 
   return (
     <div
-      className={`relative z-30 my-2 rounded-lg border-2 p-4 shadow-lg sm:flex sm:h-64 sm:w-full sm:max-w-2xl sm:flex-col sm:items-center sm:justify-between lg:h-80 lg:max-w-5xl ${CustomColor} `}
+      className={`relative z-10 my-2 rounded-lg border-2 p-4 shadow-lg sm:flex sm:h-64 sm:w-full sm:max-w-2xl sm:flex-col sm:items-center sm:justify-between lg:h-80 lg:max-w-5xl ${CustomColor} `}
     >
       <div
-        className={`absolute bottom-0 left-0 right-0 top-0 rounded-lg ${CustomColor} blur-lg filter`}
+        className={`absolute bottom-0 left-0 right-0 top-0 z-[-1] rounded-lg ${CustomColor} blur-lg filter`}
       ></div>
 
       <div
@@ -166,7 +169,7 @@ const CustomCard: React.FC<CardProps> = ({
             selectedNumber={numQuestions}
             trigger={
               <button
-                disabled={numQuestions === "Select" || isGenerating}
+                disabled={numQuestions === "Select"}
                 className={`${CustomColor} -mt-6 rounded px-3 py-1 text-sm sm:mt-0`}
               >
                 {!quizReady[numQuestions] ? (
@@ -217,6 +220,7 @@ const CustomCard: React.FC<CardProps> = ({
           />
           {!isDataLoaded && (
             <Button
+              disabled={numQuestions === "Select" || isGenerating}
               onClick={fetchQuizData}
               className="w-full rounded px-3 py-1 text-sm sm:h-9 sm:w-40"
             >
