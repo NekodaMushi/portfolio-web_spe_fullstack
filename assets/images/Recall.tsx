@@ -17,6 +17,7 @@ const Recall: React.FC<RecallProps> = ({ width = 64, height = 64 }) => {
           width={width}
           height={height}
           unoptimized={true}
+          priority
         />
       </span>
     </div>

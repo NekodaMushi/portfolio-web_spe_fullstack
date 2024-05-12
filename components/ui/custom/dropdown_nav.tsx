@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import Head from "next/head"; // Import the Head component
 
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import Quiz from "@/assets/images/Quiz";
@@ -11,6 +12,7 @@ import Recall from "@/assets/images/Recall";
 import FAQ from "@/assets/images/FAQ";
 import Documentation from "@/assets/images/Documentation";
 import Github from "@/assets/images/Github";
+import Image from "next/image";
 
 interface FlyoutLinkProps {
   link?: string;
@@ -20,14 +22,19 @@ interface FlyoutLinkProps {
 
 const NavLinks = () => {
   return (
-    <nav className="mx-6 hidden items-center space-x-4 sm:flex lg:space-x-6  ">
-      <NavLink FlyoutContent={UseContent}>Use</NavLink>
-      <NavLink FlyoutContent={LearnContent}>Learn</NavLink>
-      <NavLink FlyoutContent={DevContent}>Dev</NavLink>
-    </nav>
+    <>
+      <Head>
+        {/* Preload the Quiz image */}
+        <link rel="preload" href="/images/logos/quiz.png" as="image" />
+      </Head>
+      <nav className="mx-6 hidden items-center space-x-4 sm:flex lg:space-x-6">
+        <NavLink FlyoutContent={UseContent}>Use</NavLink>
+        <NavLink FlyoutContent={LearnContent}>Learn</NavLink>
+        <NavLink FlyoutContent={DevContent}>Dev</NavLink>
+      </nav>
+    </>
   );
 };
-
 export const NavLink = ({ link, children, FlyoutContent }: FlyoutLinkProps) => {
   const [open, setOpen] = useState(false);
 
@@ -98,7 +105,13 @@ export const UseContent = () => {
           className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary"
         >
           <div className="basis-1/3">
-            <Chat width={96} height={96} />
+            <Image
+              src="/images/logos/chat.png"
+              alt="CHAT"
+              width={96}
+              height={96}
+              unoptimized={true}
+            />
           </div>
           <div className="basis-2/3">
             <CardTitle className="p-2 text-left">Chat</CardTitle>

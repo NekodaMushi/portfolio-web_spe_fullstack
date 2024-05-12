@@ -20,6 +20,7 @@ const Documentation: React.FC<DocumentationProps> = ({
           width={width}
           height={height}
           unoptimized={true}
+          priority
         />
       </span>
     </div>

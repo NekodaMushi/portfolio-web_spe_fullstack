@@ -10,7 +10,8 @@ import {
   text,
   primaryKey,
  integer, index, serial, jsonb, uniqueIndex,
- real
+ real,
+ boolean
 } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
@@ -64,12 +65,19 @@ export const quizzesCompleted = pgTable("quizzesCompleted", {
   quizId: text("quiz_id").notNull().references(() => quizzes.id),
   attemptNumber: integer("attempt_number").notNull().default(1),
   successRate: real("success_rate").notNull(),
+  lastScore: real("last_score").notNull(),
   totalQuestions: integer("total_questions").notNull(),
   incorrectAnswers: integer("incorrect_answers").notNull(),
   highestScore: integer("highest_score").notNull().default(0),
   highestScoreTotal: integer("highest_score_total").notNull().default(0),
+  above60FourTime: integer("above_60_four_time_row").notNull().default(0),
+  above70ThreeTime: integer("above_70_three_time_row").notNull().default(0),
+  reviewState: boolean('review_state').default(false),
+  transitionToReview: boolean('transition_to_review').default(false),
+
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
+
 }, (table) => ({
   userQuizIdAttemptUnique: uniqueIndex("user_quiz_id_attempt_unique").on(table.userId, table.quizId, table.attemptNumber),
 }));
@@ -95,7 +103,8 @@ export const spacedRepetition = pgTable("spacedRepetition", {
 export const usersRelations = relations(users, ({ many }) => ({
   transcripts: many(transcripts),
   quizzes: many(quizzes),
-  quizzesCompleted: many(quizzesCompleted)
+  quizzesCompleted: many(quizzesCompleted),
+  spacedRepetition: many(spacedRepetition)
 
 }));
 
@@ -112,7 +121,10 @@ export const quizzesCompletedRelations = relations(quizzesCompleted, ({ one }) =
   user: one(users, { fields: [quizzesCompleted.userId], references: [users.id]}),
 }))
 
-
+export const spacedRepetitionRelations = relations(spacedRepetition, ({ one }) => ({
+  user: one(users, { fields: [spacedRepetition.userId], references: [users.id] }),
+  quizCompleted: one(quizzesCompleted, { fields: [spacedRepetition.quizCompletedId], references: [quizzesCompleted.id] }),
+}));
 
 
 

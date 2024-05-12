@@ -1,0 +1,1 @@
+ALTER TABLE "quizzesCompleted" ADD COLUMN "transition_to_review" boolean DEFAULT false;

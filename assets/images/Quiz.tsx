@@ -17,6 +17,7 @@ const Quiz: React.FC<QuizProps> = ({ width = 64, height = 64 }) => {
           width={width}
           height={height}
           unoptimized={true}
+          priority
         />
       </span>
     </div>

@@ -11,7 +11,7 @@ export type NumLength = {
     quizDataShort: "5",
     quizDataMedium: "10",
     quizDataLarge: "20",
-    quizDataExam: "35",
+    quizDataExam: "30",
     quizDataTest: "1",
 };
 

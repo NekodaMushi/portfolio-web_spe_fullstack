@@ -46,52 +46,84 @@ const simulateUserTrial = async (quizId: string, videoId: string, score: number,
 
 
 async function UserTrialDataM() {
-  const quizId = "16be4e58-22a0-4774-8b16-a918a9319f5f";
-  const videoId = "60. Creating a State Variable With useState";
+  const quizId = "db79a9ae-c082-4b43-9a70-3da2b64db626";
+  const videoId = "129. Binary Trees";
+
+  // Check normal process OK
+  // Check reducing drastically when he passes into transite OK
+  // except for last case if he gets through perf
+  //  await simulateUserTrial(quizId, videoId, 5, 10);
+
+  await simulateUserTrial(quizId, videoId, 0, 10);
+
+  // await simulateUserTrial(quizId, videoId, 0, 10);
+
+  //   await simulateUserTrial(quizId, videoId, 0, 10);
+
+  // await simulateUserTrial(quizId, videoId, 0, 10);
+
+  // await simulateUserTrial(quizId, videoId, 0, 10);
 
 
-  await simulateUserTrial(quizId, videoId, 7, 10);
+  // await simulateUserTrial(quizId, videoId, 1, 10);
 
-  await simulateUserTrial(quizId, videoId, 15, 20);
+  // await simulateUserTrial(quizId, videoId, 1, 10);
 
-  await simulateUserTrial(quizId, videoId, 4, 5);
+  // await simulateUserTrial(quizId, videoId, 1, 10);
 
-  await simulateUserTrial(quizId, videoId, 14, 30);
+  //   await simulateUserTrial(quizId, videoId, 1, 10);
 
-  await simulateUserTrial(quizId, videoId, 14, 30);
+  // await simulateUserTrial(quizId, videoId, 1, 10);
+
+  // await simulateUserTrial(quizId, videoId, 1, 10);
+
+  //   await simulateUserTrial(quizId, videoId, 7, 10);
+
+  // await simulateUserTrial(quizId, videoId, 7, 10);
+
+  // await simulateUserTrial(quizId, videoId, 7, 10);
+
+ 
+  
+
+  // await simulateUserTrial(quizId, videoId, 4, 10);
+
+  // await simulateUserTrial(quizId, videoId, 14, 30);
+
+  // await simulateUserTrial(quizId, videoId, 14, 30);
 }
 
-async function UserTrialDataS() {
-  const quizId = "16be4e58-22a0-4774-8b16-a918a9319f5f";
-  const videoId = "317. Building the Cart Overview With Redux Selectors";
+// async function UserTrialDataS() {
+//   const quizId = "16be4e58-22a0-4774-8b16-a918a9319f5f";
+//   const videoId = "317. Building the Cart Overview With Redux Selectors";
 
 
-  await simulateUserTrial(quizId, videoId, 2, 5);
+//   await simulateUserTrial(quizId, videoId, 2, 5);
 
-  // await simulateUserTrial(quizId, videoId, 15, 20);
+//   // await simulateUserTrial(quizId, videoId, 15, 20);
 
-  // await simulateUserTrial(quizId, videoId, 4, 5);
+//   // await simulateUserTrial(quizId, videoId, 4, 5);
 
-  // await simulateUserTrial(quizId, videoId, 14, 30);
+//   // await simulateUserTrial(quizId, videoId, 14, 30);
 
-  // await simulateUserTrial(quizId, videoId, 14, 30);
-}
+//   // await simulateUserTrial(quizId, videoId, 14, 30);
+// }
 
-async function UserTrialDataT() {
-  const quizId = "fff00aa0-0b16-41ad-9c57-bbca5a257e57";
-  const videoId = "319. Deleting Cart Items";
+// async function UserTrialDataT() {
+//   const quizId = "fff00aa0-0b16-41ad-9c57-bbca5a257e57";
+//   const videoId = "319. Deleting Cart Items";
 
 
-  await simulateUserTrial(quizId, videoId, 0, 1);
+//   await simulateUserTrial(quizId, videoId, 0, 1);
 
-  // await simulateUserTrial(quizId, videoId, 15, 20);
+//   // await simulateUserTrial(quizId, videoId, 15, 20);
 
-  // await simulateUserTrial(quizId, videoId, 4, 5);
+//   // await simulateUserTrial(quizId, videoId, 4, 5);
 
-  // await simulateUserTrial(quizId, videoId, 14, 30);
+//   // await simulateUserTrial(quizId, videoId, 14, 30);
 
-  // await simulateUserTrial(quizId, videoId, 14, 30);
-}
+//   // await simulateUserTrial(quizId, videoId, 14, 30);
+// }
 
 const main = async () => {
   const { transcripts, users, quizzes, quizzesCompleted } = schema;
@@ -99,14 +131,14 @@ const main = async () => {
   try {
     console.log("Seeding database");
 
-    await db.delete(quizzesCompleted);
-    await db.delete(quizzes);
-    await db.delete(transcripts);
+    // await db.delete(quizzesCompleted);
+    // await db.delete(quizzes);
+    // await db.delete(transcripts);
     // await db.delete(users);
 
     // Simulate user trials
     // simulateGenQuiz("60. Creating a State Variable With useState", 'T')
-    // UserTrialDataM();
+    UserTrialDataM();
     // UserTrialDataS();
     // UserTrialDataT();
 

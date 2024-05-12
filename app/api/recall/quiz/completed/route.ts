@@ -5,17 +5,32 @@ import { auth } from "auth";
 import { error } from "console";
 
 export async function POST(request: Request) {
+  // DEV
   try {
+    let sessionUser;
     const session = await auth();
-    if (!session) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: {
-          "content-type": "application/json",
-        },
-      });
+    if (session) {
+      sessionUser = session.user;
+    } else {
+
+      sessionUser = { id: "06b51c75-bf24-4aaa-a00d-2294018dbcbf" }; 
     }
-    const sessionUser = session?.user;
+
+    // PROD
+    // try {
+    // const session = await auth();
+    // if (!session) {
+    //   return new Response(JSON.stringify({ error: "Unauthorized" }), {
+    //     status: 401,
+    //     headers: {
+    //       "content-type": "application/json",
+    //     },
+    //   });
+    // }
+    // const sessionUser = session?.user;
+
+
+
 
     const { totalQuestions, incorrectAnswers, quizId, videoId } =
       await request.json();
@@ -38,6 +53,11 @@ export async function POST(request: Request) {
     let highestScore;
     let highestScoreTotal;
 
+    // New
+    let above60FourTimeUpdated;
+    let above70ThreeTimeUpdated;
+    // let lastScoreUpdated;
+
     if (latestQuizCompleted.length > 0) {
       // Quiz completed before
       const previousSuccessRate = latestQuizCompleted[0].successRate;
@@ -46,7 +66,28 @@ export async function POST(request: Request) {
       const previousHighestScoreTotal =
         latestQuizCompleted[0].highestScoreTotal;
 
+      // New
+      const lastScore = currentSuccessRate;
+      const isInReviewState = latestQuizCompleted[0].reviewState;
+
+      // ---- REPETITION GRADUATION CASES ---- 
+      let above60FourTimeUpdated =
+        latestQuizCompleted.length > 0
+          ? latestQuizCompleted[0].above60FourTime
+          : 0;
+      let above70ThreeTimeUpdated =
+        latestQuizCompleted.length > 0
+          ? latestQuizCompleted[0].above70ThreeTime
+          : 0;
+
+      above60FourTimeUpdated = lastScore >= 60 ? above60FourTimeUpdated + 1 : 0;
+      above70ThreeTimeUpdated = lastScore >= 70 ? above70ThreeTimeUpdated + 1 : 0;
+
+
+      // --
+
       attemptNumberUpdated = latestQuizCompleted[0].attemptNumber + 1;
+      // GLOBAL USER RATE
       newSuccessRate =
         (previousSuccessRate * previousAttemptNumber + currentSuccessRate) /
         attemptNumberUpdated;
@@ -64,6 +105,55 @@ export async function POST(request: Request) {
         highestScoreTotal = previousHighestScoreTotal;
       }
 
+      // ============ REVIEW STATE ============
+      const transitionReviewPeriod = latestQuizCompleted[0].transitionToReview;
+
+
+      let isGraduated;
+      
+      let isInTransition = transitionReviewPeriod;
+      if (transitionReviewPeriod) {
+        isInTransition = false;
+      } else  {
+        // GAIN REVIEW STATE
+        if (!isInReviewState) {
+          if (above60FourTimeUpdated >= 4) {
+            isGraduated = true;
+            isInTransition = true
+          }
+          if (above70ThreeTimeUpdated >= 3) {
+            isGraduated = true;
+            isInTransition = true
+          }
+        }
+        // LOOSE REVIEW STATE
+        else {
+          if (newSuccessRate <= 60) {
+            isGraduated = false;
+            console.log("Loose graduation")
+          }
+        }
+        
+
+      }
+
+
+      // Reset successRate
+      if (isGraduated && !transitionReviewPeriod) {
+        // Is it necessary to reset successRate if user already have good score
+
+        // --------------------TO CHECK AGAIN
+        if (newSuccessRate < 70) {
+        newSuccessRate = currentSuccessRate
+        console.log("New success rate should be there:", newSuccessRate)
+        }
+
+      }
+      console.log(newSuccessRate)
+
+      // ---- PERFORMANCE CASE ---- 
+      // Case : successRate above 80 & at least 2 quizz
+
       await db
         .update(quizzesCompleted)
         .set({
@@ -73,6 +163,12 @@ export async function POST(request: Request) {
           successRate: newSuccessRate,
           highestScore: highestScore,
           highestScoreTotal: highestScoreTotal,
+          above60FourTime: above60FourTimeUpdated,
+          above70ThreeTime: above70ThreeTimeUpdated,
+          lastScore: lastScore,
+          reviewState: isGraduated,
+          transitionToReview: isInTransition,
+
           updatedAt: new Date(),
         })
         .where(
@@ -89,6 +185,13 @@ export async function POST(request: Request) {
       highestScore = totalQuestions - incorrectAnswers;
       highestScoreTotal = totalQuestions;
 
+      above60FourTimeUpdated = currentSuccessRate >= 60 ?  1 : 0;
+      above70ThreeTimeUpdated = currentSuccessRate >= 70 ? 1 : 0;
+      
+      // Last case to implement if user does exam with highScore
+      // transition and graduation to turn on
+
+
       await db.insert(quizzesCompleted).values({
         userId: sessionUser.id,
         quizId: quizId,
@@ -99,6 +202,9 @@ export async function POST(request: Request) {
         successRate: newSuccessRate,
         highestScore: highestScore,
         highestScoreTotal: highestScoreTotal,
+        above60FourTime: above60FourTimeUpdated,
+        above70ThreeTime: above70ThreeTimeUpdated,
+        lastScore: newSuccessRate,
       });
     }
 

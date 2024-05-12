@@ -17,6 +17,7 @@ const Chat: React.FC<ChatProps> = ({ width = 64, height = 64 }) => {
           width={width}
           height={height}
           unoptimized={true}
+          priority
         />
       </span>
     </div>

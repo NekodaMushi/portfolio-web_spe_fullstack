@@ -220,7 +220,7 @@ const CustomCard: React.FC<CardProps> = ({
           />
           {!isDataLoaded && (
             <Button
-              disabled={numQuestions === "Select" || isGenerating}
+              disabled={isGenerating}
               onClick={fetchQuizData}
               className="w-full rounded px-3 py-1 text-sm sm:h-9 sm:w-40"
             >

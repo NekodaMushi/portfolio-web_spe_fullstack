@@ -81,7 +81,7 @@ export async function POST(request: Request) {
       quizDataField = "quizDataMedium";
     } else if (numberQuestions === "20") {
       quizDataField = "quizDataLarge";
-    } else if (numberQuestions === "35") {
+    } else if (numberQuestions === "30") {
       quizDataField = "quizDataExam";
     } else if (numberQuestions === "1") {
       quizDataField = "quizDataTest";

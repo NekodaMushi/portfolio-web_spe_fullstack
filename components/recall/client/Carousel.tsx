@@ -4,6 +4,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import CustomCard from "./CustomCard";
 import Autoplay from "embla-carousel-autoplay";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 import {
   faChevronRight,
@@ -73,40 +74,51 @@ export function Carousel() {
     );
   } else {
     return (
-      <div className="embla w-full overflow-hidden sm:mt-2" ref={emblaRef}>
-        <div className="embla__container">
-          {data.map((item, index) => (
-            <div
-              key={index}
-              className="embla__slide relative flex h-full flex-col items-center justify-center"
+      <>
+        <ToggleGroup type="multiple">
+          <ToggleGroupItem value="Learning">Learning</ToggleGroupItem>
+          <ToggleGroupItem value="Review">Review</ToggleGroupItem>
+        </ToggleGroup>
+        <div className="mb-4 flex items-center">
+          <h1 className=" flex-1 text-center text-3xl font-bold">
+            Spaced Learning Repetition
+          </h1>
+        </div>
+        <div className="embla w-full overflow-hidden sm:mt-2" ref={emblaRef}>
+          <div className="embla__container">
+            {data.map((item, index) => (
+              <div
+                key={index}
+                className="embla__slide relative flex h-full flex-col items-center justify-center"
+              >
+                <CustomCard
+                  quizTitle={item.videoId}
+                  length={item.totalQuestions}
+                  lastScore={item.totalQuestions - item.incorrectAnswers}
+                  highestScore={item.highestScore}
+                  highestScoreTotal={item.highestScoreTotal}
+                  lastAttempt={new Date(item.updatedAt).toLocaleDateString()}
+                  attemptNumber={item.attemptNumber}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-between">
+            <button
+              className="embla__prev m-2 rounded-full border-2 border-solid p-3 text-xl"
+              onClick={scrollPrev}
             >
-              <CustomCard
-                quizTitle={item.videoId}
-                length={item.totalQuestions}
-                lastScore={item.totalQuestions - item.incorrectAnswers}
-                highestScore={item.highestScore}
-                highestScoreTotal={item.highestScoreTotal}
-                lastAttempt={new Date(item.updatedAt).toLocaleDateString()}
-                attemptNumber={item.attemptNumber}
-              />
-            </div>
-          ))}
+              <FontAwesomeIcon icon={faChevronLeft} />
+            </button>
+            <button
+              className="embla__next m-2 rounded-full border-2 border-solid p-3 text-xl"
+              onClick={scrollNext}
+            >
+              <FontAwesomeIcon icon={faChevronRight} />
+            </button>
+          </div>
         </div>
-        <div className="flex justify-between">
-          <button
-            className="embla__prev m-2 rounded-full border-2 border-solid p-3 text-xl"
-            onClick={scrollPrev}
-          >
-            <FontAwesomeIcon icon={faChevronLeft} />
-          </button>
-          <button
-            className="embla__next m-2 rounded-full border-2 border-solid p-3 text-xl"
-            onClick={scrollNext}
-          >
-            <FontAwesomeIcon icon={faChevronRight} />
-          </button>
-        </div>
-      </div>
+      </>
     );
   }
 }

@@ -11,6 +11,7 @@ import { AlertCancel } from "@/components/ui/custom/alert-dialog";
 
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { resetQuiz } from "slices/quizSlice";
+import Spinner from "../ui/spinner";
 
 interface QuizCardProps {
   questions: QuestionsState;
@@ -18,6 +19,7 @@ interface QuizCardProps {
   quizId: string;
   videoId: string;
   onSetQuizCancel: () => void;
+  onSetPreventNaN: (value: boolean) => void;
 }
 
 const QuizCard = ({
@@ -26,6 +28,7 @@ const QuizCard = ({
   quizId,
   videoId,
   onSetQuizCancel,
+  onSetPreventNaN,
 }: QuizCardProps) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -34,6 +37,8 @@ const QuizCard = ({
   const [userAnswers, setUserAnswers] = useState<Record<number, string>>({});
 
   const isQuestionAnswered = userAnswers[currentQuestionIndex] ? true : false;
+
+  const [preventNaN, setPreventNaN] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
 
@@ -94,6 +99,18 @@ const QuizCard = ({
 
     onSetQuizCancel();
   };
+  // To avoid going back to generate quiz page
+  // Temp fix to avoid score NaN displayed
+  const handleEnd = () => {
+    onSetPreventNaN(false);
+    dispatch(resetQuiz());
+
+    setCurrentQuestionIndex(0);
+    setScore(0);
+    setUserAnswers({});
+
+    // onSetQuizCancel();
+  };
 
   return (
     <div className="relative text-center">
@@ -101,7 +118,7 @@ const QuizCard = ({
         <QuizEnd
           score={score}
           totalQuestions={totalQuestions}
-          handleReset={handleReset}
+          handleEnd={handleEnd}
         />
       ) : (
         <>

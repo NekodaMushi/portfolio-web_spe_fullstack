@@ -17,6 +17,7 @@ const FAQ: React.FC<FAQProps> = ({ width = 120, height = 120 }) => {
           width={width}
           height={height}
           unoptimized={true}
+          priority
         />
       </span>
     </div>

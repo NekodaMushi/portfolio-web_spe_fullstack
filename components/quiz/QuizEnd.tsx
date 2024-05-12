@@ -10,10 +10,10 @@ import Link from "next/link";
 type Props = {
   score: number;
   totalQuestions: number;
-  handleReset: () => void;
+  handleEnd: () => void;
 };
 
-const QuizEnd = ({ score, totalQuestions, handleReset }: Props) => {
+const QuizEnd = ({ score, totalQuestions, handleEnd }: Props) => {
   const scorePercentage = (score / totalQuestions) * 100;
   const incorrectBar = 100 - scorePercentage;
   const correctAnswers = score;
@@ -61,7 +61,7 @@ const QuizEnd = ({ score, totalQuestions, handleReset }: Props) => {
         />
       </div>
 
-      <Link href="/profil" onClick={() => handleReset()}>
+      <Link href="/learn/recall" onClick={() => handleEnd()}>
         <Button>Finish</Button>
       </Link>
     </div>
