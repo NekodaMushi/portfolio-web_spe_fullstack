@@ -122,9 +122,9 @@ export async function POST(request: Request) {
             graduatedByPerformance = true;
           }
           // Case 4 => mark a good score at Exam 
-          // if (totalQuestions > 28 && currentSuccessRate >= 83) {
-          //   graduatedByPerformance = true;
-          // }
+          if (totalQuestions > 28 && currentSuccessRate >= 83) {
+            graduatedByPerformance = true;
+          }
         }
         // LOOSE REVIEW STATE
         else {
