@@ -21,9 +21,7 @@ export async function GET(request: Request) {
      const currentDate = new Date();
     const previousDate = new Date(currentDate);
     previousDate.setDate(previousDate.getDate() - 1);
-    console.log("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOW")
-    console.log(previousDate)
-    console.log(currentDate)
+
 
     // Learning Phase Quiz
     const today = new Date();
