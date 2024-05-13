@@ -2,15 +2,15 @@
 import React, { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import CustomCard from "./CustomCard";
-import Autoplay from "embla-carousel-autoplay";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-
 import {
   faChevronRight,
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import Spinner from "../../ui/spinner";
+import Autoplay from "embla-carousel-autoplay";
+
 interface CarouselDataItem {
   successRate: number;
   attemptNumber: number;
@@ -25,26 +25,46 @@ interface CarouselDataItem {
 type CarouselData = CarouselDataItem[];
 
 export function Carousel() {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
+    Autoplay({ delay: 4000 }),
+  ]);
+
+  const [selectedToggle, setSelectedToggle] = useState("Review");
+  const [learningQuizzes, setLearningQuizzes] = useState<CarouselData>([]);
+  const [reviewQuizzes, setReviewQuizzes] = useState<CarouselData>([]);
   const [data, setData] = useState<CarouselData | null>(null);
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
-  // , [
-  //   Autoplay({ delay: 4000 }),
-  // ]
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/recall/quiz/latest");
+        const response = await fetch("/api/recall/quiz/spaced-repetition");
         const fetchedData = await response.json();
-        setData(Array.isArray(fetchedData) ? fetchedData : []);
+        setLearningQuizzes(fetchedData.learningAndTransitionPhaseQuizzes || []);
+        setReviewQuizzes(fetchedData.reviewPhaseQuizzes || []);
+        updateDisplayedData(selectedToggle);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setData([]); // Set data to an empty array on error to stop the spinner
+        setLearningQuizzes([]);
+        setReviewQuizzes([]);
+        setData([]);
       }
     };
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    // This effect will run when selectedToggle changes, to update displayed data accordingly
+    updateDisplayedData(selectedToggle);
+  }, [selectedToggle, learningQuizzes, reviewQuizzes]);
+
+  const updateDisplayedData = (toggleValue: string) => {
+    if (toggleValue === "Learning") {
+      setData(learningQuizzes);
+    } else {
+      setData(reviewQuizzes);
+    }
+  };
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -54,31 +74,39 @@ export function Carousel() {
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
 
-  // return (
-  //   <div className="flex h-screen items-center justify-center">
-  //     <div>No data available</div>
-  //   </div>
-  // );
-
   if (data === null) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  } else if (data.length === 0) {
-    return (
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex h-80 items-center justify-center">
         <div>No data available</div>
       </div>
     );
+    // } else if (data.length === 0) {
+    //   if (learningQuizzes.length === 0 && reviewQuizzes.length === 0) {
+    //     console.log("test");
+    //     return (
+    //       <div className="flex h-80 items-center justify-center">
+    //         <div>No more quiz for today !</div>
+    //       </div>
+    //     );
+    //   }
+    //   return (
+    //     <div className="flex h-80 items-center justify-center">
+    //       <Spinner />
+    //     </div>
+    //   );
   } else {
     return (
       <>
-        <ToggleGroup type="multiple">
+        <ToggleGroup
+          type="single"
+          value={selectedToggle}
+          onValueChange={setSelectedToggle}
+          defaultValue="Review"
+        >
           <ToggleGroupItem value="Learning">Learning</ToggleGroupItem>
           <ToggleGroupItem value="Review">Review</ToggleGroupItem>
         </ToggleGroup>
+
         <div className="mb-4 flex items-center">
           <h1 className=" flex-1 text-center text-3xl font-bold">
             Spaced Learning Repetition
@@ -99,6 +127,7 @@ export function Carousel() {
                   highestScoreTotal={item.highestScoreTotal}
                   lastAttempt={new Date(item.updatedAt).toLocaleDateString()}
                   attemptNumber={item.attemptNumber}
+                  successRate={item.successRate}
                 />
               </div>
             ))}

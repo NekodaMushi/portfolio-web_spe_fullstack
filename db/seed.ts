@@ -1,8 +1,8 @@
 import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
 import * as schema from "@/db/schema";
-// import { simulateGenQuiz } from "./testing/simulateGenQuiz";
 import { config } from "dotenv";
+import { and, eq } from "drizzle-orm";
 
 config({ path: ".env.local" });
 
@@ -44,55 +44,6 @@ const simulateUserTrial = async (quizId: string, videoId: string, score: number,
 };
 
 
-
-async function UserTrialDataM() {
-  const quizId = "db79a9ae-c082-4b43-9a70-3da2b64db626";
-  const videoId = "129. Binary Trees";
-
-  // Check normal process OK
-  // Check reducing drastically when he passes into transite OK
-  // except for last case if he gets through perf
-  //  await simulateUserTrial(quizId, videoId, 5, 10);
-
-  await simulateUserTrial(quizId, videoId, 0, 10);
-
-  // await simulateUserTrial(quizId, videoId, 0, 10);
-
-  //   await simulateUserTrial(quizId, videoId, 0, 10);
-
-  // await simulateUserTrial(quizId, videoId, 0, 10);
-
-  // await simulateUserTrial(quizId, videoId, 0, 10);
-
-
-  // await simulateUserTrial(quizId, videoId, 1, 10);
-
-  // await simulateUserTrial(quizId, videoId, 1, 10);
-
-  // await simulateUserTrial(quizId, videoId, 1, 10);
-
-  //   await simulateUserTrial(quizId, videoId, 1, 10);
-
-  // await simulateUserTrial(quizId, videoId, 1, 10);
-
-  // await simulateUserTrial(quizId, videoId, 1, 10);
-
-  //   await simulateUserTrial(quizId, videoId, 7, 10);
-
-  // await simulateUserTrial(quizId, videoId, 7, 10);
-
-  // await simulateUserTrial(quizId, videoId, 7, 10);
-
- 
-  
-
-  // await simulateUserTrial(quizId, videoId, 4, 10);
-
-  // await simulateUserTrial(quizId, videoId, 14, 30);
-
-  // await simulateUserTrial(quizId, videoId, 14, 30);
-}
-
 // async function UserTrialDataS() {
 //   const quizId = "16be4e58-22a0-4774-8b16-a918a9319f5f";
 //   const videoId = "317. Building the Cart Overview With Redux Selectors";
@@ -125,12 +76,75 @@ async function UserTrialDataM() {
 //   // await simulateUserTrial(quizId, videoId, 14, 30);
 // }
 
+
+
+async function UserTrialDataM() {
+  const quizId = "a79cf187-6396-4ff9-8e06-3622d100c7c6";
+  const videoId = "197. Graph + Tree Traversals";
+
+  // Check normal process OK
+  // Check reducing drastically when he passes into transite OK
+  // except for last case if he gets through perf
+  //  await simulateUserTrial(quizId, videoId, 6, 10);
+
+  // await simulateUserTrial(quizId, videoId, 7, 10);
+
+  // await simulateUserTrial(quizId, videoId, 0, 10);
+
+  // await simulateUserTrial(quizId, videoId, 0, 10);
+
+
+  // await simulateUserTrial(quizId, videoId, 8, 10);
+
+  //   await simulateUserTrial(quizId, videoId, 9, 10);
+
+  // await simulateUserTrial(quizId, videoId, 9, 10);
+
+
+  
+
+  await simulateUserTrial(quizId, videoId, 1, 10);
+
+    await simulateUserTrial(quizId, videoId, 1, 10);
+
+  // await simulateUserTrial(quizId, videoId, 1, 10);
+
+
+  // await simulateUserTrial(quizId, videoId, 7, 10);
+
+ 
+  
+
+
+}
+
+const updateSpacedRepetitionInterval = async (spacedRepetitionId: string) => {
+  try {
+    await db.update(schema.spacedRepetition)
+      .set({
+        interval: 1,
+        updatedAt: new Date()
+      })
+      .where(eq(schema.spacedRepetition.id, spacedRepetitionId))
+      .execute();
+
+    console.log(`Interval updated successfully for ID: ${spacedRepetitionId}`);
+  } catch (error) {
+    console.error(`Error updating interval for ID: ${spacedRepetitionId}`, error);
+    throw error;
+  };
+
+}
+
+
+
 const main = async () => {
   const { transcripts, users, quizzes, quizzesCompleted } = schema;
 
   try {
     console.log("Seeding database");
 
+    // await db.delete(schema.spacedRepetition);
     // await db.delete(quizzesCompleted);
     // await db.delete(quizzes);
     // await db.delete(transcripts);
@@ -138,9 +152,13 @@ const main = async () => {
 
     // Simulate user trials
     // simulateGenQuiz("60. Creating a State Variable With useState", 'T')
-    UserTrialDataM();
+    // UserTrialDataM();
     // UserTrialDataS();
     // UserTrialDataT();
+    const spacedRepetitionId = "42664dca-05f3-44ed-aa5a-24e63ccd77f7"; 
+updateSpacedRepetitionInterval(spacedRepetitionId);
+
+
 
     
   } catch (error) {

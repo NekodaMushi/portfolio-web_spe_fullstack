@@ -19,6 +19,7 @@ interface CardProps {
   quizTitle: string;
   length: number;
   lastScore: number;
+  successRate: number;
   highestScore: number;
   highestScoreTotal: number;
   lastAttempt: string;
@@ -33,6 +34,7 @@ const CustomCard: React.FC<CardProps> = ({
   highestScoreTotal,
   lastAttempt,
   attemptNumber,
+  successRate,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -138,16 +140,14 @@ const CustomCard: React.FC<CardProps> = ({
     }
   };
 
-  const scoreRatio = lastScore / length;
-
   const CustomColor =
-    scoreRatio >= 0.8
+    successRate >= 90
       ? `border-[2px] border-green-500`
-      : scoreRatio >= 0.6
-        ? `border-[2px] border-yellow-200`
-        : scoreRatio >= 0.4
+      : successRate >= 70
+        ? `border-[2px] border-blue-500`
+        : successRate >= 50
           ? `border-[2px] border-yellow-500`
-          : scoreRatio >= 0.2
+          : successRate >= 30
             ? `border-[2px] border-orange-500`
             : `border-[2px] border-red-500`;
 

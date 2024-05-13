@@ -1,22 +1,32 @@
 import { db } from "@/db/index";
-import { quizzesCompleted } from "@/db/schema";
+import { quizzesCompleted, spacedRepetition } from "@/db/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { auth } from "auth";
 import { error } from "console";
 
 export async function POST(request: Request) {
-
-    try {
+  // DEV
+  try {
+    let sessionUser;
     const session = await auth();
-    if (!session) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: {
-          "content-type": "application/json",
-        },
-      });
+    if (session) {
+      sessionUser = session.user;
+    } else {
+      sessionUser = { id: "06b51c75-bf24-4aaa-a00d-2294018dbcbf" };
     }
-    const sessionUser = session?.user;
+
+    // PROD
+    // try {
+    // const session = await auth();
+    // if (!session) {
+    //   return new Response(JSON.stringify({ error: "Unauthorized" }), {
+    //     status: 401,
+    //     headers: {
+    //       "content-type": "application/json",
+    //     },
+    //   });
+    // }
+    // const sessionUser = session?.user;
 
     const { totalQuestions, incorrectAnswers, quizId, videoId } =
       await request.json();
@@ -44,6 +54,8 @@ export async function POST(request: Request) {
     let above70ThreeTimeUpdated;
     let graduatedByPerformance;
 
+    let under60ThreeTimeUpdated; 
+
     if (latestQuizCompleted.length > 0) {
       // Quiz completed before
       const previousSuccessRate = latestQuizCompleted[0].successRate;
@@ -55,6 +67,7 @@ export async function POST(request: Request) {
       // New
       const lastScore = currentSuccessRate;
       const isInReviewState = latestQuizCompleted[0].reviewState;
+      console.log("NOW---------------------1", isInReviewState);
 
       // ---- REPETITION GRADUATION CASES ----
       let above60FourTimeUpdated =
@@ -65,11 +78,17 @@ export async function POST(request: Request) {
         latestQuizCompleted.length > 0
           ? latestQuizCompleted[0].above70ThreeTime
           : 0;
+      
+          let under60ThreeTimeUpdated =
+        latestQuizCompleted.length > 0
+          ? latestQuizCompleted[0].under60ThreeTime
+          : 0; 
 
       above60FourTimeUpdated = lastScore >= 60 ? above60FourTimeUpdated + 1 : 0;
       above70ThreeTimeUpdated =
         lastScore >= 70 ? above70ThreeTimeUpdated + 1 : 0;
 
+      under60ThreeTimeUpdated = lastScore <= 60? under60ThreeTimeUpdated + 1 : 0;
       // --
 
       attemptNumberUpdated = latestQuizCompleted[0].attemptNumber + 1;
@@ -113,7 +132,7 @@ export async function POST(request: Request) {
             isInTransition = true;
           }
 
-                // ---- PERFORMANCE CASE ----
+          // ---- PERFORMANCE CASE ----
           // Case 3 => successRate above 80 & at least 2 quizz
           if (
             latestQuizCompleted[0].attemptNumber >= 2 &&
@@ -121,7 +140,7 @@ export async function POST(request: Request) {
           ) {
             graduatedByPerformance = true;
           }
-          // Case 4 => mark a good score at Exam 
+          // Case 4 => mark a good score at Exam
           if (totalQuestions > 28 && currentSuccessRate >= 83) {
             graduatedByPerformance = true;
           }
@@ -129,24 +148,30 @@ export async function POST(request: Request) {
         // LOOSE REVIEW STATE
         else {
           if (newSuccessRate <= 60) {
+            console.log("CHECKING----");
             isGraduated = false;
-            console.log("Loose graduation");
+            graduatedByPerformance = false;
+            console.log("Loose graduation", isGraduated);
           }
         }
       }
+      console.log(isGraduated);
 
       // Reset successRate
       if (isGraduated && !transitionReviewPeriod) {
-
         if (newSuccessRate < 70 && currentSuccessRate > 60) {
           newSuccessRate = currentSuccessRate;
           console.log("New success rate should be there:", newSuccessRate);
         }
+        if (under60ThreeTimeUpdated){
+          newSuccessRate = currentSuccessRate;
+        }
+         
       }
       console.log(newSuccessRate);
 
-
-
+      console.log("HERE", isGraduated);
+      console.log("now", isGraduated || graduatedByPerformance);
       await db
         .update(quizzesCompleted)
         .set({
@@ -158,9 +183,11 @@ export async function POST(request: Request) {
           highestScoreTotal: highestScoreTotal,
           above60FourTime: above60FourTimeUpdated,
           above70ThreeTime: above70ThreeTimeUpdated,
+          under60ThreeTime: under60ThreeTimeUpdated,
           lastScore: lastScore,
           reviewState: isGraduated || graduatedByPerformance,
           transitionToReview: isInTransition,
+
 
           updatedAt: new Date(),
         })
@@ -171,6 +198,169 @@ export async function POST(request: Request) {
             eq(quizzesCompleted.id, latestQuizCompleted[0].id),
           ),
         );
+
+      // TEMP DEBUG ------------------
+
+      // --------- REVIEW PHASE ---------
+      // Check if quiz transitioning to review phase for 1thtime
+
+      //  Need to add condition to erase SpacedRepetition table is user loose review state
+      if (!latestQuizCompleted[0].reviewState && latestQuizCompleted[0].attemptNumber > 5) {
+    const existingSpacedRepetitionToErase = await db
+        .select()
+        .from(spacedRepetition)
+        .where(
+            and(
+                eq(spacedRepetition.userId, sessionUser.id),
+                eq(spacedRepetition.quizCompletedId, latestQuizCompleted[0].id),
+            ),
+        );
+
+    if (existingSpacedRepetitionToErase.length > 0) {
+        await db
+            .delete(spacedRepetition)
+            .where(
+                and(
+                    eq(spacedRepetition.userId, sessionUser.id),
+                    eq(spacedRepetition.quizCompletedId, latestQuizCompleted[0].id),
+                ),
+            );
+        console.log("Spaced Repetition entries deleted due to loss of review state.");
+    }
+}
+
+      console.log("isInReviewState before review phase", isInReviewState);
+      if (isInReviewState ) {
+
+        const existingSpacedRepetition = await db
+          .select()
+          .from(spacedRepetition)
+          .where(
+            and(
+              eq(spacedRepetition.userId, sessionUser.id),
+              eq(spacedRepetition.quizCompletedId, latestQuizCompleted[0].id),
+            ),
+          )
+          .limit(1);
+        console.log("existingSpacedRepetition before Length", existingSpacedRepetition);
+
+        if (existingSpacedRepetition.length > 0) {
+          console.log("HEXIST", existingSpacedRepetition);
+          // Calculate new ease factor from user's perf
+          const currentEaseFactor = existingSpacedRepetition[0].easeFactor;
+          //-------
+
+          const targetSuccessRate = 8;
+          const dampeningFactor = 0.025; // The speed range
+          const adjustmentFactor = 0.05; // How quickly it reacts
+
+          // ----- TEMP FIX START   ----- 
+          let newEaseFactor; //Whatever
+          if (currentEaseFactor > 4800) {
+            newEaseFactor = 2500;
+            if (currentSuccessRate < 80) {
+              newEaseFactor = 3400
+            }
+            else if (currentSuccessRate < 60) {
+              newEaseFactor = 2400
+            }
+            else if (currentSuccessRate < 40) {
+              newEaseFactor = 1400
+              }
+            console.log("currentEaseFactor > 4800")
+            }
+            
+          else {
+             
+            // ----- TO FIX LATER   ----- 
+
+            console.log(Math.round(
+                currentEaseFactor + 
+                  dampeningFactor *
+                    (currentEaseFactor *
+                      (Math.log(targetSuccessRate / 100) /
+                        Math.log(currentSuccessRate / 100) -
+                        1) +
+                      adjustmentFactor),
+              ))
+           newEaseFactor = Math.max(
+            1300,
+            Math.min(
+              5000,
+              Math.round(
+                currentEaseFactor + 
+                  dampeningFactor *
+                    (currentEaseFactor *
+                      (Math.log(targetSuccessRate / 100) /
+                        Math.log(currentSuccessRate / 100) -
+                        1) +
+                      adjustmentFactor),
+              ),
+            ),
+          );
+          }
+          
+
+          
+
+          const currentInterval = existingSpacedRepetition[0].interval;
+
+    
+
+    
+          let newInterval;
+          if (newEaseFactor < 1500) {
+            newInterval = 1;
+          } else if (newEaseFactor < 2500) {
+            newInterval = 3;
+          } else if (newEaseFactor < 3500) {
+            newInterval = 5;
+          } else if (newEaseFactor < 4000) {
+            newInterval = 8;
+          } else if (newEaseFactor < 4400) {
+            newInterval = 21;
+          } else if (newEaseFactor < 4700) {
+            newInterval = 51;
+          } else if (newEaseFactor < 4950) {
+            newInterval = 127;
+          } else if (newEaseFactor < 5000) {
+            newInterval = 317;
+          } else {
+            newInterval = 500; // Default case if bug
+          }
+
+          // ----- TEMP FIX END   ----- 
+          // const newInterval = Math.max(1, Math.round(currentInterval * (newEaseFactor / currentEaseFactor)));
+
+          console.log("Here newInterval => ", newInterval);
+          // -- Next quiz depend of the calculated interval --
+          await db
+            .update(spacedRepetition)
+            .set({
+              interval: newInterval,
+              easeFactor: newEaseFactor,
+              dueDate: new Date(Date.now() + newInterval * 24 * 60 * 60 * 1000), // Set the due date based on the new interval
+            })
+            .where(
+              and(
+                eq(spacedRepetition.userId, sessionUser.id),
+                eq(spacedRepetition.quizCompletedId, latestQuizCompleted[0].id),
+              ),
+            );
+        } else {
+          // --- Next quiz in 3 days for new in review state ---
+          await db.insert(spacedRepetition).values({
+            userId: sessionUser.id,
+            quizCompletedId: latestQuizCompleted[0].id,
+            interval: 3,
+            easeFactor: 2500,
+            dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+          });
+        }
+      }
+
+
+      // --------------------------------
     } else {
       // Quiz completed first time
       attemptNumberUpdated = 1;
@@ -181,10 +371,10 @@ export async function POST(request: Request) {
       above60FourTimeUpdated = currentSuccessRate >= 60 ? 1 : 0;
       above70ThreeTimeUpdated = currentSuccessRate >= 70 ? 1 : 0;
 
-      // Case 4 => mark a excellent score at Exam 
-       if (totalQuestions > 28 && currentSuccessRate >= 83) {
-            graduatedByPerformance = true;
-          }
+      // Case 4 => mark a excellent score at Exam
+      if (totalQuestions > 28 && currentSuccessRate >= 83) {
+        graduatedByPerformance = true;
+      }
 
       await db.insert(quizzesCompleted).values({
         userId: sessionUser.id,
@@ -203,6 +393,7 @@ export async function POST(request: Request) {
         transitionToReview: graduatedByPerformance,
       });
     }
+    
 
     return new Response(
       JSON.stringify({ message: "Quiz result stored successfully" }),
