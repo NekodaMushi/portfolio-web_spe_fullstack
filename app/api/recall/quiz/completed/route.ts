@@ -67,7 +67,7 @@ export async function POST(request: Request) {
       // New
       const lastScore = currentSuccessRate;
       const isInReviewState = latestQuizCompleted[0].reviewState;
-      console.log("NOW---------------------1", isInReviewState);
+
 
       // ---- REPETITION GRADUATION CASES ----
       let above60FourTimeUpdated =
@@ -148,14 +148,14 @@ export async function POST(request: Request) {
         // LOOSE REVIEW STATE
         else {
           if (newSuccessRate <= 60) {
-            console.log("CHECKING----");
+
             isGraduated = false;
             graduatedByPerformance = false;
             console.log("Loose graduation", isGraduated);
           }
         }
       }
-      console.log(isGraduated);
+
 
       // Reset successRate
       if (isGraduated && !transitionReviewPeriod) {
@@ -168,10 +168,10 @@ export async function POST(request: Request) {
         }
          
       }
-      console.log(newSuccessRate);
 
-      console.log("HERE", isGraduated);
-      console.log("now", isGraduated || graduatedByPerformance);
+    
+
+
       await db
         .update(quizzesCompleted)
         .set({
@@ -242,10 +242,10 @@ export async function POST(request: Request) {
             ),
           )
           .limit(1);
-        console.log("existingSpacedRepetition before Length", existingSpacedRepetition);
+
 
         if (existingSpacedRepetition.length > 0) {
-          console.log("HEXIST", existingSpacedRepetition);
+
           // Calculate new ease factor from user's perf
           const currentEaseFactor = existingSpacedRepetition[0].easeFactor;
           //-------
@@ -267,7 +267,7 @@ export async function POST(request: Request) {
             else if (currentSuccessRate < 40) {
               newEaseFactor = 1400
               }
-            console.log("currentEaseFactor > 4800")
+  
             }
             
           else {
@@ -332,7 +332,7 @@ export async function POST(request: Request) {
           // ----- TEMP FIX END   ----- 
           // const newInterval = Math.max(1, Math.round(currentInterval * (newEaseFactor / currentEaseFactor)));
 
-          console.log("Here newInterval => ", newInterval);
+  
           // -- Next quiz depend of the calculated interval --
           await db
             .update(spacedRepetition)
