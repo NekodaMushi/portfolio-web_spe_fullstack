@@ -1,12 +1,9 @@
 {
   "extends": [
-  "next/core-web-vitals",
-  "plugin:testing-library/react",
-  "plugin:jest/dom/recommended"
+    "next/core-web-vitals",
+    "plugin:testing-library/react"
   ],
   "rules": {
-    "react/no-unescaped-entities" : 0
+    "react/no-unescaped-entities": 0
   }
-  
-
 }

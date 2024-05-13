@@ -91,13 +91,23 @@ const RecallQuizCard = ({
     setUserAnswers({});
   };
 
+  const handleEnd = () => {
+    dispatch(resetRecall());
+
+    setCurrentQuestionIndex(0);
+    setScore(0);
+    setUserAnswers({});
+
+    // onSetQuizCancel();
+  };
+
   return (
     <div className="relative text-center">
       {quizEnded ? (
         <QuizEnd
           score={score}
           totalQuestions={totalQuestions}
-          handleReset={handleReset}
+          handleEnd={handleReset}
         />
       ) : (
         <>
