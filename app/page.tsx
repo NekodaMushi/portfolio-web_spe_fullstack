@@ -20,7 +20,7 @@ export default function HomePage() {
               {item.title}
             </p>
 
-            <div className="prose  prose-sm dark:prose-invert text-sm">
+            <div className="prose prose-sm dark:prose-invert space-y-10 text-center text-sm sm:text-lg">
               {item?.image && (
                 <Image
                   src={item.image}
@@ -44,20 +44,20 @@ const dummyContent = [
     title: "Welcome to NexLearn",
     description: (
       <>
-        <p className="sm:text-lg">
+        <p>
           The ultimate platform for personalized learning and knowledge
           retention. Our innovative project harnesses the power of cutting-edge
           technologies like Next.js, Tailwind CSS, TypeScript, Serverless Neon
           Postgres with Drizzle, and Vercel for seamless deployment.
         </p>
-        <p className="sm:text-lg">
+        <p>
           NexLearn is designed to revolutionize the way you learn by adapting to
           your unique needs and preferences. Whether you're a student seeking to
           excel in your studies, a professional looking to upskill, or simply
           someone with a passion for lifelong learning, NexLearn provides a
           tailored experience that maximizes your potential.
         </p>
-        <p className="sm:text-lg">
+        <p>
           With our intuitive interface, engaging content, and powerful
           analytics, you'll embark on a transformative learning journey like
           never before.
@@ -70,14 +70,14 @@ const dummyContent = [
     title: "AI and more...",
     description: (
       <>
-        <p className="sm:text-lg">
+        <p>
           At the heart of NexLearn lies a sophisticated AI-powered
           recommendation engine that understands your strengths, weaknesses, and
           learning style. By analyzing your interactions, performance, and
           feedback, our system dynamically curates content and creates
           personalized learning paths that are optimized for your growth.
         </p>
-        <p className="sm:text-lg">
+        <p>
           Our advanced spaced repetition algorithms ensure that you retain
           knowledge effectively, with timely reminders and reinforcement
           exercises that cement your understanding. With NexLearn, you're not
@@ -93,7 +93,7 @@ const dummyContent = [
     title: "Adaptative",
     description: (
       <>
-        <p className="sm:text-lg">
+        <p>
           Whether you prefer to learn on your desktop, tablet, or smartphone,
           our responsive design adapts to your needs. With serverless Neon
           Postgres and Drizzle, we ensure lightning-fast performance and
