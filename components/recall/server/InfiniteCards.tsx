@@ -33,6 +33,7 @@ async function InfiniteCards() {
             highestScoreTotal={item.highestScoreTotal}
             lastAttempt={new Date(item.updatedAt).toLocaleDateString()}
             attemptNumber={item.attemptNumber}
+            successRate={item.successRate} // Added missing successRate
           />
         ))}
         <LoadMore />

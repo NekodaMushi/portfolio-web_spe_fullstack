@@ -25,7 +25,7 @@ const QuizEnd = ({ score, totalQuestions, handleEnd }: Props) => {
     if (scorePercentage >= 80) {
       reward();
     }
-  }, [score, reward]);
+  }, [score, reward, scorePercentage]);
 
   return (
     <div className="py-8  text-center sm:px-24 lg:px-36">

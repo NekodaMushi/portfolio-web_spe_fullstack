@@ -24,7 +24,7 @@ const RecallQuizLayout = () => {
 
       return () => clearTimeout(timer);
     }
-  }, [selectedQuizData]);
+  }, [selectedQuizData, dispatch]);
 
   if (!selectedQuizData) {
     return (

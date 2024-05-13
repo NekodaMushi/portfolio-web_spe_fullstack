@@ -48,7 +48,7 @@ function LoadMore() {
           setIsLoading(false);
         });
     }
-  }, [inView]);
+  }, [inView, isLoading]);
 
   return (
     <>

@@ -78,6 +78,7 @@ export function QuizStart({ onSetQuizReady }: Props) {
     };
 
     checkQuizReady();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quizData]);
 
   const handleSelectNumber = (value: NumQuestions) => {
