@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     let above70ThreeTimeUpdated;
     let graduatedByPerformance;
 
-    let under60ThreeTimeUpdated; 
+    let under60ThreeTimeUpdated;
 
     if (latestQuizCompleted.length > 0) {
       // Quiz completed before
@@ -68,7 +68,6 @@ export async function POST(request: Request) {
       const lastScore = currentSuccessRate;
       const isInReviewState = latestQuizCompleted[0].reviewState;
 
-
       // ---- REPETITION GRADUATION CASES ----
       let above60FourTimeUpdated =
         latestQuizCompleted.length > 0
@@ -78,17 +77,18 @@ export async function POST(request: Request) {
         latestQuizCompleted.length > 0
           ? latestQuizCompleted[0].above70ThreeTime
           : 0;
-      
-          let under60ThreeTimeUpdated =
+
+      let under60ThreeTimeUpdated =
         latestQuizCompleted.length > 0
           ? latestQuizCompleted[0].under60ThreeTime
-          : 0; 
+          : 0;
 
       above60FourTimeUpdated = lastScore >= 60 ? above60FourTimeUpdated + 1 : 0;
       above70ThreeTimeUpdated =
         lastScore >= 70 ? above70ThreeTimeUpdated + 1 : 0;
 
-      under60ThreeTimeUpdated = lastScore <= 60? under60ThreeTimeUpdated + 1 : 0;
+      under60ThreeTimeUpdated =
+        lastScore <= 60 ? under60ThreeTimeUpdated + 1 : 0;
       // --
 
       attemptNumberUpdated = latestQuizCompleted[0].attemptNumber + 1;
@@ -121,6 +121,7 @@ export async function POST(request: Request) {
       } else {
         // GAIN REVIEW STATE
         if (!isInReviewState) {
+           // ---- REPETITION CASES ----
           // Case 1 => Whatever scoreRate: 4 last trial > 60%
           if (above60FourTimeUpdated >= 4) {
             isGraduated = true;
@@ -132,7 +133,7 @@ export async function POST(request: Request) {
             isInTransition = true;
           }
 
-          // ---- PERFORMANCE CASE ----
+          // ---- BASE CASE ----
           // Case 3 => successRate above 80 & at least 2 quizz
           if (
             latestQuizCompleted[0].attemptNumber >= 2 &&
@@ -140,6 +141,7 @@ export async function POST(request: Request) {
           ) {
             graduatedByPerformance = true;
           }
+          // ---- PERFORMANCE CASE ----
           // Case 4 => mark a good score at Exam
           if (totalQuestions > 28 && currentSuccessRate >= 83) {
             graduatedByPerformance = true;
@@ -148,7 +150,6 @@ export async function POST(request: Request) {
         // LOOSE REVIEW STATE
         else {
           if (newSuccessRate <= 60) {
-
             isGraduated = false;
             graduatedByPerformance = false;
             console.log("Loose graduation", isGraduated);
@@ -156,21 +157,16 @@ export async function POST(request: Request) {
         }
       }
 
-
       // Reset successRate
       if (isGraduated && !transitionReviewPeriod) {
         if (newSuccessRate < 70 && currentSuccessRate > 60) {
           newSuccessRate = currentSuccessRate;
           console.log("New success rate should be there:", newSuccessRate);
         }
-        if (under60ThreeTimeUpdated){
+        if (under60ThreeTimeUpdated) {
           newSuccessRate = currentSuccessRate;
         }
-         
       }
-
-    
-
 
       await db
         .update(quizzesCompleted)
@@ -188,7 +184,6 @@ export async function POST(request: Request) {
           reviewState: isGraduated || graduatedByPerformance,
           transitionToReview: isInTransition,
 
-
           updatedAt: new Date(),
         })
         .where(
@@ -205,33 +200,37 @@ export async function POST(request: Request) {
       // Check if quiz transitioning to review phase for 1thtime
 
       //  Need to add condition to erase SpacedRepetition table is user loose review state
-      if (!latestQuizCompleted[0].reviewState && latestQuizCompleted[0].attemptNumber > 5) {
-    const existingSpacedRepetitionToErase = await db
-        .select()
-        .from(spacedRepetition)
-        .where(
+      if (
+        !latestQuizCompleted[0].reviewState &&
+        latestQuizCompleted[0].attemptNumber > 5
+      ) {
+        const existingSpacedRepetitionToErase = await db
+          .select()
+          .from(spacedRepetition)
+          .where(
             and(
-                eq(spacedRepetition.userId, sessionUser.id),
-                eq(spacedRepetition.quizCompletedId, latestQuizCompleted[0].id),
+              eq(spacedRepetition.userId, sessionUser.id),
+              eq(spacedRepetition.quizCompletedId, latestQuizCompleted[0].id),
             ),
-        );
+          );
 
-    if (existingSpacedRepetitionToErase.length > 0) {
-        await db
+        if (existingSpacedRepetitionToErase.length > 0) {
+          await db
             .delete(spacedRepetition)
             .where(
-                and(
-                    eq(spacedRepetition.userId, sessionUser.id),
-                    eq(spacedRepetition.quizCompletedId, latestQuizCompleted[0].id),
-                ),
+              and(
+                eq(spacedRepetition.userId, sessionUser.id),
+                eq(spacedRepetition.quizCompletedId, latestQuizCompleted[0].id),
+              ),
             );
-        console.log("Spaced Repetition entries deleted due to loss of review state.");
-    }
-}
+          console.log(
+            "Spaced Repetition entries deleted due to loss of review state.",
+          );
+        }
+      }
 
       console.log("isInReviewState before review phase", isInReviewState);
-      if (isInReviewState ) {
-
+      if (isInReviewState) {
         const existingSpacedRepetition = await db
           .select()
           .from(spacedRepetition)
@@ -243,9 +242,7 @@ export async function POST(request: Request) {
           )
           .limit(1);
 
-
         if (existingSpacedRepetition.length > 0) {
-
           // Calculate new ease factor from user's perf
           const currentEaseFactor = existingSpacedRepetition[0].easeFactor;
           //-------
@@ -254,60 +251,34 @@ export async function POST(request: Request) {
           const dampeningFactor = 0.025; // The speed range
           const adjustmentFactor = 0.05; // How quickly it reacts
 
-          // ----- TEMP FIX START   ----- 
+          // ----- TEMP FIX START   -----
           let newEaseFactor; //Whatever
           if (currentEaseFactor > 4800) {
             newEaseFactor = 2500;
             if (currentSuccessRate < 80) {
-              newEaseFactor = 3400
+              newEaseFactor = 3400;
+            } else if (currentSuccessRate < 60) {
+              newEaseFactor = 2400;
+            } else if (currentSuccessRate < 40) {
+              newEaseFactor = 1400;
             }
-            else if (currentSuccessRate < 60) {
-              newEaseFactor = 2400
-            }
-            else if (currentSuccessRate < 40) {
-              newEaseFactor = 1400
-              }
-  
-            }
-            
-          else {
-             
-            // ----- TO FIX LATER   ----- 
+          } else {
+            // ----- TO FIX LATER   -----
 
-            console.log(Math.round(
-                currentEaseFactor + 
-                  dampeningFactor *
-                    (currentEaseFactor *
-                      (Math.log(targetSuccessRate / 100) /
-                        Math.log(currentSuccessRate / 100) -
-                        1) +
-                      adjustmentFactor),
-              ))
-           newEaseFactor = Math.max(
-            1300,
-            Math.min(
-              5000,
-              Math.round(
-                currentEaseFactor + 
-                  dampeningFactor *
-                    (currentEaseFactor *
-                      (Math.log(targetSuccessRate / 100) /
-                        Math.log(currentSuccessRate / 100) -
-                        1) +
-                      adjustmentFactor),
-              ),
-            ),
-          );
+            // console.log(
+            //   Math.round(
+            //     currentEaseFactor +
+            //       dampeningFactor *
+            //         (currentEaseFactor *
+            //           (Math.log(targetSuccessRate / 100) /
+            //             Math.log(currentSuccessRate / 100) - 1) +adjustmentFactor),),);
+
+
+            newEaseFactor = Math.max(1300,Math.min(5000,Math.round(currentEaseFactor + dampeningFactor *(currentEaseFactor * (Math.log(targetSuccessRate / 100) /Math.log(currentSuccessRate / 100) - 1) + adjustmentFactor))));
           }
-          
 
-          
 
-          const currentInterval = existingSpacedRepetition[0].interval;
 
-    
-
-    
           let newInterval;
           if (newEaseFactor < 1500) {
             newInterval = 1;
@@ -329,10 +300,10 @@ export async function POST(request: Request) {
             newInterval = 500; // Default case if bug
           }
 
-          // ----- TEMP FIX END   ----- 
+          // ----- TEMP FIX END   -----
+          // const currentInterval = existingSpacedRepetition[0].interval;
           // const newInterval = Math.max(1, Math.round(currentInterval * (newEaseFactor / currentEaseFactor)));
 
-  
           // -- Next quiz depend of the calculated interval --
           await db
             .update(spacedRepetition)
@@ -358,7 +329,6 @@ export async function POST(request: Request) {
           });
         }
       }
-
 
       // --------------------------------
     } else {
@@ -393,7 +363,6 @@ export async function POST(request: Request) {
         transitionToReview: graduatedByPerformance,
       });
     }
-    
 
     return new Response(
       JSON.stringify({ message: "Quiz result stored successfully" }),

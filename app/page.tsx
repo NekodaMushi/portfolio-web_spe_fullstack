@@ -9,7 +9,7 @@ import { TracingBeam } from "@/components/ui/tracing-beam";
 export default function HomePage() {
   return (
     <TracingBeam className="px-6">
-      <div className="relative mx-auto max-w-2xl pt-4 antialiased">
+      <div className="relative mx-auto max-w-2xl pl-2 pt-4 antialiased">
         {dummyContent.map((item, index) => (
           <div key={`content-${index}`} className="mb-10">
             <h2 className="mb-4 w-fit rounded-full bg-black px-4 py-1 text-sm text-white">
@@ -46,13 +46,13 @@ const dummyContent = [
       <>
         <p>
           The ultimate platform for personalized learning and knowledge
-          retention. Our innovative project harnesses the power of cutting-edge
+          retention. This innovative project harnesses the power of cutting-edge
           technologies like Next.js, Tailwind CSS, TypeScript, Serverless Neon
           Postgres with Drizzle, and Vercel for seamless deployment.
         </p>
         <p>
-          NexLearn is designed to revolutionize the way you learn by adapting to
-          your unique needs and preferences. Whether you're a student seeking to
+          NexLearn is designed to improve the way you learn by adapting to your
+          unique needs and preferences. Whether you're a student seeking to
           excel in your studies, a professional looking to upskill, or simply
           someone with a passion for lifelong learning, NexLearn provides a
           tailored experience that maximizes your potential.
@@ -71,17 +71,15 @@ const dummyContent = [
     description: (
       <>
         <p>
-          At the heart of NexLearn lies a sophisticated AI-powered
-          recommendation engine that understands your strengths, weaknesses, and
-          learning style. By analyzing your interactions, performance, and
-          feedback, our system dynamically curates content and creates
-          personalized learning paths that are optimized for your growth.
+          By analyzing your interactions and performance, our system dynamically
+          curates content and creates personalized learning paths that are
+          optimized for your growth.
         </p>
         <p>
           Our advanced spaced repetition algorithms ensure that you retain
-          knowledge effectively, with timely reminders and reinforcement
-          exercises that cement your understanding. With NexLearn, you're not
-          just consuming information - you're building a solid foundation of
+          knowledge effectively, with timely reminders and reinforcement quizzes
+          that cement your understanding. With NexLearn, you're not just
+          consuming information - you're building a solid foundation of
           knowledge that lasts a lifetime.
         </p>
       </>

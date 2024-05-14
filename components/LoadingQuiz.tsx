@@ -7,6 +7,7 @@ import { FaArrowDown } from "react-icons/fa";
 
 import Quiz from "@/assets/images/Quiz";
 import transcripts from "@/transcripts.json";
+import Documentation from "@/assets/images/Documentation";
 
 const LoadingQuiz: React.FC = () => {
   const [transcript, setTranscript] = useState<string>(
@@ -53,14 +54,14 @@ const LoadingQuiz: React.FC = () => {
         <section className="relative basis-1/3">
           <section className="absolute inset-0 flex items-center justify-center">
             <FaArrowDown className="arrow-icon animate-pulse text-6xl sm:hidden" />
-            <p className="mx-1 animate-pulse sm:mx-0">Feeding Quiz</p>
+            <p className="mx-1 animate-pulse sm:mx-0">Work in Progress...</p>
             <FaArrowDown className="arrow-icon animate-pulse text-6xl sm:-rotate-90" />
           </section>
         </section>
         <section className="relative basis-1/3">
           <section className="absolute inset-1/4 h-1/2 w-1/2">
             <div className="flex h-full w-full animate-spring items-center justify-center">
-              <Quiz height={120} width={120} />
+              <Documentation height={120} width={120} />
             </div>
           </section>
         </section>

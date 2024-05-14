@@ -208,7 +208,7 @@ export const DevContent = () => {
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
       >
         <Link
-          href="/"
+          href="https://github.com/NekodaMushi/portfolio-web_spe_fullstack"
           className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary "
         >
           <div className="  -mr-1 ml-1 basis-1/3">
