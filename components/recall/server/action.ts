@@ -1,5 +1,6 @@
 // action.ts
 "use server";
+import getDomain from "@/lib/getDomain";
 import { auth } from "auth";
 import jwt from "jsonwebtoken";
 
@@ -43,7 +44,8 @@ export default async function fetchCards(page: number): Promise<CarouselData> {
 
 export async function fetchRecallAll(token: string, page: number): Promise<CarouselData> {
   try {
-    const response = await fetch(`http://localhost:3000/api/recall/quiz/all?page=${page}`, {
+    const domain = getDomain();
+    const response = await fetch(`${domain}:3000/api/recall/quiz/all?page=${page}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
