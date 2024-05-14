@@ -1,5 +1,5 @@
 export default function getDomain() {
-  return `https://your-vercel-deployment-url.vercel.app`;
+  return `https://nexlearn.vercel.app/use/chat`;
 }
 
 
