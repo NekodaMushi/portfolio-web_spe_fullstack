@@ -45,7 +45,7 @@ export default async function fetchCards(page: number): Promise<CarouselData> {
 export async function fetchRecallAll(token: string, page: number): Promise<CarouselData> {
   try {
     const domain = getDomain();
-    const response = await fetch(`${domain}:3000/api/recall/quiz/all?page=${page}`, {
+    const response = await fetch(`${domain}/api/recall/quiz/all?page=${page}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
