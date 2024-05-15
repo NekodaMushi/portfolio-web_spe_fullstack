@@ -1,6 +1,6 @@
 import { db } from "@/db/index";
 import { quizzesCompleted, spacedRepetition } from "@/db/schema";
-import { eq, desc, and, or, lt } from "drizzle-orm";
+import { eq, desc, and, or, lt, lte } from "drizzle-orm";
 import { auth } from "auth";
 import { error } from "console";
 
@@ -57,7 +57,11 @@ export async function GET(request: Request) {
     console.log('Nb of LearningPhaseQuizzes',LearningAndTransitionPhaseQuizzes.length);
 
 
-    // Review Phase Quiz with interval of one
+// Review Phase Quiz
+const tomorrow = new Date(today);
+tomorrow.setDate(today.getDate() + 1);
+tomorrow.setHours(23, 59, 59, 999); 
+
 const reviewPhaseQuizzes = await db
   .select({
     successRate: quizzesCompleted.successRate,
@@ -70,16 +74,22 @@ const reviewPhaseQuizzes = await db
     videoId: quizzesCompleted.videoId,
   })
   .from(quizzesCompleted)
-  .innerJoin(spacedRepetition, eq(quizzesCompleted.id, spacedRepetition.quizCompletedId)) // Use innerJoin here
+  .innerJoin(spacedRepetition, eq(quizzesCompleted.id, spacedRepetition.quizCompletedId))
   .where(
     and(
       eq(quizzesCompleted.userId, sessionUser.id),
       eq(quizzesCompleted.reviewState, true),
       eq(quizzesCompleted.transitionToReview, false),
-      eq(spacedRepetition.interval, 1)  // INTERVAL TO SET
+      lte(spacedRepetition.dueDate, tomorrow) // Get the quiz due today or before
     )
   )
   .orderBy(desc(quizzesCompleted.updatedAt));
+
+
+
+
+
+
 
 console.log(' Nb of reviewPhaseQuizzes with interval 1 =>', reviewPhaseQuizzes.length);
 

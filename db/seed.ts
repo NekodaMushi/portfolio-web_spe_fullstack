@@ -120,10 +120,13 @@ async function UserTrialDataM() {
 
 const updateSpacedRepetitionInterval = async (spacedRepetitionId: string) => {
   try {
+    const twoDaysAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);
+
     await db.update(schema.spacedRepetition)
       .set({
         interval: 1,
-        updatedAt: new Date()
+        createdAt: twoDaysAgo,
+        updatedAt: twoDaysAgo
       })
       .where(eq(schema.spacedRepetition.id, spacedRepetitionId))
       .execute();
@@ -132,9 +135,28 @@ const updateSpacedRepetitionInterval = async (spacedRepetitionId: string) => {
   } catch (error) {
     console.error(`Error updating interval for ID: ${spacedRepetitionId}`, error);
     throw error;
-  };
+  }
+};
 
-}
+const updateDueDateToOneDayAgo = async (spacedRepetitionId: string) => {
+  try {
+    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+    await db.update(schema.spacedRepetition)
+      .set({
+        dueDate: oneDayAgo
+      })
+      .where(eq(schema.spacedRepetition.id, spacedRepetitionId))
+      .execute();
+
+    console.log(`Due date updated successfully for ID: ${spacedRepetitionId}`);
+  } catch (error) {
+    console.error(`Error updating due date for ID: ${spacedRepetitionId}`, error);
+    throw error;
+  }
+};
+
+
 
 
 
@@ -155,10 +177,13 @@ const main = async () => {
     // UserTrialDataM();
     // UserTrialDataS();
     // UserTrialDataT();
+    
     const spacedRepetitionId = "42664dca-05f3-44ed-aa5a-24e63ccd77f7"; 
-updateSpacedRepetitionInterval(spacedRepetitionId);
 
 
+// updateSpacedRepetitionInterval(spacedRepetitionId);
+
+    updateDueDateToOneDayAgo(spacedRepetitionId);
 
     
   } catch (error) {

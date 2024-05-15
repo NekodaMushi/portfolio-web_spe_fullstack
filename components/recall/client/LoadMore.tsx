@@ -8,7 +8,7 @@ import fetchCards from "../server/action";
 import CustomCard from "./CustomCard";
 
 let page = 2;
-let loadCount = 8; //temp
+let loadCount = 7; //temp
 
 interface CarouselDataItem {
   successRate: number;
