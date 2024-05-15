@@ -7,11 +7,8 @@ import Spinner from "@/components/ui/spinner";
 import fetchCards from "../server/action";
 import CustomCard from "./CustomCard";
 
-// import { fetchRecall } from "./action";
-// import AnimeCard, { AnimeProp } from "./AnimeCard";
-// import Spinner from "../ui/spinner";
-
 let page = 2;
+let loadCount = 8; //temp
 
 interface CarouselDataItem {
   successRate: number;
@@ -32,15 +29,15 @@ function LoadMore() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (inView && !isLoading) {
+    if (inView && !isLoading && loadCount < 10) {
+      // temp
       setIsLoading(true);
 
-      console.log(page);
-      console.log("LOAD");
       fetchCards(page)
         .then((resData) => {
           setData((prevData) => [...prevData, ...resData]);
           page++;
+          loadCount++; // temp
           setIsLoading(false);
         })
         .catch((error) => {
@@ -66,8 +63,9 @@ function LoadMore() {
         />
       ))}
       {isLoading && <Spinner />}
-      <div ref={ref} style={{ height: "1px" }}></div>
+      {loadCount < 10 && <div ref={ref} style={{ height: "1px" }}></div>}
     </>
+    // temp
   );
 }
 

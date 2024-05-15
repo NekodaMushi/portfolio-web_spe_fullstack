@@ -27,12 +27,11 @@ export async function GET(request: Request) {
     const decoded = jwt.verify(token, process.env.AUTH_SECRET) as TokenPayload;
     if (typeof decoded === "object" && decoded !== null && "id" in decoded) {
       const userId = decoded.id;
-      console.log("-------------------");
-      console.log(userId);
+
 
       const url = new URL(request.url);
       const page = parseInt(url.searchParams.get("page") || "1");
-      const limit = 3; 
+      const limit = 4; 
 
       const offset = (page - 1) * limit;
 
