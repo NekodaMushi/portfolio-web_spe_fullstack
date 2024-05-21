@@ -3,6 +3,7 @@ import { neon } from "@neondatabase/serverless";
 import * as schema from "@/db/schema";
 import { config } from "dotenv";
 import { and, eq } from "drizzle-orm";
+import * as readline from 'readline';
 
 config({ path: ".env.local" });
 
@@ -44,37 +45,6 @@ const simulateUserTrial = async (quizId: string, videoId: string, score: number,
 };
 
 
-// async function UserTrialDataS() {
-//   const quizId = "16be4e58-22a0-4774-8b16-a918a9319f5f";
-//   const videoId = "317. Building the Cart Overview With Redux Selectors";
-
-
-//   await simulateUserTrial(quizId, videoId, 2, 5);
-
-//   // await simulateUserTrial(quizId, videoId, 15, 20);
-
-//   // await simulateUserTrial(quizId, videoId, 4, 5);
-
-//   // await simulateUserTrial(quizId, videoId, 14, 30);
-
-//   // await simulateUserTrial(quizId, videoId, 14, 30);
-// }
-
-// async function UserTrialDataT() {
-//   const quizId = "fff00aa0-0b16-41ad-9c57-bbca5a257e57";
-//   const videoId = "319. Deleting Cart Items";
-
-
-//   await simulateUserTrial(quizId, videoId, 0, 1);
-
-//   // await simulateUserTrial(quizId, videoId, 15, 20);
-
-//   // await simulateUserTrial(quizId, videoId, 4, 5);
-
-//   // await simulateUserTrial(quizId, videoId, 14, 30);
-
-//   // await simulateUserTrial(quizId, videoId, 14, 30);
-// }
 
 
 
@@ -82,81 +52,56 @@ async function UserTrialDataM() {
   const quizId = "a79cf187-6396-4ff9-8e06-3622d100c7c6";
   const videoId = "197. Graph + Tree Traversals";
 
-  // Check normal process OK
-  // Check reducing drastically when he passes into transite OK
-  // except for last case if he gets through perf
-  //  await simulateUserTrial(quizId, videoId, 6, 10);
-
-  // await simulateUserTrial(quizId, videoId, 7, 10);
-
-  // await simulateUserTrial(quizId, videoId, 0, 10);
-
-  // await simulateUserTrial(quizId, videoId, 0, 10);
+  //   // Check normal process OK
+  //   // Check reducing drastically when he passes into transite OK
+  //   // except for last case if he gets through perf
 
 
-  // await simulateUserTrial(quizId, videoId, 8, 10);
+    //  await simulateUserTrial(quizId, videoId, 6, 10);
 
-  //   await simulateUserTrial(quizId, videoId, 9, 10);
+    // await simulateUserTrial(quizId, videoId, 7, 10);
 
-  // await simulateUserTrial(quizId, videoId, 9, 10);
+    // await simulateUserTrial(quizId, videoId, 0, 10);
 
-
-  
-
-  await simulateUserTrial(quizId, videoId, 1, 10);
-
-    await simulateUserTrial(quizId, videoId, 1, 10);
-
-  // await simulateUserTrial(quizId, videoId, 1, 10);
+  //   // await simulateUserTrial(quizId, videoId, 0, 10);
 
 
-  // await simulateUserTrial(quizId, videoId, 7, 10);
+  //   // await simulateUserTrial(quizId, videoId, 8, 10);
 
- 
-  
+  //   //   await simulateUserTrial(quizId, videoId, 9, 10);
+
+  //   // await simulateUserTrial(quizId, videoId, 9, 10);
 
 
 }
-
-const updateSpacedRepetitionInterval = async (spacedRepetitionId: string) => {
-  try {
-    const twoDaysAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);
-
-    await db.update(schema.spacedRepetition)
-      .set({
-        interval: 1,
-        createdAt: twoDaysAgo,
-        updatedAt: twoDaysAgo
-      })
-      .where(eq(schema.spacedRepetition.id, spacedRepetitionId))
-      .execute();
-
-    console.log(`Interval updated successfully for ID: ${spacedRepetitionId}`);
-  } catch (error) {
-    console.error(`Error updating interval for ID: ${spacedRepetitionId}`, error);
-    throw error;
-  }
-};
-
-const updateDueDateToOneDayAgo = async (spacedRepetitionId: string) => {
-  try {
-    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-
-    await db.update(schema.spacedRepetition)
-      .set({
-        dueDate: oneDayAgo
-      })
-      .where(eq(schema.spacedRepetition.id, spacedRepetitionId))
-      .execute();
-
-    console.log(`Due date updated successfully for ID: ${spacedRepetitionId}`);
-  } catch (error) {
-    console.error(`Error updating due date for ID: ${spacedRepetitionId}`, error);
-    throw error;
-  }
-};
+  
 
 
+
+
+
+// const updateDueDateToOneDayAgo = async (spacedRepetitionId: string) => {
+//   try {
+//     const oneDayAgo = new Date(Date.now());
+
+//     const updatedRecord = await db.update(schema.spacedRepetition)
+//       .set({
+//         dueDate: oneDayAgo,
+//         updatedAt: oneDayAgo,
+//       })
+//       .where(eq(schema.spacedRepetition.id, spacedRepetitionId))
+//       .returning({ dueDate: schema.spacedRepetition.dueDate, updatedAt: schema.spacedRepetition.updatedAt })
+//       .then((result) => result[0]);
+
+//     console.log(`Due date updated successfully for ID: ${spacedRepetitionId}`);
+//     console.log('Updated date:', updatedRecord.updatedAt);
+
+//     return updatedRecord.dueDate;
+//   } catch (error) {
+//     console.error(`Error updating due date for ID: ${spacedRepetitionId}`, error);
+//     throw error;
+//   }
+// };
 
 
 
@@ -178,12 +123,13 @@ const main = async () => {
     // UserTrialDataS();
     // UserTrialDataT();
     
-    const spacedRepetitionId = "42664dca-05f3-44ed-aa5a-24e63ccd77f7"; 
+    // const spacedRepetitionId = "bf8dac41-af1d-40c9-863b-9e6e70d6e3df"; 
 
+    // updateDueDate(spacedRepetitionId)
 
 // updateSpacedRepetitionInterval(spacedRepetitionId);
 
-    updateDueDateToOneDayAgo(spacedRepetitionId);
+    // updateDueDateToOneDayAgo(spacedRepetitionId);
 
     
   } catch (error) {

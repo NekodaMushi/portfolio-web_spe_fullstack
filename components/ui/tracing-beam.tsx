@@ -7,7 +7,7 @@ import {
   useVelocity,
   useSpring,
 } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 
 export const TracingBeam = ({
   children,
