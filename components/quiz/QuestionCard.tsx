@@ -15,17 +15,7 @@ const QuestionCard = ({
   onClick,
   correctAnswer,
 }: Props) => {
-  const getAnswerStyle = (answer: string) => {
-    if (userAnswer === answer) {
-      return userAnswer === correctAnswer
-        ? "bg-green-500 text-white"
-        : "bg-red-500 text-white";
-    }
-    if (userAnswer && answer === correctAnswer) {
-      return "bg-green-500 text-white";
-    }
-    return "bg-white text-black";
-  };
+  // PROD
 
   // const getAnswerStyle = (answer: string) => {
   //   if (userAnswer === answer) {
@@ -33,11 +23,25 @@ const QuestionCard = ({
   //       ? "bg-green-500 text-white"
   //       : "bg-red-500 text-white";
   //   }
-  //   if (answer === correctAnswer) {
-  //     return "bg-blue-500 text-white";
+  //   if (userAnswer && answer === correctAnswer) {
+  //     return "bg-green-500 text-white";
   //   }
   //   return "bg-white text-black";
   // };
+
+  //DEV
+
+  const getAnswerStyle = (answer: string) => {
+    if (userAnswer === answer) {
+      return userAnswer === correctAnswer
+        ? "bg-green-500 text-white"
+        : "bg-red-500 text-white";
+    }
+    if (answer === correctAnswer) {
+      return "bg-blue-500 text-white";
+    }
+    return "bg-white text-black";
+  };
 
   return (
     <div>

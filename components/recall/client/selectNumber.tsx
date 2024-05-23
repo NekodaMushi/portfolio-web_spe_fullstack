@@ -14,9 +14,14 @@ import { NumQuestions } from "@/types/quiz";
 type SelectNumberProps = {
   value: NumQuestions;
   onValueChange: (value: NumQuestions) => void;
+  quizReady: { [key: string]: boolean }; // Add this prop to receive quizReady state
 };
 
-export function SelectDataType({ value, onValueChange }: SelectNumberProps) {
+export function SelectDataType({
+  value,
+  onValueChange,
+  quizReady,
+}: SelectNumberProps) {
   const [selectedValue, setSelectedValue] = React.useState<NumQuestions | "">(
     "",
   );
@@ -34,11 +39,36 @@ export function SelectDataType({ value, onValueChange }: SelectNumberProps) {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Size</SelectLabel>
-          <SelectItem value="quizDataTest">Test</SelectItem>
-          <SelectItem value="quizDataShort">Short</SelectItem>
-          <SelectItem value="quizDataMedium">Medium</SelectItem>
-          <SelectItem value="quizDataLarge">Large</SelectItem>
-          <SelectItem value="quizDataExam">Exam</SelectItem>
+          <SelectItem
+            value="quizDataTest"
+            className={quizReady["quizDataTest"] ? "text-green-500" : ""}
+          >
+            Test
+          </SelectItem>
+          <SelectItem
+            value="quizDataShort"
+            className={quizReady["quizDataShort"] ? "text-green-500" : ""}
+          >
+            Short
+          </SelectItem>
+          <SelectItem
+            value="quizDataMedium"
+            className={quizReady["quizDataMedium"] ? "text-green-500" : ""}
+          >
+            Medium
+          </SelectItem>
+          <SelectItem
+            value="quizDataLarge"
+            className={quizReady["quizDataLarge"] ? "text-green-500" : ""}
+          >
+            Large
+          </SelectItem>
+          <SelectItem
+            value="quizDataExam"
+            className={quizReady["quizDataExam"] ? "text-green-500" : ""}
+          >
+            Exam
+          </SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

@@ -1,11 +1,11 @@
 "use client";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { SelectDataType } from "./selectNumber";
-import { NumQuestions } from "@/types/quiz";
+import { NumQuestions, QuestionsState } from "@/types/quiz";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 
-import { useAppDispatch } from "hooks";
+import { useAppDispatch, useAppSelector } from "hooks";
 import {
   setRecallData,
   setSelectedQuizData,
@@ -37,6 +37,9 @@ const CustomCard: React.FC<CardProps> = ({
   successRate,
 }) => {
   const dispatch = useAppDispatch();
+  const selectedQuizData = useAppSelector(
+    (state) => state.recall.selectedQuizData,
+  );
 
   const [numQuestions, setNumQuestions] = useState<NumQuestions>("Select");
   const [quizReady, setQuizReady] = useState<{ [key: string]: boolean }>({});
@@ -70,9 +73,10 @@ const CustomCard: React.FC<CardProps> = ({
         setRecallData({
           videoId: data.videoId,
           quizId: data.quizId,
-          quizData: quizData,
+          quizData: { [selectedNumber]: quizData },
         }),
       );
+      dispatch(setSelectedQuizData(selectedNumber)); // Ensure the selected data is set
       dispatch(setQuizStart(true));
     } catch (error) {
       console.error("Failed to regenerate quiz:", error);
@@ -101,33 +105,58 @@ const CustomCard: React.FC<CardProps> = ({
         "quizDataExam",
         "quizDataTest",
       ];
+
       const quizDataAvailable = quizKeys.filter((key) => data[key] !== null);
+
+      const quizData = quizKeys.reduce(
+        (acc, key) => {
+          if (data[key] !== null) {
+            acc[key as NumQuestions] = data[key];
+          }
+          return acc;
+        },
+        {} as { [key in NumQuestions]?: QuestionsState },
+      );
 
       dispatch(
         setRecallData({
           videoId: quizTitle,
           quizId: data.quizId,
-          quizData: data,
+          quizData: quizData as { [key in NumQuestions]?: QuestionsState },
         }),
       );
 
       setQuizReady((prevState) => ({
         ...prevState,
         ...quizDataAvailable.reduce((acc: { [key: string]: boolean }, key) => {
-          acc[key] = true;
+          acc[key as string] = true; // Ensure keys are treated as strings
           return acc;
         }, {}),
       }));
 
       setIsDataLoaded(true);
+      if (
+        numQuestions !== "Select" &&
+        quizDataAvailable.includes(numQuestions)
+      ) {
+        dispatch(setSelectedQuizData(numQuestions));
+      }
     } catch (error) {
       console.error("Failed to fetch quiz data:", error);
     }
-  }, [dispatch, quizTitle]);
+  }, [dispatch, quizTitle, numQuestions]);
+
+  useEffect(() => {
+    if (isDataLoaded && numQuestions !== "Select" && quizReady[numQuestions]) {
+      dispatch(setQuizStart(true));
+    }
+  }, [isDataLoaded, numQuestions, quizReady, dispatch]);
 
   const handleSelectNumber = (value: NumQuestions) => {
     setNumQuestions(value);
-    dispatch(setSelectedQuizData(value));
+    if (isDataLoaded) {
+      dispatch(setSelectedQuizData(value));
+    }
   };
 
   const startQuiz = () => {
@@ -142,14 +171,22 @@ const CustomCard: React.FC<CardProps> = ({
 
   const CustomColor =
     successRate >= 90
-      ? `border-[2px] border-green-500`
-      : successRate >= 70
-        ? `border-[2px] border-blue-500`
-        : successRate >= 50
-          ? `border-[2px] border-yellow-500`
-          : successRate >= 30
-            ? `border-[2px] border-orange-500`
-            : `border-[2px] border-red-500`;
+      ? `border-[2px] border-score-90`
+      : successRate >= 80
+        ? `border-[2px] border-score-80`
+        : successRate >= 70
+          ? `border-[2px] border-score-70`
+          : successRate >= 60
+            ? `border-[2px] border-score-60`
+            : successRate >= 50
+              ? `border-[2px] border-score-50`
+              : successRate >= 40
+                ? `border-[2px] border-score-40`
+                : successRate >= 30
+                  ? `border-[2px] border-score-30`
+                  : successRate >= 20
+                    ? `border-[2px] border-score-20`
+                    : `border-[2px] border-score-10`;
 
   return (
     <div
@@ -169,7 +206,7 @@ const CustomCard: React.FC<CardProps> = ({
             selectedNumber={numQuestions}
             trigger={
               <button
-                disabled={numQuestions === "Select"}
+                disabled={numQuestions === "Select" || isGenerating}
                 className={`${CustomColor} -mt-6 rounded px-3 py-1 text-sm sm:mt-0`}
               >
                 {!quizReady[numQuestions] ? (
@@ -217,6 +254,7 @@ const CustomCard: React.FC<CardProps> = ({
           <SelectDataType
             value={numQuestions}
             onValueChange={handleSelectNumber}
+            quizReady={quizReady}
           />
           {!isDataLoaded && (
             <Button
@@ -235,7 +273,7 @@ const CustomCard: React.FC<CardProps> = ({
                 !quizReady[numQuestions] ? "cursor-not-allowed opacity-50" : ""
               }`}
             >
-              START
+              PICK A SIZE
             </Button>
           )}
         </div>

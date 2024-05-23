@@ -1,9 +1,6 @@
-
-
 import type { Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 import plugin from "tailwindcss/plugin";
-
 
 const {
   default: flattenColorPalette,
@@ -23,7 +20,6 @@ const config = {
       padding: "2rem",
       screens: {
         "2xl": "1400px",
-
       },
     },
     extend: {
@@ -63,6 +59,17 @@ const config = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        score: {
+          10: '#e53935',    // Vivid Red
+          20: '#ff5722',    // Vivid Deep Orange
+          30: '#ff9800',    // Vivid Orange
+          40: '#ffc107',    // Vivid Amber
+          50: '#ffeb3b',    // Vivid Yellow
+          60: '#009688',    // Vivid Light Green
+          70: '#4caf50',    // Vivid Green
+          80: '#8bc34a',    // Vivid Teal
+          90: '#b2ff59',    // Vivid Blue
         },
       },
       borderRadius: {
@@ -104,7 +111,8 @@ const config = {
           }
         }
       });
-    })
+    }),
+    plugin(addVariablesForColors),
   ],
 } satisfies Config;
 
@@ -114,7 +122,7 @@ function addVariablesForColors({ addBase, theme }: any) {
   let newVars = Object.fromEntries(
     Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
   );
- 
+
   addBase({
     ":root": newVars,
   });

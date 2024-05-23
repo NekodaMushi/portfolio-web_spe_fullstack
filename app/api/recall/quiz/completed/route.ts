@@ -2,7 +2,7 @@ import { db } from "@/db/index";
 import { quizzesCompleted, spacedRepetition } from "@/db/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { auth } from "auth";
-import { error } from "console";
+import { calculateNewInterval } from "@/lib/utils/newInterval";
 
 export async function POST(request: Request) {
   // DEV
@@ -119,7 +119,7 @@ export async function POST(request: Request) {
       if (transitionReviewPeriod) {
         isInTransition = false;
       } else {
-        // GAIN REVIEW STATE
+        // GAIN/ENTER REVIEW STATE
         if (!isInReviewState) {
            // ---- REPETITION CASES ----
           // Case 1 => Whatever scoreRate: 4 last trial > 60%
@@ -147,7 +147,7 @@ export async function POST(request: Request) {
             graduatedByPerformance = true;
           }
         }
-        // LOOSE REVIEW STATE
+        // LOOSE/EXIT REVIEW STATE
         else {
           if (newSuccessRate <= 60) {
             isGraduated = false;
@@ -157,13 +157,15 @@ export async function POST(request: Request) {
         }
       }
 
+
       // Reset successRate
-      if (isGraduated && !transitionReviewPeriod) {
+      if ((isInReviewState || isGraduated) && !transitionReviewPeriod) {
+        console.log("Entering in condition")
         if (newSuccessRate < 70 && currentSuccessRate > 60) {
           newSuccessRate = currentSuccessRate;
           console.log("New success rate should be there:", newSuccessRate);
         }
-        if (under60ThreeTimeUpdated) {
+        if (under60ThreeTimeUpdated >= 3) {
           newSuccessRate = currentSuccessRate;
         }
       }
@@ -197,12 +199,12 @@ export async function POST(request: Request) {
       // TEMP DEBUG ------------------
 
       // --------- REVIEW PHASE ---------
-      // Check if quiz transitioning to review phase for 1thtime
+      // Check if quiz transitioning to review phase for 1thtime ??????
 
-      //  Need to add condition to erase SpacedRepetition table is user loose review state
+      //  Erase SpacedRepetition table is user loose review state
       if (
         !latestQuizCompleted[0].reviewState &&
-        latestQuizCompleted[0].attemptNumber > 5
+        latestQuizCompleted[0].attemptNumber > 4
       ) {
         const existingSpacedRepetitionToErase = await db
           .select()
@@ -245,72 +247,27 @@ export async function POST(request: Request) {
         if (existingSpacedRepetition.length > 0) {
           // Calculate new ease factor from user's perf
           const currentEaseFactor = existingSpacedRepetition[0].easeFactor;
-          //-------
+          const currentInterval = existingSpacedRepetition[0].interval;
+          const dampeningFactor = 0.5
 
-          const targetSuccessRate = 8;
-          const dampeningFactor = 0.025; // The speed range
-          const adjustmentFactor = 0.05; // How quickly it reacts
+          const spacedRepetitionMetrics = calculateNewInterval(
+            currentEaseFactor,
+            currentSuccessRate,
+            newSuccessRate,
+            dampeningFactor,
+            currentInterval
+          );
 
-          // ----- TEMP FIX START   -----
-          let newEaseFactor; //Whatever
-          if (currentEaseFactor > 4800) {
-            newEaseFactor = 2500;
-            if (currentSuccessRate < 80) {
-              newEaseFactor = 3400;
-            } else if (currentSuccessRate < 60) {
-              newEaseFactor = 2400;
-            } else if (currentSuccessRate < 40) {
-              newEaseFactor = 1400;
-            }
-          } else {
-            // ----- TO FIX LATER   -----
+          const { newInterval, boundedEaseFactor, realDif } = spacedRepetitionMetrics;
 
-            // console.log(
-            //   Math.round(
-            //     currentEaseFactor +
-            //       dampeningFactor *
-            //         (currentEaseFactor *
-            //           (Math.log(targetSuccessRate / 100) /
-            //             Math.log(currentSuccessRate / 100) - 1) +adjustmentFactor),),);
+          console.log("Real difference: ",realDif)
 
-
-            newEaseFactor = Math.max(1300,Math.min(5000,Math.round(currentEaseFactor + dampeningFactor *(currentEaseFactor * (Math.log(targetSuccessRate / 100) /Math.log(currentSuccessRate / 100) - 1) + adjustmentFactor))));
-          }
-
-
-
-          let newInterval;
-          if (newEaseFactor < 1500) {
-            newInterval = 1;
-          } else if (newEaseFactor < 2500) {
-            newInterval = 3;
-          } else if (newEaseFactor < 3500) {
-            newInterval = 5;
-          } else if (newEaseFactor < 4000) {
-            newInterval = 8;
-          } else if (newEaseFactor < 4400) {
-            newInterval = 21;
-          } else if (newEaseFactor < 4700) {
-            newInterval = 51;
-          } else if (newEaseFactor < 4950) {
-            newInterval = 127;
-          } else if (newEaseFactor < 5000) {
-            newInterval = 317;
-          } else {
-            newInterval = 500; // Default case if bug
-          }
-
-          // ----- TEMP FIX END   -----
-          // const currentInterval = existingSpacedRepetition[0].interval;
-          // const newInterval = Math.max(1, Math.round(currentInterval * (newEaseFactor / currentEaseFactor)));
-
-          // -- Next quiz depend of the calculated interval --
           await db
             .update(spacedRepetition)
             .set({
               interval: newInterval,
-              easeFactor: newEaseFactor,
-              dueDate: new Date(Date.now() + newInterval * 24 * 60 * 60 * 1000), // Set the due date based on the new interval
+              easeFactor: boundedEaseFactor,
+              dueDate: new Date(Date.now() + newInterval * 24 * 60 * 60 * 1000), // Set due date based on interval
             })
             .where(
               and(
