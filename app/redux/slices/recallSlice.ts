@@ -1,4 +1,3 @@
-// recallSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { NumQuestions, QuestionsState } from "@/types/quiz";
 

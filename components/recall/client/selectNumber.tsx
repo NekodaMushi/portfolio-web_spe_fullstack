@@ -14,7 +14,7 @@ import { NumQuestions } from "@/types/quiz";
 type SelectNumberProps = {
   value: NumQuestions;
   onValueChange: (value: NumQuestions) => void;
-  quizReady: { [key: string]: boolean }; // Add this prop to receive quizReady state
+  quizReady: { [key: string]: boolean };
 };
 
 export function SelectDataType({

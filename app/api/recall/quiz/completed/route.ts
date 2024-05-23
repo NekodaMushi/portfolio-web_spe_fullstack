@@ -6,27 +6,27 @@ import { calculateNewInterval } from "@/lib/utils/newInterval";
 
 export async function POST(request: Request) {
   // DEV
-  try {
-    let sessionUser;
-    const session = await auth();
-    if (session) {
-      sessionUser = session.user;
-    } else {
-      sessionUser = { id: "06b51c75-bf24-4aaa-a00d-2294018dbcbf" };
-    }
+  // try {
+  //   let sessionUser;
+  //   const session = await auth();
+  //   if (session) {
+  //     sessionUser = session.user;
+  //   } else {
+  //     sessionUser = { id: "06b51c75-bf24-4aaa-a00d-2294018dbcbf" };
+  //   }
 
     // PROD
-    // try {
-    // const session = await auth();
-    // if (!session) {
-    //   return new Response(JSON.stringify({ error: "Unauthorized" }), {
-    //     status: 401,
-    //     headers: {
-    //       "content-type": "application/json",
-    //     },
-    //   });
-    // }
-    // const sessionUser = session?.user;
+    try {
+    const session = await auth();
+    if (!session) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+    }
+    const sessionUser = session?.user;
 
     const { totalQuestions, incorrectAnswers, quizId, videoId } =
       await request.json();
