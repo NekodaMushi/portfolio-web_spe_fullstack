@@ -22,7 +22,7 @@ const FAQ = () => {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-2">
-          <AccordionTrigger>Can I redo the same script?</AccordionTrigger>
+          <AccordionTrigger>Can I redo the same Quiz?</AccordionTrigger>
           <AccordionContent>
             Yes. Once you completed your first transcript you will be directed
             to recall page, which allow you to review all your quizzes, you only

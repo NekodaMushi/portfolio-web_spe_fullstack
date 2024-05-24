@@ -84,6 +84,7 @@ const RecallQuizCard = ({
   };
 
   const handleReset = () => {
+    console.log("TEST1");
     dispatch(resetRecall());
 
     setCurrentQuestionIndex(0);
@@ -98,7 +99,8 @@ const RecallQuizCard = ({
     setScore(0);
     setUserAnswers({});
 
-    // onSetQuizCancel();
+    // Server action needs reload to display latest data
+    window.location.reload();
   };
 
   return (
@@ -107,16 +109,13 @@ const RecallQuizCard = ({
         <QuizEnd
           score={score}
           totalQuestions={totalQuestions}
-          handleEnd={handleReset}
+          handleEnd={handleEnd}
         />
       ) : (
         <>
           <AlertCancel
             trigger={
-              <button
-                className="absolute right-0 top-0 z-10"
-                // onClick={() => handleReset()}
-              >
+              <button className="absolute right-0 top-0 z-10">
                 <IconSquareRoundedX className="h-7 w-7" />
               </button>
             }

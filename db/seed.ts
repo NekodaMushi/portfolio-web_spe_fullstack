@@ -49,15 +49,15 @@ const simulateUserTrial = async (quizId: string, videoId: string, score: number,
 
 
 async function UserTrialDataM() {
-  const quizId = "a79cf187-6396-4ff9-8e06-3622d100c7c6";
-  const videoId = "197. Graph + Tree Traversals";
+  const quizId = "44bf5745-b629-4816-a21d-eb52b39bbd42";
+  const videoId = "71. Implementing An Array";
 
   //   // Check normal process OK
   //   // Check reducing drastically when he passes into transite OK
   //   // except for last case if he gets through perf
 
 
-    //  await simulateUserTrial(quizId, videoId, 6, 10);
+     await simulateUserTrial(quizId, videoId, 2, 10);
 
     // await simulateUserTrial(quizId, videoId, 7, 10);
 
@@ -117,19 +117,17 @@ const main = async () => {
     // await db.delete(transcripts);
     // await db.delete(users);
 
-    // Simulate user trials
-    // simulateGenQuiz("60. Creating a State Variable With useState", 'T')
-    // UserTrialDataM();
-    // UserTrialDataS();
-    // UserTrialDataT();
+    UserTrialDataM();
+
     
-    // const spacedRepetitionId = "bf8dac41-af1d-40c9-863b-9e6e70d6e3df"; 
+    // const spacedRepetitionId = "bf8dac41-af1d-40c9-863b-9e6e70d6e3df";
 
     // updateDueDate(spacedRepetitionId)
 
 // updateSpacedRepetitionInterval(spacedRepetitionId);
 
     // updateDueDateToOneDayAgo(spacedRepetitionId);
+    
 
     
   } catch (error) {

@@ -2,6 +2,7 @@
 "use server";
 import { auth } from "auth";
 import jwt from "jsonwebtoken";
+import getDomain from "@/lib/getDomain";
 
 interface CarouselDataItem {
   successRate: number;
@@ -42,8 +43,9 @@ export default async function fetchCards(page: number): Promise<CarouselData> {
 }
 
 export async function fetchRecallAll(token: string, page: number): Promise<CarouselData> {
+  const domain = getDomain();
   try {
-    const response = await fetch(`http://localhost:3000/api/recall/quiz/all?page=${page}`, {
+    const response = await fetch(`${domain}/api/recall/quiz/all?page=${page}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

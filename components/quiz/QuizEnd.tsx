@@ -61,7 +61,12 @@ const QuizEnd = ({ score, totalQuestions, handleEnd }: Props) => {
         />
       </div>
 
-      <Link href="/learn/recall" onClick={() => handleEnd()}>
+      <Link
+        href="/learn/recall"
+        onClick={() => {
+          handleEnd();
+        }}
+      >
         <Button>Finish</Button>
       </Link>
     </div>

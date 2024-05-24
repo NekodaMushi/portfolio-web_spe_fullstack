@@ -109,7 +109,7 @@ const QuizCard = ({
     setScore(0);
     setUserAnswers({});
 
-    // onSetQuizCancel();
+    window.location.href = "/learn/recall";
   };
 
   return (
