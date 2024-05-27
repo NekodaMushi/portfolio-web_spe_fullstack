@@ -1,16 +1,16 @@
+// HomePage.tsx
 "use client";
 import React from "react";
-
 import { jetBrainsMono } from "../fonts";
-import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 import { TracingBeam } from "@/components/ui/tracing-beam";
+import LazyImage from "@/components/ui/custom/LazyImage"; // Import LazyImage component
 
 export default function HomePage() {
   return (
     <TracingBeam className="px-6">
       <div className="relative mx-auto max-w-2xl pl-2 pt-4 antialiased">
-        {dummyContent.map((item, index) => (
+        {Content.map((item, index) => (
           <div key={`content-${index}`} className="mb-10">
             <h2 className="mb-4 w-fit rounded-full bg-black px-4 py-1 text-sm text-white">
               {item.badge}
@@ -22,11 +22,12 @@ export default function HomePage() {
 
             <div className="prose prose-sm dark:prose-invert space-y-10 text-center text-sm sm:text-lg">
               {item?.image && (
-                <Image
+                <LazyImage
                   src={item.image}
+                  placeholder={item.placeholder}
                   alt="blog thumbnail"
-                  height="1000"
-                  width="1000"
+                  height={1000}
+                  width={1000}
                   className="mb-10 rounded-lg object-cover"
                 />
               )}
@@ -39,7 +40,7 @@ export default function HomePage() {
   );
 }
 
-const dummyContent = [
+const Content = [
   {
     title: "Welcome to NexLearn",
     description: (
@@ -64,7 +65,8 @@ const dummyContent = [
         </p>
       </>
     ),
-    image: "/images/homepage/cyber1.png",
+    image: "/images/homepage/cyber.png",
+    placeholder: "/images/homepage/cyber-small.jpg",
   },
   {
     title: "AI and more...",
@@ -86,6 +88,7 @@ const dummyContent = [
     ),
     badge: "",
     image: "/images/homepage/space-learning-dark.png",
+    placeholder: "/images/homepage/space-learning-dark-small.png",
   },
   {
     title: "Adaptative",
@@ -102,5 +105,6 @@ const dummyContent = [
     ),
     badge: "",
     image: "/images/homepage/tree-traversal.png",
+    placeholder: "/images/homepage/tree-traversal-small.png",
   },
 ];

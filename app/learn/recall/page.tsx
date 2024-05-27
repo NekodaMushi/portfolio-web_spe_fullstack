@@ -4,8 +4,10 @@ import Recall from "@/components/recall/server/Recall";
 
 export default async function RecallServerComponent() {
   return (
-    <RecallOrQuiz>
-      <Recall />
-    </RecallOrQuiz>
+    <div>
+      <RecallOrQuiz>
+        <Recall />
+      </RecallOrQuiz>
+    </div>
   );
 }

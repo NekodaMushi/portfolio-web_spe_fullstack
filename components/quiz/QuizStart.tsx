@@ -10,6 +10,7 @@ import { Toaster, toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { setQuizData, setQuizSelected } from "slices/quizSlice";
 import { NumQuestions } from "@/types/quiz";
+
 type Props = {
   onSetQuizReady: () => void;
 };
@@ -163,7 +164,6 @@ export function QuizStart({ onSetQuizReady }: Props) {
 
   const updateAnimationDuration = (numQuestions: NumQuestions) => {
     setAnimationDuration(durationMap[numQuestions]);
-    console.log(animationDuration);
   };
 
   const durationMap: { [key in NumQuestions]: number } = {

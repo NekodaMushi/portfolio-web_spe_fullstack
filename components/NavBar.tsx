@@ -28,7 +28,7 @@ const NavBar = () => {
   };
 
   return (
-    <div className="sticky top-0 z-10 border-b px-4 py-3 backdrop-blur supports-[backgrop-filter]:bg-background/60">
+    <div className="sticky top-0 z-50 border-b px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <Container>
         <div className="relative flex h-16 w-full items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center">

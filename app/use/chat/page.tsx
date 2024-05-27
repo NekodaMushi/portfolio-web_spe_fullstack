@@ -1,13 +1,8 @@
-import React from "react";
+// app/use/chat/page.tsx
+import ChatWithProviders from "@/components/chat/ChatWithProviders";
 
-const Chat = () => {
-  return (
-    <div className="flex  items-center justify-center">
-      <h1 className=" text-3xl font-bold">
-        ChatBot will be implemented soon, stay tuned..
-      </h1>
-    </div>
-  );
+const ChatPage = () => {
+  return <ChatWithProviders />;
 };
 
-export default Chat;
+export default ChatPage;

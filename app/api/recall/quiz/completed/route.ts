@@ -6,27 +6,27 @@ import { calculateNewInterval } from "@/lib/utils/newInterval";
 
 export async function POST(request: Request) {
   // DEV
-  try {
-    let sessionUser;
-    const session = await auth();
-    if (session) {
-      sessionUser = session.user;
-    } else {
-      sessionUser = { id: "06b51c75-bf24-4aaa-a00d-2294018dbcbf" };
-    }
+  // try {
+  //   let sessionUser;
+  //   const session = await auth();
+  //   if (session) {
+  //     sessionUser = session.user;
+  //   } else {
+  //     sessionUser = { id: "06b51c75-bf24-4aaa-a00d-2294018dbcbf" };
+  //   }
 
     // PROD
-    // try {
-    // const session = await auth();
-    // if (!session) {
-    //   return new Response(JSON.stringify({ error: "Unauthorized" }), {
-    //     status: 401,
-    //     headers: {
-    //       "content-type": "application/json",
-    //     },
-    //   });
-    // }
-    // const sessionUser = session?.user;
+    try {
+    const session = await auth();
+    if (!session) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+    }
+    const sessionUser = session?.user;
 
     const { totalQuestions, incorrectAnswers, quizId, videoId } =
       await request.json();
@@ -121,7 +121,7 @@ export async function POST(request: Request) {
       } else {
         // GAIN/ENTER REVIEW STATE
         if (!isInReviewState) {
-           // ---- REPETITION CASES ----
+          // ---- REPETITION CASES ----
           // Case 1 => Whatever scoreRate: 4 last trial > 60%
           if (above60FourTimeUpdated >= 4) {
             isGraduated = true;
@@ -157,10 +157,9 @@ export async function POST(request: Request) {
         }
       }
 
-
       // Reset successRate
       if ((isInReviewState || isGraduated) && !transitionReviewPeriod) {
-        console.log("Entering in condition")
+        console.log("Entering in condition");
         if (newSuccessRate < 70 && currentSuccessRate > 60) {
           newSuccessRate = currentSuccessRate;
           console.log("New success rate should be there:", newSuccessRate);
@@ -248,20 +247,23 @@ export async function POST(request: Request) {
           // Calculate new ease factor from user's perf
           const currentEaseFactor = existingSpacedRepetition[0].easeFactor;
           const currentInterval = existingSpacedRepetition[0].interval;
-          const dampeningFactor = 0.5;
           const targetSuccessRate = 75;
+
+          // Additional param to tune how large the EF's change can be
+          const dampeningFactor = 0.5;
 
           const spacedRepetitionMetrics = calculateNewInterval(
             currentEaseFactor,
             targetSuccessRate,
             currentSuccessRate,
             dampeningFactor,
-            currentInterval
+            currentInterval,
           );
 
-          const { newInterval, boundedEaseFactor, realDif } = spacedRepetitionMetrics;
+          const { newInterval, boundedEaseFactor, realDif } =
+            spacedRepetitionMetrics;
 
-          console.log("Real difference: ",realDif)
+          console.log("Real difference: ", realDif);
 
           await db
             .update(spacedRepetition)
