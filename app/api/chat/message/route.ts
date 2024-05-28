@@ -3,15 +3,18 @@ import { ChatGPTMessage, OpenAIStream, OpenAIStreamPayload } from "@/lib/utils/c
 import { MessageArraySchema } from "@/lib/validators/message"
 
 export async function POST(request: Request) {
-  const { messages } = await request.json()
+  const { messages, max_tokens } = await request.json()
   
 
   const parsedMessages = MessageArraySchema.parse(messages);
+
 
   const outboundMessages: ChatGPTMessage[] = parsedMessages.map((message) => ({
     role: message.isUserMessage ? 'user' : 'system',
     content: message.text,
   }))
+
+  console.log(max_tokens)
 
   outboundMessages.unshift({
     role: 'system',
@@ -25,7 +28,7 @@ export async function POST(request: Request) {
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
-    max_tokens: 200,
+    max_tokens: max_tokens,
     stream: true,
     n: 1
 

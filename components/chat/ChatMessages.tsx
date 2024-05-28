@@ -3,9 +3,17 @@ import { cn } from "@/lib/utils";
 import { FC, HTMLAttributes, useContext } from "react";
 import MarkdownLite from "./MarkdownLite";
 
-interface ChatMessagesProps extends HTMLAttributes<HTMLDivElement> {}
+interface ChatMessagesProps extends HTMLAttributes<HTMLDivElement> {
+  aiTextColor: string;
+  userTextColor: string;
+}
 
-const ChatMessages: FC<ChatMessagesProps> = ({ className, ...props }) => {
+const ChatMessages: FC<ChatMessagesProps> = ({
+  className,
+  aiTextColor,
+  userTextColor,
+  ...props
+}) => {
   const { messages } = useContext(MessagesContext);
   const inverseMessages = [...messages].reverse();
 
@@ -13,7 +21,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({ className, ...props }) => {
     <div
       {...props}
       className={cn(
-        "scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch flex flex-col-reverse gap-3 overflow-y-auto",
+        " vertical-scroll flex flex-col-reverse gap-3 overflow-y-auto",
         className,
       )}
     >
@@ -28,17 +36,17 @@ const ChatMessages: FC<ChatMessagesProps> = ({ className, ...props }) => {
             >
               <div
                 className={cn(
-                  "mx-2 flex max-w-xs flex-col space-y-2 overflow-x-hidden text-sm",
+                  "mx-2 flex max-w-xl flex-col space-y-2 overflow-x-hidden text-xs sm:text-sm lg:text-base",
                   {
                     "order-1 items-end": message.isUserMessage,
-                    "order-2 items-start": !message.isUserMessage,
+                    "order-2 max-w-2xl items-start": !message.isUserMessage,
                   },
                 )}
               >
                 <p
                   className={cn("rounded-lg px-4 py-2", {
-                    "bg-primary text-white": message.isUserMessage,
-                    "bg-gray-200 text-gray-900": !message.isUserMessage,
+                    [`bg-${userTextColor} text-white`]: message.isUserMessage,
+                    [`bg-${aiTextColor} text-gray-900`]: !message.isUserMessage,
                   })}
                 >
                   <MarkdownLite text={message.text} />

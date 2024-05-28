@@ -49,9 +49,9 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
           }
           try {
             const json = JSON.parse(data);
-            console.log('JSON ==> ',json);
+           
             const text = json.choices[0].delta?.content || "";
-            console.log('TEXT ==> ',text);
+            
             if (counter < 2 && (text.match(/\n/) || []).length) {
               return;
             }

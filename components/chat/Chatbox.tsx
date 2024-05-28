@@ -1,22 +1,31 @@
 "use client";
 import React, { useContext, useRef, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { CornerDownLeft } from "lucide-react";
+import { CornerDownLeft, Loader2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { nanoid } from "@reduxjs/toolkit";
 import { Message } from "@/lib/validators/message";
 import { MessagesContext } from "@/app/use/chat/context/messages";
 import ChatMessages from "./ChatMessages";
+import { Toaster, toast } from "sonner";
 
 interface ChatBoxProps {
   activeFieldset: string;
+  aiTextColor: string;
+  userTextColor: string;
+  maxTokens: number;
 }
 
-const ChatBox: React.FC<ChatBoxProps> = ({ activeFieldset }) => {
+const ChatBox: React.FC<ChatBoxProps> = ({
+  activeFieldset,
+  aiTextColor,
+  userTextColor,
+  maxTokens,
+}) => {
   const [input, setInput] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const {
     messages,
     addMessage,
@@ -34,8 +43,12 @@ const ChatBox: React.FC<ChatBoxProps> = ({ activeFieldset }) => {
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify({ messages: [message] }),
+        body: JSON.stringify({ messages: [message], max_tokens: maxTokens }),
       });
+
+      if (!response.ok) {
+        throw new Error("User notified through toast");
+      }
       return response.body;
     },
     onMutate(message) {
@@ -74,15 +87,25 @@ const ChatBox: React.FC<ChatBoxProps> = ({ activeFieldset }) => {
       setTimeout(() => {
         textareaRef.current?.focus();
       }, 10);
+      setIsLoading(false);
+    },
+    onError(_, message) {
+      setIsLoading(false);
+      toast.error("Something went wrong. Please try again");
+      removeMessage(message.id);
+      textareaRef.current?.focus();
     },
   });
 
   const handleSubmit = (
     e:
       | React.FormEvent<HTMLFormElement>
-      | React.KeyboardEvent<HTMLTextAreaElement>,
+      | React.KeyboardEvent<HTMLTextAreaElement>
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>
+      | React.MouseEvent<SVGElement, MouseEvent>,
   ) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const message: Message = {
       id: nanoid(),
@@ -95,65 +118,56 @@ const ChatBox: React.FC<ChatBoxProps> = ({ activeFieldset }) => {
 
   return (
     <div
-      className={`relative flex h-5/6 min-h-[50vh] flex-col rounded-xl bg-muted/50 p-4 lg:col-span-2 ${
+      className={`relative flex h-5/6 min-h-[50vh] flex-col rounded-xl bg-muted/50 p-4 lg:col-span-2 max-h-screen${
         activeFieldset === "playground" ? "md:ml-24 lg:ml-40 xl:ml-28" : ""
       }`}
     >
-      <Badge variant="outline" className="absolute right-3 top-3">
-        Output
-      </Badge>
-      <ChatMessages />
+      <ChatMessages aiTextColor={aiTextColor} userTextColor={userTextColor} />
       <div className="flex-1" />
       <form
-        className="relative overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring"
+        className="relative mt-1 overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring "
         x-chunk="dashboard-03-chunk-1"
+        onSubmit={handleSubmit}
       >
         <Label htmlFor="message" className="sr-only">
           Message
         </Label>
-        <Textarea
-          ref={textareaRef}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              handleSubmit(e);
-            }
-          }}
-          onChange={(e) => setInput(e.target.value)}
-          id="message"
-          placeholder="Type your message here..."
-          value={input}
-          className="min-h-12 resize-none border-0 p-3 shadow-none focus-visible:ring-0"
-        />
-        <div className="flex items-center p-3 pt-0">
-          <Button type="submit" size="sm" className="ml-auto gap-1.5">
-            Send Message
-            <CornerDownLeft className="size-3.5" />
-          </Button>
+        <div className="flex flex-row">
+          <Textarea
+            ref={textareaRef}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                handleSubmit(e);
+              }
+            }}
+            onChange={(e) => setInput(e.target.value)}
+            onInput={(e) => {
+              const textarea = e.target as HTMLTextAreaElement;
+              textarea.style.height = "auto";
+              textarea.style.height = textarea.scrollHeight + "px";
+            }}
+            id="message"
+            placeholder="Type your message here..."
+            value={input}
+            disabled={isLoading}
+            className="vertical-scroll   max-h-96 min-h-36 resize-none overflow-y-auto border-0 p-4 pt-8 shadow-none focus-visible:ring-0"
+            style={{ scrollbarColor: `${userTextColor} secondary` }}
+          />
+
+          <div className="flex items-center p-4">
+            {isLoading ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <button type="submit" onClick={handleSubmit}>
+                <CornerDownLeft className="size-5" />
+              </button>
+            )}
+          </div>
         </div>
       </form>
+      <Toaster position="bottom-right" />
     </div>
   );
 };
 
 export default ChatBox;
-
-{
-  /* <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Paperclip className="size-4" />
-                <span className="sr-only">Attach file</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="top">Attach File</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Mic className="size-4" />
-                <span className="sr-only">Use Microphone</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="top">Use Microphone</TooltipContent>
-          </Tooltip> */
-}

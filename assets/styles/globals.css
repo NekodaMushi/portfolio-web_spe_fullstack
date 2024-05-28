@@ -87,14 +87,14 @@
 }
 
 .vertical-scroll::-webkit-scrollbar-thumb {
-  background: #e11d48;
+  /* background: #e11d48; */
   border: 0.25em solid secondary;
   border-radius: 100vw;
 }
 
-.vertical-scroll::-webkit-scrollbar-thumb:hover {
+/* .vertical-scroll::-webkit-scrollbar-thumb:hover {
   background: #e11d48;
-}
+} */
 
 /* TEST */
 .icon-blink {
