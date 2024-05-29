@@ -58,6 +58,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({
       if (!stream) throw new Error("No stream");
 
       const id = nanoid();
+
       const responseMessage: Message = {
         id,
         isUserMessage: false,
@@ -77,7 +78,6 @@ const ChatBox: React.FC<ChatBoxProps> = ({
         done = doneReading;
         const chunkValue = decoder.decode(value);
         updateMessage(id, (prev) => prev + chunkValue);
-        console.log(chunkValue);
       }
 
       // clean up
@@ -118,51 +118,54 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 
   return (
     <div
-      className={`relative flex h-5/6 min-h-[50vh] flex-col rounded-xl bg-muted/50 p-4 lg:col-span-2 max-h-screen${
+      className={`relative flex h-5/6 max-h-screen min-h-[50vh] flex-col rounded-xl bg-muted/50 p-4 lg:col-span-2 ${
         activeFieldset === "playground" ? "md:ml-24 lg:ml-40 xl:ml-28" : ""
       }`}
     >
-      <ChatMessages aiTextColor={aiTextColor} userTextColor={userTextColor} />
-      <div className="flex-1" />
+      <ChatMessages
+        aiTextColor={aiTextColor}
+        userTextColor={userTextColor}
+        className="flex-grow overflow-y-auto"
+      />
       <form
-        className="relative mt-1 overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring "
-        x-chunk="dashboard-03-chunk-1"
+        className="relative mt-1 flex items-center rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring"
         onSubmit={handleSubmit}
       >
         <Label htmlFor="message" className="sr-only">
           Message
         </Label>
-        <div className="flex flex-row">
-          <Textarea
-            ref={textareaRef}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                handleSubmit(e);
-              }
-            }}
-            onChange={(e) => setInput(e.target.value)}
-            onInput={(e) => {
-              const textarea = e.target as HTMLTextAreaElement;
-              textarea.style.height = "auto";
-              textarea.style.height = textarea.scrollHeight + "px";
-            }}
-            id="message"
-            placeholder="Type your message here..."
-            value={input}
-            disabled={isLoading}
-            className="vertical-scroll   max-h-96 min-h-36 resize-none overflow-y-auto border-0 p-4 pt-8 shadow-none focus-visible:ring-0"
-            style={{ scrollbarColor: `${userTextColor} secondary` }}
-          />
-
-          <div className="flex items-center p-4">
-            {isLoading ? (
-              <Loader2 className="animate-spin" />
-            ) : (
-              <button type="submit" onClick={handleSubmit}>
-                <CornerDownLeft className="size-5" />
-              </button>
-            )}
-          </div>
+        <Textarea
+          ref={textareaRef}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              handleSubmit(e);
+            }
+          }}
+          onChange={(e) => setInput(e.target.value)}
+          onInput={(e) => {
+            const textarea = e.target as HTMLTextAreaElement;
+            textarea.style.height = "auto";
+            textarea.style.height = Math.min(textarea.scrollHeight, 384) + "px";
+          }}
+          id="message"
+          placeholder="Type your message here..."
+          value={input}
+          disabled={isLoading}
+          className="vertical-scroll flex-1 resize-none overflow-y-auto border-0 p-4 pt-3 shadow-none focus-visible:ring-0"
+          style={{ maxHeight: "24rem" }}
+        />
+        <div className="flex items-center p-4">
+          {isLoading ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              disabled={!input.trim()}
+            >
+              <CornerDownLeft className="size-5" />
+            </button>
+          )}
         </div>
       </form>
       <Toaster position="bottom-right" />

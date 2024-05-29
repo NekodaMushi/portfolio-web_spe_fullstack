@@ -25,7 +25,8 @@
     --ring: 346.8 77.2% 49.8%;
     --radius: 1rem;
 
-    --emerald-500: #34d399; /* Example color */
+    /* HomePage */
+    --emerald-500: #34d399;
     --emerald-600: #2c7a7b;
   }
 
@@ -73,7 +74,7 @@
   flex: 0 0 100%;
 }
 
-/* Cards scroll in Recall */
+/* Chat */
 
 .vertical-scroll::-webkit-scrollbar {
   width: 0.4em;
@@ -87,33 +88,19 @@
 }
 
 .vertical-scroll::-webkit-scrollbar-thumb {
-  /* background: #e11d48; */
+  background: #6b6b6b;
   border: 0.25em solid secondary;
   border-radius: 100vw;
 }
 
-/* .vertical-scroll::-webkit-scrollbar-thumb:hover {
-  background: #e11d48;
-} */
+.vertical-scroll::-webkit-scrollbar-thumb:hover {
+  background: #7e7e7e;
+}
 
-/* TEST */
+/* CustomCard in Recall */
 .icon-blink {
   animation: blink 6s linear infinite;
 }
-
-/* Lazy loading img */
-.blurred-img {
-  filter: blur(20px);
-  transition: filter 0.3s ease;
-}
-
-.blurred-img.loaded {
-  filter: blur(0);
-}
-
-/* END TEST */
-
-/* CustomCard in Recall */
 
 @keyframes blink {
   0%,
@@ -123,4 +110,14 @@
   50% {
     opacity: 0;
   }
+}
+
+/* HomePage - Lazy loading img */
+.blurred-img {
+  filter: blur(20px);
+  transition: filter 0.3s ease;
+}
+
+.blurred-img.loaded {
+  filter: blur(0);
 }
