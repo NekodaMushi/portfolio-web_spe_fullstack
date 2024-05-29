@@ -1,6 +1,6 @@
 "use client";
 
-import { MessagesProvider } from "@/app/use/chat/context/messages";
+import { MessagesProvider } from "@/context/messages";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { FC, ReactNode } from "react";
 

@@ -6,7 +6,7 @@ import { CornerDownLeft, Loader2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { nanoid } from "@reduxjs/toolkit";
 import { Message } from "@/lib/validators/message";
-import { MessagesContext } from "@/app/use/chat/context/messages";
+import { MessagesContext } from "@/context/messages";
 import ChatMessages from "./ChatMessages";
 import { Toaster, toast } from "sonner";
 

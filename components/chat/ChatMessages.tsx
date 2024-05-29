@@ -1,4 +1,4 @@
-import { MessagesContext } from "@/app/use/chat/context/messages";
+import { MessagesContext } from "@/context/messages";
 import { cn } from "@/lib/utils";
 import { FC, HTMLAttributes, useContext } from "react";
 import MarkdownLite from "./MarkdownLite";
