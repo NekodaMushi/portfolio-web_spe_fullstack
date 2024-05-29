@@ -28,6 +28,16 @@ export const users = pgTable("user", {
  emailVerified: timestamp("emailVerified", { mode: "date" }),
  image: text("image"),
 })
+
+export const userSettings = pgTable("user_settings", {
+  id: text("id").primaryKey().$defaultFn(() => randomUUID()),
+  userId: text("user_id").notNull().references(() => users.id).unique(),
+  settings: jsonb("settings").notNull(),
+  createdAt: timestamp('created_at').default(sql`date_trunc('minute', now())`),
+  updatedAt: timestamp("updated_at").notNull().defaultNow()
+});
+
+
  
 
 export const transcripts = pgTable("transcripts", {
@@ -107,6 +117,11 @@ export const usersRelations = relations(users, ({ many }) => ({
   quizzesCompleted: many(quizzesCompleted),
   spacedRepetition: many(spacedRepetition)
 
+}));
+
+
+export const userSettingsRelations = relations(userSettings, ({ one }) => ({
+  user: one(users, { fields: [userSettings.userId], references: [users.id] })
 }));
 
 

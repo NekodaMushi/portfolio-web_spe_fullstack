@@ -1,8 +1,6 @@
 "use client";
-
-import { useState } from "react";
+import { useReducer, useState, useEffect } from "react";
 import Link from "next/link";
-
 import {
   Bird,
   Book,
@@ -21,7 +19,6 @@ import {
   Battery,
   Cat,
 } from "lucide-react";
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,13 +39,73 @@ import {
 } from "@/components/ui/tooltip";
 import Table from "@/components/chat/table";
 import ChatBox from "@/components/chat/Chatbox";
+import {
+  useUserSettings,
+  useUpdateUserSettings,
+  UserSettings,
+} from "@/lib/utils/chat/userSettings";
 
-export default function Chat() {
+import DotLoader from "../ui/custom/DotLoader";
+
+const initialState: UserSettings = {
+  aiTextColor: "gray-200",
+  userTextColor: "primary",
+  maxTokens: 200,
+};
+
+type Action =
+  | { type: "SET_AI_TEXT_COLOR"; payload: string }
+  | { type: "SET_USER_TEXT_COLOR"; payload: string }
+  | { type: "SET_MAX_TOKENS"; payload: number };
+
+function settingsReducer(state: UserSettings, action: Action): UserSettings {
+  switch (action.type) {
+    case "SET_AI_TEXT_COLOR":
+      return { ...state, aiTextColor: action.payload };
+    case "SET_USER_TEXT_COLOR":
+      return { ...state, userTextColor: action.payload };
+    case "SET_MAX_TOKENS":
+      return { ...state, maxTokens: action.payload };
+    default:
+      return state;
+  }
+}
+
+const Chat: React.FC = () => {
   const [activeFieldset, setActiveFieldset] = useState("playground");
 
-  const [aiTextColor, setAiTextColor] = useState("gray-200");
-  const [userTextColor, setUserTextColor] = useState("primary");
-  const [maxTokens, setMaxTokens] = useState(200);
+  const { data: initialSettings, isLoading, error } = useUserSettings();
+  const [state, dispatch] = useReducer(settingsReducer, initialState);
+  const updateUserSettings = useUpdateUserSettings();
+
+  useEffect(() => {
+    if (initialSettings) {
+      // console.log("Applying settings:", initialSettings.settings);
+
+      dispatch({
+        type: "SET_AI_TEXT_COLOR",
+        payload: initialSettings.settings.aiTextColor,
+      });
+      dispatch({
+        type: "SET_USER_TEXT_COLOR",
+        payload: initialSettings.settings.userTextColor,
+      });
+      dispatch({
+        type: "SET_MAX_TOKENS",
+        payload: initialSettings.settings.maxTokens,
+      });
+    }
+  }, [initialSettings]);
+
+  const handleSaveSettings = async () => {
+    try {
+      await updateUserSettings.mutateAsync(state);
+      alert("Settings saved successfully!");
+    } catch (error) {
+      console.error("Failed to save settings", error);
+      alert("Failed to save settings");
+    }
+  };
 
   return (
     <TooltipProvider>
@@ -110,22 +167,6 @@ export default function Chat() {
                 Role
               </TooltipContent>
             </Tooltip>
-            {/* <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className={`rounded-lg ${activeFieldset === "api" ? "bg-muted" : ""}`}
-                  aria-label="API"
-                  onClick={() => setActiveFieldset("api")}
-                >
-                  <Code2 className="size-5" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="right" sideOffset={5}>
-                API
-              </TooltipContent>
-            </Tooltip> */}
 
             <Tooltip>
               <TooltipTrigger asChild>
@@ -143,6 +184,7 @@ export default function Chat() {
                 Documentation
               </TooltipContent>
             </Tooltip>
+
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -203,17 +245,25 @@ export default function Chat() {
         <div className="flex flex-col">
           <header className="sticky top-0 z-10 flex h-[53px] items-center gap-1 border-b bg-background px-4">
             <h1 className="text-xl font-semibold">Chat</h1>
-            {/* <Button
+            <Button
               variant="outline"
               size="sm"
               className="ml-auto gap-1.5 text-sm"
+              onClick={handleSaveSettings}
             >
               <Share className="size-3.5" />
-              Share
-            </Button> */}
+              Save settings
+            </Button>
           </header>
+          {/* 
+          
+          */}
 
           {/* - - - MAIN - - - */}
+
+          {/*  */}
+
+          {/*  */}
 
           <main className="grid flex-1 gap-4 overflow-auto p-4 md:grid-cols-2 lg:grid-cols-3">
             <div
@@ -239,7 +289,12 @@ export default function Chat() {
                     <div className="grid gap-3">
                       <Label htmlFor="max-tokens">AI Reply Length</Label>
                       <Select
-                        onValueChange={(value) => setMaxTokens(Number(value))}
+                        onValueChange={(value) =>
+                          dispatch({
+                            type: "SET_MAX_TOKENS",
+                            payload: Number(value),
+                          })
+                        }
                       >
                         <SelectTrigger id="max-tokens" className="items-start">
                           <SelectValue placeholder="Select length" />
@@ -260,7 +315,14 @@ export default function Chat() {
 
                     <div className="grid gap-3">
                       <Label htmlFor="ai-text-color">AI Text Color</Label>
-                      <Select onValueChange={(value) => setAiTextColor(value)}>
+                      <Select
+                        onValueChange={(value) =>
+                          dispatch({
+                            type: "SET_AI_TEXT_COLOR",
+                            payload: value,
+                          })
+                        }
+                      >
                         <SelectTrigger
                           id="ai-text-color"
                           className="items-start [&_[data-description]]:hidden"
@@ -325,7 +387,12 @@ export default function Chat() {
                     <div className="grid gap-3">
                       <Label htmlFor="user-text-color">User Text Color</Label>
                       <Select
-                        onValueChange={(value) => setUserTextColor(value)}
+                        onValueChange={(value) =>
+                          dispatch({
+                            type: "SET_USER_TEXT_COLOR",
+                            payload: value,
+                          })
+                        }
                       >
                         <SelectTrigger
                           id="user-text-color"
@@ -394,8 +461,24 @@ export default function Chat() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="system">System</SelectItem>
-                          <SelectItem value="user">User</SelectItem>
-                          <SelectItem value="assistant">Assistant</SelectItem>
+                          <SelectItem value="user">
+                            User{" "}
+                            <span
+                              className="text-xs text-yellow-600"
+                              data-description
+                            >
+                              feature coming soon...
+                            </span>
+                          </SelectItem>
+                          <SelectItem value="assistant">
+                            Assistant{" "}
+                            <span
+                              className="text-xs text-yellow-600"
+                              data-description
+                            >
+                              feature coming soon...
+                            </span>
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -436,7 +519,13 @@ export default function Chat() {
                                 </p>
                                 <p className="text-xs" data-description>
                                   Our fastest model for general use cases.
-                                </p>
+                                </p>{" "}
+                                <span
+                                  className="text-xs text-yellow-600"
+                                  data-description
+                                >
+                                  feature coming soon...
+                                </span>
                               </div>
                             </div>
                           </SelectItem>
@@ -452,7 +541,13 @@ export default function Chat() {
                                 </p>
                                 <p className="text-xs" data-description>
                                   Performance and speed for efficiency.
-                                </p>
+                                </p>{" "}
+                                <span
+                                  className="text-xs text-yellow-600"
+                                  data-description
+                                >
+                                  feature coming soon...
+                                </span>
                               </div>
                             </div>
                           </SelectItem>
@@ -469,7 +564,13 @@ export default function Chat() {
                                 <p className="text-xs" data-description>
                                   The most powerful model for complex
                                   computations.
-                                </p>
+                                </p>{" "}
+                                <span
+                                  className="text-xs text-yellow-600"
+                                  data-description
+                                >
+                                  feature coming soon...
+                                </span>
                               </div>
                             </div>
                           </SelectItem>
@@ -495,15 +596,21 @@ export default function Chat() {
               </form>
             </div>
 
-            <ChatBox
-              activeFieldset={activeFieldset}
-              aiTextColor={aiTextColor}
-              userTextColor={userTextColor}
-              maxTokens={maxTokens}
-            />
+            {isLoading ? (
+              <DotLoader />
+            ) : (
+              <ChatBox
+                activeFieldset={activeFieldset}
+                aiTextColor={state.aiTextColor}
+                userTextColor={state.userTextColor}
+                maxTokens={state.maxTokens}
+              />
+            )}
           </main>
         </div>
       </div>
     </TooltipProvider>
   );
-}
+};
+
+export default Chat;

@@ -1,6 +1,5 @@
 "use client";
 import React, { useContext, useRef, useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { CornerDownLeft, Loader2 } from "lucide-react";
@@ -58,7 +57,6 @@ const ChatBox: React.FC<ChatBoxProps> = ({
       if (!stream) throw new Error("No stream");
 
       const id = nanoid();
-
       const responseMessage: Message = {
         id,
         isUserMessage: false,
@@ -83,6 +81,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({
       // clean up
       setIsMessageUpdating(false);
       setInput("");
+      textareaRef.current!.style.height = "auto"; // Reset height
 
       setTimeout(() => {
         textareaRef.current?.focus();
@@ -105,6 +104,9 @@ const ChatBox: React.FC<ChatBoxProps> = ({
       | React.MouseEvent<SVGElement, MouseEvent>,
   ) => {
     e.preventDefault();
+    if (!input.trim()) {
+      return;
+    }
     setIsLoading(true);
 
     const message: Message = {
@@ -125,7 +127,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({
       <ChatMessages
         aiTextColor={aiTextColor}
         userTextColor={userTextColor}
-        className="flex-grow overflow-y-auto"
+        className="vertical-scroll flex-grow overflow-y-auto"
       />
       <form
         className="relative mt-1 flex items-center rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring"
@@ -158,11 +160,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({
           {isLoading ? (
             <Loader2 className="animate-spin" />
           ) : (
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              disabled={!input.trim()}
-            >
+            <button type="submit" onClick={handleSubmit}>
               <CornerDownLeft className="size-5" />
             </button>
           )}
