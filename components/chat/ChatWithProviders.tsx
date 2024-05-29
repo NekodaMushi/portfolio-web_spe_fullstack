@@ -1,13 +1,9 @@
-import React from "react";
-import Providers from "@/components/chat/Providers";
-import Chat from "@/components/chat/Chat";
+// // components/chat/ChatWithProviders.tsx
+// import React from "react";
+// import Chat from "@/components/chat/Chat";
 
-const ChatWithProviders: React.FC = () => {
-  return (
-    <Providers>
-      <Chat />
-    </Providers>
-  );
-};
+// const ChatWithProviders: React.FC = () => {
+//   return <Chat />;
+// };
 
-export default ChatWithProviders;
+// export default ChatWithProviders;

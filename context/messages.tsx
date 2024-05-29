@@ -1,3 +1,4 @@
+"use client";
 import { Message } from "@/lib/validators/message";
 import { nanoid } from "@reduxjs/toolkit";
 import { createContext, useState } from "react";
