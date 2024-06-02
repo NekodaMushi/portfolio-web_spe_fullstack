@@ -10,10 +10,9 @@ interface TokenPayload {
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request: Request) {
+export async function POST(request: Request) {
   try {
-    const queryParams = new URLSearchParams(request.url.split('?')[1]);
-    const token = queryParams.get("token");
+    const { token, page } = await request.json();
 
     if (!token) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -30,7 +29,6 @@ export async function GET(request: Request) {
     if (typeof decoded === "object" && decoded !== null && "id" in decoded) {
       const userId = decoded.id;
 
-      const page = parseInt(queryParams.get("page") || "1");
       const limit = 4;
       const offset = (page - 1) * limit;
 
@@ -59,7 +57,7 @@ export async function GET(request: Request) {
       throw new Error("Invalid token payload");
     }
   } catch (error: any) {
-    console.log("Error in GET route:", error);
+    console.log("Error in POST route:", error);
     return new Response(
       JSON.stringify({ error: "Failed to fetch quiz completed" }),
       {

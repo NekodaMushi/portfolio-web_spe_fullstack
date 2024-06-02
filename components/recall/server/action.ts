@@ -1,4 +1,3 @@
-// action.ts
 "use server";
 import { auth } from "auth";
 import jwt from "jsonwebtoken";
@@ -34,8 +33,12 @@ export default async function fetchCards(page: number): Promise<CarouselData> {
 export async function fetchRecallAll(token: string, page: number): Promise<CarouselData> {
   const domain = getDomain();
   try {
-    const response = await fetch(`${domain}/api/recall/quiz/all?page=${page}&token=${encodeURIComponent(token)}`, {
-      method: 'GET'
+    const response = await fetch(`${domain}/api/recall/quiz/all`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token, page }),
     });
     if (!response.ok) {
       console.error(`HTTP error! status: ${response.status}`);
