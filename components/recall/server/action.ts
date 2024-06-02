@@ -4,18 +4,7 @@ import { auth } from "auth";
 import jwt from "jsonwebtoken";
 import getDomain from "@/lib/getDomain";
 
-interface CarouselDataItem {
-  successRate: number;
-  attemptNumber: number;
-  totalQuestions: number;
-  incorrectAnswers: number;
-  highestScore: number;
-  highestScoreTotal: number;
-  updatedAt: string;
-  videoId: string;
-}
-
-type CarouselData = CarouselDataItem[];
+import { CarouselData } from "@/types/quiz";
 
 export default async function fetchCards(page: number): Promise<CarouselData> {
   const session = await auth();
