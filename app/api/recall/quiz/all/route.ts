@@ -8,6 +8,8 @@ interface TokenPayload {
   email: string;
 }
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
   try {
     const authHeader = request.headers.get("Authorization");

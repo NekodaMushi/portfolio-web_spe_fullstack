@@ -13,7 +13,7 @@ export default async function Recall() {
       </div>
 
       {/* Bottom Part */}
-      <div className="my-4 flex items-center border-t-2  border-solid pt-4">
+      <div className="my-4 flex items-center border-t-2 border-solid pt-4">
         <h1 className="ml-8 flex-1 text-center text-3xl font-bold">
           All Completed Quizzes
         </h1>
