@@ -54,7 +54,6 @@ export async function POST(request: Request) {
     let above70ThreeTimeUpdated;
     let graduatedByPerformance;
 
-    let under60ThreeTimeUpdated;
 
     if (latestQuizCompleted.length > 0) {
       // Quiz completed before
@@ -195,7 +194,7 @@ export async function POST(request: Request) {
           ),
         );
 
-      // TEMP DEBUG ------------------
+
 
       // --------- REVIEW PHASE ---------
       // Check if quiz transitioning to review phase for 1thtime ??????
