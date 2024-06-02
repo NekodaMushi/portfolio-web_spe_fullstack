@@ -1,7 +1,6 @@
-"use server";
+import { GetServerSideProps } from "next";
 import CustomCard from "../client/CustomCard";
 import LoadMore from "../client/LoadMore";
-// import TempFixFront from "../client/TempFixFront";
 import fetchCards from "./action";
 
 interface CarouselDataItem {
@@ -17,32 +16,39 @@ interface CarouselDataItem {
 
 type CarouselData = CarouselDataItem[];
 
-async function InfiniteCards() {
+interface InfiniteCardsProps {
+  data: CarouselData;
+}
+
+const InfiniteCards: React.FC<InfiniteCardsProps> = ({ data = [] }) => {
+  return (
+    <div className="flex flex-col items-center gap-2">
+      {data.map((item, index) => (
+        <CustomCard
+          key={index}
+          quizTitle={item.videoId}
+          length={item.totalQuestions}
+          lastScore={item.totalQuestions - item.incorrectAnswers}
+          highestScore={item.highestScore}
+          highestScoreTotal={item.highestScoreTotal}
+          lastAttempt={new Date(item.updatedAt).toLocaleDateString()}
+          attemptNumber={item.attemptNumber}
+          successRate={item.successRate}
+        />
+      ))}
+      <LoadMore />
+    </div>
+  );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const data: CarouselData = await fetchCards(1);
-
-    return (
-      <div className="flex flex-col items-center gap-2">
-        {data.map((item, index) => (
-          <CustomCard
-            key={index}
-            quizTitle={item.videoId}
-            length={item.totalQuestions}
-            lastScore={item.totalQuestions - item.incorrectAnswers}
-            highestScore={item.highestScore}
-            highestScoreTotal={item.highestScoreTotal}
-            lastAttempt={new Date(item.updatedAt).toLocaleDateString()}
-            attemptNumber={item.attemptNumber}
-            successRate={item.successRate}
-          />
-        ))}
-        <LoadMore />
-      </div>
-    );
+    return { props: { data } };
   } catch (error) {
     console.error("Failed to fetch data:", error);
-    return null;
+    return { props: { data: [] } };
   }
-}
+};
 
 export default InfiniteCards;
