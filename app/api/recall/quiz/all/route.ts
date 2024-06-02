@@ -8,10 +8,12 @@ interface TokenPayload {
   email: string;
 }
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: Request) {
   try {
-    const url = new URL(request.url);
-    const token = url.searchParams.get("token");
+    const queryParams = new URLSearchParams(request.url.split('?')[1]);
+    const token = queryParams.get("token");
 
     if (!token) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -28,7 +30,7 @@ export async function GET(request: Request) {
     if (typeof decoded === "object" && decoded !== null && "id" in decoded) {
       const userId = decoded.id;
 
-      const page = parseInt(url.searchParams.get("page") || "1");
+      const page = parseInt(queryParams.get("page") || "1");
       const limit = 4;
       const offset = (page - 1) * limit;
 
