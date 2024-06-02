@@ -23,3 +23,18 @@ export type QuizCancelHandler = () => void;
 export interface QuizLayoutProps {
   onSetQuizCancel: QuizCancelHandler;
 }
+
+
+
+export interface CarouselDataItem {
+  successRate: number;
+  attemptNumber: number;
+  totalQuestions: number;
+  incorrectAnswers: number;
+  highestScore: number;
+  highestScoreTotal: number;
+  updatedAt: string;
+  videoId: string;
+}
+
+export type CarouselData = CarouselDataItem[];

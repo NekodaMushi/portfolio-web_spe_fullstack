@@ -1,11 +1,9 @@
-"use server";
 import { Carousel } from "@/components/recall/client/Carousel";
 import { Card } from "@/components/ui/card";
 import InfiniteCards from "./InfiniteCards";
+import { CarouselData } from "@/types/quiz";
 
-// import LoadMore from "../client/LoadMore";
-
-export default async function Recall() {
+export default function Recall({ data }: { data: CarouselData }) {
   return (
     <div className="flex flex-col ">
       <div className="flex-1 py-6">
@@ -19,10 +17,7 @@ export default async function Recall() {
         </h1>
       </div>
       <div className="flex-1 overflow-y-auto py-4">
-        <InfiniteCards />
-
-        {/* <LoadMore />
-        </InfiniteCards> */}
+        <InfiniteCards data={data} />
       </div>
     </div>
   );
