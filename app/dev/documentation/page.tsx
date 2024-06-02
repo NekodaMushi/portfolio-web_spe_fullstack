@@ -1,8 +1,7 @@
 // Documentation.tsx
 
 import IconCloud from "@/components/ui/icon-cloud";
-import { useTheme } from "next-themes";
-import React, { useEffect, useMemo, useState } from "react";
+
 import cloudIcons from "@/components/documentation/cloud-icons";
 
 const Documentation = () => {
