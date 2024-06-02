@@ -4,6 +4,8 @@ import { eq, and, desc } from "drizzle-orm";
 import { auth } from "auth";
 import { calculateNewInterval } from "@/lib/utils/newInterval";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: Request) {
   // DEV
   // try {
