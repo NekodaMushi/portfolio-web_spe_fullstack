@@ -1,5 +1,5 @@
 
-  import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "./lib/auth/auth";
 import { rateLimiter } from "./lib/utils/chat/rate-limiter";
 
@@ -32,7 +32,7 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  if (req.nextUrl.pathname.startsWith('/api/chat/message')) {
+  if (req.nextUrl.pathname.startsWith('/api/ai/chat/message')) {
     return chatRateLimitMiddleware(req);
   }
 
@@ -42,6 +42,6 @@ export async function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     "/((?!api|_next/static|_next/image|favicon.ico).*)",
-    "/api/chat/message/:path*"
+    "/api/ai/chat/message/:path*"
   ],
 };
