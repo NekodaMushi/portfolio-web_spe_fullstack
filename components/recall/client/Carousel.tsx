@@ -84,7 +84,7 @@ export function Carousel() {
     );
   }
 
-  if (datqa === null || data.length === 0) {
+  if (data === null || data.length === 0) {
     let message = "";
     if (learningQuizzes.length === 0) {
       message = "No quiz to learn today, please generate new quiz!";
