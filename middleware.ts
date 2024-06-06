@@ -2,7 +2,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "./lib/auth/auth";
 import { rateLimiter } from "./lib/utils/chat/rate-limiter";
+import getDomain from "@/lib/getDomain";
 
+const domain = getDomain();
 
 async function chatRateLimitMiddleware(req: NextRequest) {
   const ip = req.ip ?? '127.0.0.1';
@@ -26,8 +28,11 @@ export async function middleware(req: NextRequest) {
     
 
     if (!isLoggedIn) {
-      const signInUrl = new URL("/api/auth/signin", req.nextUrl.origin);
-      signInUrl.searchParams.set("callbackUrl", req.nextUrl.href);
+      console.log('Middleware Condition not Logged In')
+      const signInUrl = new URL("/api/auth/signin", domain);
+      console.log(req.nextUrl.origin);
+      signInUrl.searchParams.set("callbackUrl", domain);
+      console.log(req.nextUrl.href);
       return NextResponse.redirect(signInUrl);
     }
   }
