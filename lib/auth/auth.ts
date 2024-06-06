@@ -6,7 +6,6 @@ import { db } from "@/db"
 import getDomain from "@/lib/getDomain";
 
 const domain = getDomain();
-console.log('Hey2')
 export const authConfig = { 
   providers: [Github, GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -26,7 +25,6 @@ export const authConfig = {
       const isProtected = paths.some((path) => nextUrl.pathname.startsWith(path))
 
       if (isProtected && !isLoggedIn) {
-        console.log('Hey1')
         console.log(domain)
         const redirectUrl = new URL("api/auth/signin", domain)
         redirectUrl.searchParams.append("callbackUrl", nextUrl.origin)

@@ -20,6 +20,7 @@ export async function POST(request: Request) {
     }
 
     const sessionUser = session?.user;
+    console.log(sessionUser)
     const lastTranscript = await db
       .select({
         videoId: transcripts.videoId,

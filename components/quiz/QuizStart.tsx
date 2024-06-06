@@ -125,6 +125,7 @@ export function QuizStart({ onSetQuizReady }: Props) {
 
       const data = await response.json();
       const quizId = data.quizId;
+      console.log("front", quizId);
       const videoId = data.videoId;
       const quizData = JSON.parse(data.quizData);
 
