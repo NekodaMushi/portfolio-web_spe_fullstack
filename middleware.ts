@@ -31,7 +31,7 @@ export async function middleware(req: NextRequest) {
       console.log('Middleware Condition not Logged In')
       const signInUrl = new URL("/api/auth/signin", domain);
       console.log(req.nextUrl.origin);
-      signInUrl.searchParams.set("callbackUrl", req.nextUrl.origin);
+      signInUrl.searchParams.set("callbackUrl", `${domain}${req.nextUrl.pathname}`);
       console.log(req.nextUrl.href);
       return NextResponse.redirect(signInUrl);
     }
