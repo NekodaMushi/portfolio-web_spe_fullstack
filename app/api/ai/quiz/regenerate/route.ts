@@ -12,8 +12,6 @@ const inverseQuizDataMapping: Record<string, string> = {
   "quizDataExam": "30",
 };
 
-export const maxDuration = 60;
-
 
 export async function POST(request: Request) {
   try {
@@ -51,8 +49,10 @@ export async function POST(request: Request) {
     const { videoId, content } = transcriptNeeded[0];
     const numberQuestions = inverseQuizDataMapping[numQuestions];
     
+   console.log(numberQuestions)
+    
     const requestData = {
-      model: "mixtral-8x22b-instruct",
+      model: "gpt-3.5-turbo",  
       messages: [
         {
           role: "system",

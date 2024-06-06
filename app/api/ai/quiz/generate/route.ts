@@ -4,6 +4,9 @@ import { quizzes, transcripts } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { auth } from "auth";
 
+
+
+
 export const maxDuration = 60;
 
 export async function POST(request: Request) {
@@ -51,6 +54,10 @@ export async function POST(request: Request) {
     const transcriptString = content;
     const videoTitle = videoId;
 
+
+
+ 
+
     const requestData = {
       model: "gpt-3.5-turbo",  
       messages: [
@@ -63,12 +70,15 @@ export async function POST(request: Request) {
     };
 
     const response = await fetchChatCompletion(requestData);
-    console.log('======= AVANT quizContent');
-    console.log(response);
-    console.log('Descriptif: ', response.choices);
+
+    // 
+    console.log(response)
+
+    if (response.choices === undefined) console.log(response);
     const quizContent = response.choices[0].message.content;
     console.log(`☑️ Quiz has been generated successfully as '${videoTitle}`);
-    console.log('======= Apres quizContent');
+
+
 
     let quizDataField:
       | "quizDataShort"
@@ -145,3 +155,4 @@ export async function POST(request: Request) {
     );
   }
 }
+

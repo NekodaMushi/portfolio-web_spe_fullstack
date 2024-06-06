@@ -22,7 +22,7 @@ export async function fetchChatCompletion(requestData: RequestData) {
     body: JSON.stringify({
       model: requestData.model,
       messages: requestData.messages,
-      max_tokens: 1500,  // Adjust as necessary
+      max_tokens: 4096,  // Adjust as necessary
       n: 1,
       stop: null,
       temperature: 0.7,  // Adjust as necessary

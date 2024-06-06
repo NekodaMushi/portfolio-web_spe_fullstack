@@ -35,10 +35,10 @@ const QuizEnd = ({ score, totalQuestions, handleEnd }: Props) => {
       <Image
         src={
           scorePercentage > 75
-            ? "/images/success/high.png"
+            ? "/images/success/high.jpg"
             : scorePercentage > 50
-              ? "/images/success/medium.png"
-              : "/images/success/low.png"
+              ? "/images/success/medium.jpg"
+              : "/images/success/low.jpg"
         }
         alt="Success Image"
         width={250}
