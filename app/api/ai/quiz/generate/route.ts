@@ -50,8 +50,9 @@ export async function POST(request: Request) {
     const videoTitle = videoId;
 
     const requestData = {
-      // model: "mixtral-8x22b-instruct",
-      model: "mixtral-8x7b-instruct",
+      // model: "mixtral-8x22b-instruct", not available anymore
+      // model: "mixtral-8x7b-instruct", poor quiz generation quality
+      model: "llama-3-70b-instruct",
       messages: [
         {
           role: "system",
