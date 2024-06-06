@@ -3,6 +3,9 @@ import Github from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google";
 import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import { db } from "@/db"
+import getDomain from "@/lib/getDomain";
+
+const domain = getDomain();
 
 export const authConfig = { 
   providers: [Github, GoogleProvider({
@@ -18,12 +21,11 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user
       const paths = ["/use/quiz", "/use/chat","/learn/recall"]
-      // REMINDER - TO PUT BACK
-      //  ,"/learn/recall"
+
       const isProtected = paths.some((path) => nextUrl.pathname.startsWith(path))
 
       if (isProtected && !isLoggedIn) {
-        const redirectUrl = new URL("api/auth/signin", nextUrl.origin)
+        const redirectUrl = new URL("api/auth/signin", domain)
         redirectUrl.searchParams.append("callbackUrl", nextUrl.href)
         return Response.redirect(redirectUrl)
       }
