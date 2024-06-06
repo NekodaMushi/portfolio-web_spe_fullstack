@@ -1,4 +1,4 @@
-import { fetchChatCompletion } from "@/lib/perplexityAPI";
+import { fetchChatCompletion } from "@/lib/openaiAPI";
 import { db } from "@/db/index";
 import { quizzes, transcripts } from "@/db/schema";
 import { eq, desc, and } from "drizzle-orm";
@@ -11,6 +11,8 @@ const inverseQuizDataMapping: Record<string, string> = {
   "quizDataLarge": "20",
   "quizDataExam": "30",
 };
+
+export const maxDuration = 60;
 
 
 export async function POST(request: Request) {
