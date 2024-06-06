@@ -1,7 +1,7 @@
-import { fetchChatCompletion } from "@/lib/perplexityAPI";
+import { fetchChatCompletion } from "@/lib/openaiAPI"; 
 import { db } from "@/db/index";
 import { quizzes, transcripts } from "@/db/schema";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { auth } from "auth";
 
 export async function POST(request: Request) {
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     }
 
     const sessionUser = session?.user;
-    console.log(sessionUser)
+    console.log(sessionUser);
     const lastTranscript = await db
       .select({
         videoId: transcripts.videoId,
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
           headers: {
             "content-type": "application/json",
           },
-        },
+        }
       );
     }
 
@@ -50,9 +50,7 @@ export async function POST(request: Request) {
     const videoTitle = videoId;
 
     const requestData = {
-      // model: "mixtral-8x22b-instruct", not available anymore
-      // model: "mixtral-8x7b-instruct", poor quiz generation quality
-      model: "llama-3-70b-instruct",
+      model: "gpt-3.5-turbo",  
       messages: [
         {
           role: "system",
@@ -63,10 +61,12 @@ export async function POST(request: Request) {
     };
 
     const response = await fetchChatCompletion(requestData);
-    if (response.choices === undefined) console.log(response);
+    console.log('======= AVANT quizContent');
+    console.log(response);
+    console.log('Descriptif: ', response.choices);
     const quizContent = response.choices[0].message.content;
     console.log(`☑️ Quiz has been generated successfully as '${videoTitle}`);
-
+    console.log('======= Apres quizContent');
 
     let quizDataField:
       | "quizDataShort"
@@ -86,17 +86,14 @@ export async function POST(request: Request) {
     } else if (numQuestions === "1") {
       quizDataField = "quizDataTest";
     } else {
-      throw new Error("Wrong number of question");
+      throw new Error("Wrong number of questions");
     }
 
     const existingQuiz = await db
       .select()
       .from(quizzes)
       .where(
-        and(
-          eq(quizzes.userId, sessionUser.id),
-          eq(quizzes.videoId, videoTitle),
-        ),
+        and(eq(quizzes.userId, sessionUser.id), eq(quizzes.videoId, videoTitle))
       )
       .limit(1);
 
@@ -120,9 +117,7 @@ export async function POST(request: Request) {
       }).returning({ id: quizzes.id });
       quizId = result[0].id;
       console.log("✅ Quiz has been stored successfully");
-
     }
-    
 
     const quizResponse = {
       quizData: quizContent,
@@ -136,9 +131,15 @@ export async function POST(request: Request) {
     });
   } catch (error: any) {
     console.log("Error in POST route:", error);
+
+    let errorMessage = "Failed to fetch chat completion";
+    if (error.message.includes("Invalid model")) {
+      errorMessage = `Invalid model. Please refer to the documentation for permitted models: https://beta.openai.com/docs/models/gpt-3.5`;
+    }
+
     return new Response(
-      JSON.stringify({ error: "Failed to fetch chat completion" }),
-      { status: 500, headers: { "content-type": "application/json" } },
+      JSON.stringify({ error: errorMessage }),
+      { status: error.code || 500, headers: { "content-type": "application/json" } },
     );
   }
 }

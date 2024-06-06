@@ -151,8 +151,9 @@ export function QuizStart({ onSetQuizReady }: Props) {
         // Implement a new API request :
         // to fetch a new quiz from the AI.
         toast.info("Please try another length.");
-        toast.error("AI error: Received malformed data.");
+        // toast.error("AI error: Received malformed data.");
       } else {
+        console.log(error);
         toast.info("You need to download a transcript first");
       }
     }
