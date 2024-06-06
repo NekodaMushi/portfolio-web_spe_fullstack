@@ -18,6 +18,7 @@ export const authConfig = {
       session.user.id = user.id
       return session
     },
+    // needs this for google auth
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user
       const paths = ["/use/quiz", "/use/chat","/learn/recall"]
@@ -28,7 +29,7 @@ export const authConfig = {
         console.log('Hey1')
         console.log(domain)
         const redirectUrl = new URL("api/auth/signin", domain)
-        redirectUrl.searchParams.append("callbackUrl", domain)
+        redirectUrl.searchParams.append("callbackUrl", nextUrl.href)
         return Response.redirect(redirectUrl)
       }
       
