@@ -56,7 +56,7 @@ export async function GET(request: Request) {
       .orderBy(desc(quizzesCompleted.createdAt));
 
     // Gets all Learning phase quiz which haven't been done today
-    console.log('Nb of LearningPhaseQuizzes',LearningAndTransitionPhaseQuizzes.length);
+    // console.log('Nb of LearningPhaseQuizzes',LearningAndTransitionPhaseQuizzes.length);
 
 
 // Review Phase Quiz
@@ -93,7 +93,7 @@ const reviewPhaseQuizzes = await db
 
 
 
-console.log(' Nb of reviewPhaseQuizzes with interval 1 =>', reviewPhaseQuizzes.length);
+// console.log(' Nb of reviewPhaseQuizzes with interval 1 =>', reviewPhaseQuizzes.length);
 
     return new Response(JSON.stringify({
       learningAndTransitionPhaseQuizzes: LearningAndTransitionPhaseQuizzes,

@@ -10,6 +10,7 @@ export async function POST(request: Request) {
     const numQuestions = url.searchParams.get("numQuestions") || "5";
 
     const session = await auth();
+    
     if (!session) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
@@ -49,7 +50,8 @@ export async function POST(request: Request) {
     const videoTitle = videoId;
 
     const requestData = {
-      model: "mixtral-8x22b-instruct",
+      // model: "mixtral-8x22b-instruct",
+      model: "mixtral-8x7b-instruct",
       messages: [
         {
           role: "system",
@@ -60,6 +62,7 @@ export async function POST(request: Request) {
     };
 
     const response = await fetchChatCompletion(requestData);
+    if (response.choices === undefined) console.log(response);
     const quizContent = response.choices[0].message.content;
     console.log(`☑️ Quiz has been generated successfully as '${videoTitle}`);
 
