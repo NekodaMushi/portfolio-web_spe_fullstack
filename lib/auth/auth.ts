@@ -29,7 +29,7 @@ export const authConfig = {
         console.log('Hey1')
         console.log(domain)
         const redirectUrl = new URL("api/auth/signin", domain)
-        redirectUrl.searchParams.append("callbackUrl", nextUrl.href)
+        redirectUrl.searchParams.append("callbackUrl", nextUrl.origin)
         return Response.redirect(redirectUrl)
       }
       
