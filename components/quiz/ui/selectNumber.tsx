@@ -33,11 +33,16 @@ export function SelectNumber({ value, onValueChange }: SelectNumberProps) {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Size</SelectLabel>
-          <SelectItem value="1">test</SelectItem>
+          <SelectItem value="1">Test</SelectItem>
           <SelectItem value="5">Short</SelectItem>
           <SelectItem value="10">Medium</SelectItem>
           <SelectItem value="20">Large</SelectItem>
-          <SelectItem value="30">Exam</SelectItem>
+          <SelectItem value="30">
+            Exam{" "}
+            <span className="text-xs text-yellow-600" data-description>
+              unstable in prod...
+            </span>
+          </SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>
