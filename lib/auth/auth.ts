@@ -1,10 +1,14 @@
 import NextAuth, { NextAuthConfig } from "next-auth"
 import Github from "next-auth/providers/github"
+import GoogleProvider from "next-auth/providers/google";
 import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import { db } from "@/db"
 
 export const authConfig = { 
-  providers: [Github],
+  providers: [Github, GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),],
   adapter: DrizzleAdapter(db),
   callbacks: {
     async session({session, user}) {

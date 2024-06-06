@@ -46,6 +46,7 @@ import {
 } from "@/lib/utils/chat/userSettings";
 
 import DotLoader from "@/components/ui/custom/DotLoader";
+import { Toaster, toast } from "sonner";
 
 const initialState: UserSettings = {
   aiTextColor: "gray-200",
@@ -100,10 +101,10 @@ const Chat: React.FC = () => {
   const handleSaveSettings = async () => {
     try {
       await updateUserSettings.mutateAsync(state);
-      alert("Settings saved successfully!");
+      toast.info("Settings saved successfully!");
     } catch (error) {
       console.error("Failed to save settings", error);
-      alert("Failed to save settings");
+      toast.warning("Failed to save settings");
     }
   };
 

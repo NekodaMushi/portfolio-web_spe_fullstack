@@ -65,7 +65,7 @@ const Content = [
         </p>
       </>
     ),
-    image: "/images/homepage/cyber.png",
+    image: "/images/homepage/cyber.jpg",
     placeholder: "/images/homepage/cyber-small.jpg",
   },
   {
@@ -87,7 +87,7 @@ const Content = [
       </>
     ),
     badge: "",
-    image: "/images/homepage/space-learning-dark.png",
+    image: "/images/homepage/space-learning-dark.jpg",
     placeholder: "/images/homepage/space-learning-dark-small.png",
   },
   {

@@ -37,7 +37,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 
   const { mutate: sendMessage } = useMutation({
     mutationFn: async (message: Message) => {
-      const response = await fetch("/api/chat/message", {
+      const response = await fetch("/api/ai/chat/message", {
         method: "POST",
         headers: {
           "Content-type": "application/json",

@@ -87,9 +87,9 @@ export function Carousel() {
   if (data === null || data.length === 0) {
     let message = "";
     if (learningQuizzes.length === 0) {
-      message = "No more quiz to learn today, check Review!";
+      message = "No quiz to learn today, please generate new quiz!";
     } else if (reviewQuizzes.length === 0) {
-      message = "No more quiz to review today, check Learning!";
+      message = "No quiz to review today, check Learning!";
     }
 
     return (
