@@ -468,9 +468,8 @@ const Chat: React.FC = () => {
                           <SelectValue placeholder="Select a role" />
                         </SelectTrigger>
                         <SelectContent>
-                          {/* <SelectItem value="system">System</SelectItem> */}
-                          <SelectItem value="user">
-                            User{" "}
+                          <SelectItem value="system">
+                            System{" "}
                             <span
                               className="text-xs text-yellow-600"
                               data-description
@@ -478,6 +477,7 @@ const Chat: React.FC = () => {
                               feature coming soon...
                             </span>
                           </SelectItem>
+                          {/* <SelectItem value="user">User</SelectItem> */}
                           <SelectItem value="assistant">
                             Assistant{" "}
                             <span
