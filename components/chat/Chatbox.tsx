@@ -121,7 +121,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({
   return (
     <div
       className={`relative flex h-5/6 max-h-screen min-h-[50vh] flex-col rounded-xl bg-muted/50 p-4 lg:col-span-2 ${
-        activeFieldset === "playground" ? "md:ml-24 lg:ml-40 xl:ml-28" : ""
+        activeFieldset === "recall" ? "md:ml-24 lg:ml-40 xl:ml-28" : ""
       }`}
     >
       <ChatMessages

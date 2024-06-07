@@ -13,7 +13,7 @@ import {
   PlayCircle,
   Settings2,
   Share,
-  Terminal,
+  BrainCircuitIcon,
   User,
   Triangle,
   Battery,
@@ -73,7 +73,7 @@ function settingsReducer(state: UserSettings, action: Action): UserSettings {
 }
 
 const Chat: React.FC = () => {
-  const [activeFieldset, setActiveFieldset] = useState("playground");
+  const [activeFieldset, setActiveFieldset] = useState("recall");
 
   const { data: initialSettings, isLoading, error } = useUserSettings();
   const [state, dispatch] = useReducer(settingsReducer, initialState);
@@ -123,15 +123,15 @@ const Chat: React.FC = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className={`rounded-lg ${activeFieldset === "playground" ? "bg-muted" : ""}`}
-                  aria-label="Playground"
-                  onClick={() => setActiveFieldset("playground")}
+                  className={`rounded-lg ${activeFieldset === "recall" ? "bg-muted" : ""}`}
+                  aria-label="Recall"
+                  onClick={() => setActiveFieldset("recall")}
                 >
-                  <Terminal className="size-5" />
+                  <BrainCircuitIcon className="size-5" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right" sideOffset={5}>
-                Playground
+                Recall
               </TooltipContent>
             </Tooltip>
 
@@ -273,10 +273,10 @@ const Chat: React.FC = () => {
               x-chunk="dashboard-03-chunk-0"
             >
               <form className="grid w-full items-start gap-6">
-                {activeFieldset === "playground" && (
+                {activeFieldset === "recall" && (
                   <fieldset className="grid gap-6 rounded-lg border p-4">
                     <legend className="-ml-1 px-1 text-sm font-medium">
-                      Playground{" "}
+                      Recall{" "}
                       <span
                         className="text-xs text-yellow-600"
                         data-description
@@ -463,12 +463,12 @@ const Chat: React.FC = () => {
                     </legend>
                     <div className="grid gap-3">
                       <Label htmlFor="role">Role</Label>
-                      <Select defaultValue="system">
+                      <Select defaultValue="assistant">
                         <SelectTrigger>
                           <SelectValue placeholder="Select a role" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="system">System</SelectItem>
+                          {/* <SelectItem value="system">System</SelectItem> */}
                           <SelectItem value="user">
                             User{" "}
                             <span
@@ -493,6 +493,7 @@ const Chat: React.FC = () => {
                     <div className="grid gap-3">
                       <Label htmlFor="content">Content</Label>
                       <Textarea
+                        disabled
                         id="content"
                         placeholder="You are a..."
                         className="min-h-[9.5rem]"
@@ -587,16 +588,31 @@ const Chat: React.FC = () => {
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="temperature">Temperature</Label>
-                      <Input id="temperature" type="number" placeholder="0.4" />
+                      <Input
+                        id="temperature"
+                        type="number"
+                        placeholder="0.4"
+                        disabled
+                      />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="grid gap-3">
                         <Label htmlFor="top-p">Top P</Label>
-                        <Input id="top-p" type="number" placeholder="0.7" />
+                        <Input
+                          id="top-p"
+                          disabled
+                          type="number"
+                          placeholder="0.7"
+                        />
                       </div>
                       <div className="grid gap-3">
                         <Label htmlFor="top-k">Top K</Label>
-                        <Input id="top-k" type="number" placeholder="0.0" />
+                        <Input
+                          id="top-k"
+                          type="number"
+                          placeholder="0.0"
+                          disabled
+                        />
                       </div>
                     </div>
                   </fieldset>
