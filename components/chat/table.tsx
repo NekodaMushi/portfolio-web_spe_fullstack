@@ -71,32 +71,32 @@ const columns: ColumnDef<Payment>[] = [
     ),
   },
   {
-    accessorKey: "email",
+    accessorKey: "quiz",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          Quiz Name
           <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    cell: ({ row }) => <div>{row.getValue("quiz")}</div>,
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
+    accessorKey: "trialnumber",
+    header: () => <div className="text-right">Trial Number</div>,
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
+      const trialnumber = parseFloat(row.getValue("trialnumber"));
 
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
+      // const formatted = new Intl.NumberFormat("en-US", {
+      //   style: "currency",
+      //   currency: "USD",
+      // }).format(trialnumber);
 
-      return <div className="text-right font-medium">{formatted}</div>;
+      return <div className="text-right font-medium">{trialnumber}</div>;
     },
   },
   {
@@ -118,11 +118,11 @@ const columns: ColumnDef<Payment>[] = [
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(payment.id)}
             >
-              Copy payment ID
+              Copy quiz title
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>Insert content to chat</DropdownMenuItem>
+            <DropdownMenuItem>Insert result to chat</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -162,10 +162,10 @@ export default function PaymentTable() {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          placeholder="Filter quiz..."
+          value={(table.getColumn("quiz")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("quiz")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

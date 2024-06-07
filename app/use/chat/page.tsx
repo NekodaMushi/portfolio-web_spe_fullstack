@@ -174,23 +174,6 @@ const Chat: React.FC = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className={`rounded-lg ${activeFieldset === "documentation" ? "bg-muted" : ""}`}
-                  aria-label="Documentation"
-                  onClick={() => setActiveFieldset("documentation")}
-                >
-                  <Book className="size-5" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="right" sideOffset={5}>
-                Documentation
-              </TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
                   className={`rounded-lg ${activeFieldset === "advanced-settings" ? "bg-muted" : ""}`}
                   aria-label="Settings"
                   onClick={() => setActiveFieldset("advanced-settings")}
@@ -204,6 +187,24 @@ const Chat: React.FC = () => {
             </Tooltip>
           </nav>
           <nav className="mt-auto grid gap-1 p-2">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link href="https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-model-parameters.html?context=wx&locale=fr">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className={`rounded-lg ${activeFieldset === "documentation" ? "bg-muted" : ""}`}
+                    aria-label="Documentation"
+                    onClick={() => setActiveFieldset("documentation")}
+                  >
+                    <Book className="size-5" />
+                  </Button>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right" sideOffset={5}>
+                Documentation
+              </TooltipContent>
+            </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link href="/learn/faq">

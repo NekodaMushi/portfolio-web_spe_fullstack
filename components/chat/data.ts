@@ -1,40 +1,42 @@
 
 export type Payment = {
   id: string;
-  amount: number;
+  trialnumber: number;
   status: "pending" | "processing" | "success" | "failed";
-  email: string;
+  quiz: string;
 };
 // dummy data
 export const data: Payment[] = [
   {
     id: "m5gr84i9",
-    amount: 316,
+    trialnumber: 3,
     status: "success",
-    email: "ken99@yahoo.com",
+    quiz: "130. O(log n)",
+
   },
   {
     id: "3u1reuv4",
-    amount: 242,
+    trialnumber: 13,
     status: "success",
-    email: "Abe45@gmail.com",
+    quiz: "119. Optional: How Javascript Works",
   },
   {
     id: "derv1ws0",
-    amount: 837,
+    trialnumber: 5,
     status: "processing",
-    email: "Monserrat44@gmail.com",
+    quiz: "91. Hash Tables Review",
   },
   {
     id: "5kma53ae",
-    amount: 874,
+    trialnumber: 2,
     status: "success",
-    email: "Silas22@gmail.com",
+    quiz: "84. Solution: Implement A Hash Table",
   },
   {
     id: "bhqecj4p",
-    amount: 721,
+    trialnumber: 9,
     status: "failed",
-    email: "carmella@hotmail.com",
+    quiz: "Building the Story Section",
   },
 ];
+
