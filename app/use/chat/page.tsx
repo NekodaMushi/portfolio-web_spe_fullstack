@@ -276,7 +276,13 @@ const Chat: React.FC = () => {
                 {activeFieldset === "playground" && (
                   <fieldset className="grid gap-6 rounded-lg border p-4">
                     <legend className="-ml-1 px-1 text-sm font-medium">
-                      Playground
+                      Playground{" "}
+                      <span
+                        className="text-xs text-yellow-600"
+                        data-description
+                      >
+                        feature coming soon...
+                      </span>
                     </legend>
                     <Table />
                   </fieldset>
