@@ -477,9 +477,8 @@ const Chat: React.FC = () => {
                               feature coming soon...
                             </span>
                           </SelectItem>
-                          {/* <SelectItem value="user">User</SelectItem> */}
-                          <SelectItem value="assistant">
-                            Assistant{" "}
+                          <SelectItem value="user">
+                            User{" "}
                             <span
                               className="text-xs text-yellow-600"
                               data-description
@@ -487,6 +486,7 @@ const Chat: React.FC = () => {
                               feature coming soon...
                             </span>
                           </SelectItem>
+                          {/* <SelectItem value="assistant">Assistant</SelectItem> */}
                         </SelectContent>
                       </Select>
                     </div>
