@@ -46,8 +46,6 @@ To be able to generate quiz, you need to use the custom chrome extension from th
 
 <b>Warning</b>: It only works on brave for the moment.
 
-<a href="https://youtu.be/cuzw4vL1z5E?feature=shared" target="_blank"><img src="https://github.com/sujatagunale/EasyRead/assets/151519281/1736fca5-a031-4854-8c09-bc110e3bc16d" /></a>
-
 **Installation**
 
 **Cloning the Repository**
