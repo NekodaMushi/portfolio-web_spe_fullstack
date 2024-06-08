@@ -521,7 +521,7 @@ export default config;
 
 **Contributing**
 
-We welcome contributions from the community. If you have suggestions for improvements or new features, please create a pull request or open an issue on our GitHub repository.
+I welcome contributions from the community. If you have suggestions for improvements or new features, please create a pull request or open an issue on our GitHub repository.
 
 **License**
 
