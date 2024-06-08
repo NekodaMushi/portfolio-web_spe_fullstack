@@ -62,6 +62,21 @@
   }
 }
 
+/* Recall - CustomCard */
+.icon-blink {
+  animation: blink 6s linear infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
 /* Carousel */
 
 .embla {
@@ -96,22 +111,6 @@
 .vertical-scroll::-webkit-scrollbar-thumb:hover {
   background: #7e7e7e;
 }
-
-/* CustomCard in Recall */
-.icon-blink {
-  animation: blink 6s linear infinite;
-}
-
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
-q
 
 /* HomePage - Lazy loading img */
 .blurred-img {
