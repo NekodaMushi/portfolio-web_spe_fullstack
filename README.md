@@ -1,7 +1,7 @@
 <div align="center">
   <br />
     <a href="https://nexlearn.vercel.app/" target="_blank">
-      <img src="" alt="Multi device app showcase">
+      <img src="https://github.com/NekodaMushi/portfolio-web_spe_fullstack/blob/main/public/images/github/Readme.jpg" alt="Multi device app showcase">
     </a>
   <br />
 
