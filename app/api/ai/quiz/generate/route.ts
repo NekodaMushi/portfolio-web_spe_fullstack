@@ -63,7 +63,7 @@ export async function POST(request: Request) {
       messages: [
         {
           role: "system",
-          content: `Generate a multiple choice quiz from the provided transcript with exactly ${numQuestions} questions. Each question should have one correct answer among four options. Format the output as JSON: [{"question": "Q", "choices": ["A", "B", "C", "D"], "correct_answer": "A"}, ...]. Only JSON output is required. PLEASE ASSURE to have the correct amount of questions before replying`,
+          content: `Generate a multiple choice quiz from the provided transcript with exactly ${numQuestions} questions. Each question should have one correct answer among four options. Format the output as JSON: [{"question": "Q", "choices": ["A", "B", "C", "D"], "correct_answer": "A"}, ...]. Only JSON output is required. PLEASE ASSURE to always have one correct_answer per question`,
         },
         { role: "user", content: transcriptString },
       ],
