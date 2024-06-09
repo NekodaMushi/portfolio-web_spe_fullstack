@@ -1,7 +1,7 @@
 
 export const chatbotPrompt = `
 
-Answer all user request, with and concise answer, do not be polite and go to ensential.
+Answer all user request, do not be polite and go to ensential.
 
 Only include links in markdown format.
 Example: 'You can browse our books [here](https://www.example.com/books)'.
