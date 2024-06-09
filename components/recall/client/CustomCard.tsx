@@ -252,6 +252,7 @@ const CustomCard: React.FC<CardProps> = ({
         </div>
         <div className="mt-4 flex gap-3">
           <SelectDataType
+            disabled={isGenerating}
             value={numQuestions}
             onValueChange={handleSelectNumber}
             quizReady={quizReady}

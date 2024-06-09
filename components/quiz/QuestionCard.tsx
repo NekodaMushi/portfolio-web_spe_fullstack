@@ -29,7 +29,7 @@ const QuestionCard = ({
   //   return "bg-white text-black";
   // };
 
-  //DEV
+  //DEV or until exam over
 
   const getAnswerStyle = (answer: string) => {
     if (userAnswer === answer) {
@@ -45,22 +45,28 @@ const QuestionCard = ({
 
   return (
     <div>
-      <p className="text-[20px]text-center max-w-[615px] ">{question}</p>
+      <p className="max-w-[615px] text-center text-[20px] ">{question}</p>
       <div className="flex flex-col items-center pt-8">
-        {answers?.map((answer) => (
-          <div
-            key={answer}
-            onClick={() => onClick(answer, currentQuestionIndex)}
-            className={` border-grey my-2 flex min-h-[60px] w-full max-w-[600px] cursor-pointer select-none items-center justify-center rounded-[10px] border p-4 font-bold transition-transform duration-300 hover:scale-105  ${getAnswerStyle(
-              answer,
-            )}`}
-          >
-            <span className="text-center ">{answer}</span>
+        {answers ? (
+          Object.entries(answers).map(([key, value]) => (
+            <div
+              key={key}
+              onClick={() => onClick(key, currentQuestionIndex)}
+              className={`border-grey my-2 flex min-h-[60px] w-full max-w-[600px] cursor-pointer select-none items-center justify-center rounded-[10px] border p-4 font-bold transition-transform duration-300 hover:scale-105 ${getAnswerStyle(
+                key,
+              )}`}
+            >
+              <span className="text-center">{value}</span>
+            </div>
+          ))
+        ) : (
+          <div>
+            <p>⚠️ There was a issue with the quiz ⚠️</p>
+            <p> Please generate a new quiz</p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
 };
-
 export default QuestionCard;

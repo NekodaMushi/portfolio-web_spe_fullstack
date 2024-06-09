@@ -4,6 +4,10 @@ import { quizzes, transcripts } from "@/db/schema";
 import { eq, desc, and } from "drizzle-orm";
 import { auth } from "auth";
 
+// import { validateAndCorrectQuizContent } from "@/lib/validators/doubleAiChecking";
+
+
+
 const inverseQuizDataMapping: Record<string, string> = {
   "quizDataTest": "1",
   "quizDataShort": "5",
@@ -56,16 +60,19 @@ export async function POST(request: Request) {
       messages: [
         {
           role: "system",
-          content: `Generate a multiple choice quiz from the provided transcript with exactly ${numberQuestions} questions. Each question should have one correct answer among four options. Format the output as JSON: [{"question": "Q", "choices": ["A", "B", "C", "D"], "correct_answer": "A"}, ...]. Only JSON output is required.`,
+          content: `Generate a multiple choice quiz from the provided transcript with exactly ${numQuestions} questions. Each question should have one correct answer among four options. Format the output as JSON: [{"question": "Q", "choices": {"A": "option A", "B": "option B", "C": "option C", "D": "option D"}, "correct_answer": "A"}, ...]. Correct answer format should be the key of the option. Only JSON output is required. PLEASE ASSURE to always have one correct_answer per question`,
         },
         { role: "user", content: content },
       ],
     };
 
     const response = await fetchChatCompletion(requestData);
-    const quizContent = response.choices[0].message.content;
-    // Remove later
-    console.log(quizContent)
+    let quizContent = response.choices[0].message.content;
+
+        // Extra Layer of Security => Validate and Correct the quiz content
+    // quizContent = await validateAndCorrectQuizContent(quizContent, numQuestions);
+
+
     console.log(`☑️ Quiz has been generated successfully as '${videoId}`);
 
 

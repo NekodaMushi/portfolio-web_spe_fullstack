@@ -15,12 +15,14 @@ type SelectNumberProps = {
   value: NumQuestions;
   onValueChange: (value: NumQuestions) => void;
   quizReady: { [key: string]: boolean };
+  disabled?: boolean;
 };
 
 export function SelectDataType({
   value,
   onValueChange,
   quizReady,
+  disabled,
 }: SelectNumberProps) {
   const [selectedValue, setSelectedValue] = React.useState<NumQuestions | "">(
     "",
@@ -32,8 +34,12 @@ export function SelectDataType({
   };
 
   return (
-    <Select value={selectedValue} onValueChange={handleValueChange}>
-      <SelectTrigger className="w-52">
+    <Select
+      value={selectedValue}
+      onValueChange={handleValueChange}
+      disabled={disabled}
+    >
+      <SelectTrigger className="w-52" disabled={disabled}>
         <SelectValue placeholder="Number of questions" />
       </SelectTrigger>
       <SelectContent>

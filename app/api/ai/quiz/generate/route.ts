@@ -1,11 +1,11 @@
+// pages/api/quiz.ts
+
 import { fetchChatCompletion } from "@/lib/openaiAPI"; 
 import { db } from "@/db/index";
 import { quizzes, transcripts } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { auth } from "auth";
-
-
-
+import { validateAndCorrectQuizContent } from "@/lib/validators/doubleAiChecking";
 
 export const maxDuration = 60;
 
@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     const numQuestions = url.searchParams.get("numQuestions") || "5";
 
     const session = await auth();
-    
+
     if (!session) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
@@ -54,31 +54,24 @@ export async function POST(request: Request) {
     const transcriptString = content;
     const videoTitle = videoId;
 
-
-
- 
-
     const requestData = {
-      model: "gpt-3.5-turbo",  
+      model: "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
-          content: `Generate a multiple choice quiz from the provided transcript with exactly ${numQuestions} questions. Each question should have one correct answer among four options. Format the output as JSON: [{"question": "Q", "choices": ["A", "B", "C", "D"], "correct_answer": "A"}, ...]. Only JSON output is required. PLEASE ASSURE to always have one correct_answer per question`,
+          content: `Generate a multiple choice quiz from the provided transcript with exactly ${numQuestions} questions. Each question should have one correct answer among four options. Format the output as JSON: [{"question": "Q", "choices": {"A": "option A", "B": "option B", "C": "option C", "D": "option D"}, "correct_answer": "A"}, ...]. Correct answer format should be the key of the option. Only JSON output is required. PLEASE ASSURE to always have one correct_answer per question`,
         },
         { role: "user", content: transcriptString },
       ],
     };
 
     const response = await fetchChatCompletion(requestData);
+    let quizContent = response.choices[0].message.content;
 
-    // 
-    console.log(response)
+    // Extra Layer of Security => Validate and Correct the quiz content
+    quizContent = await validateAndCorrectQuizContent(quizContent, numQuestions);
 
-    if (response.choices === undefined) console.log(response);
-    const quizContent = response.choices[0].message.content;
     console.log(`☑️ Quiz has been generated successfully as '${videoTitle}`);
-
-
 
     let quizDataField:
       | "quizDataShort"
@@ -155,4 +148,3 @@ export async function POST(request: Request) {
     );
   }
 }
-
