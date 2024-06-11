@@ -2,8 +2,6 @@ import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
 import * as schema from "@/db/schema";
 import { config } from "dotenv";
-import { and, eq } from "drizzle-orm";
-import * as readline from 'readline';
 
 config({ path: ".env.local" });
 
@@ -52,26 +50,15 @@ async function UserTrialDataM() {
   const quizId = "44bf5745-b629-4816-a21d-eb52b39bbd42";
   const videoId = "71. Implementing An Array";
 
-  //   // Check normal process OK
-  //   // Check reducing drastically when he passes into transite OK
-  //   // except for last case if he gets through perf
+    await simulateUserTrial(quizId, videoId, 2, 10);
 
+    await simulateUserTrial(quizId, videoId, 7, 10);
 
-     await simulateUserTrial(quizId, videoId, 2, 10);
+    await simulateUserTrial(quizId, videoId, 0, 10);
 
-    // await simulateUserTrial(quizId, videoId, 7, 10);
+    await simulateUserTrial(quizId, videoId, 0, 10);
 
-    // await simulateUserTrial(quizId, videoId, 0, 10);
-
-  //   // await simulateUserTrial(quizId, videoId, 0, 10);
-
-
-  //   // await simulateUserTrial(quizId, videoId, 8, 10);
-
-  //   //   await simulateUserTrial(quizId, videoId, 9, 10);
-
-  //   // await simulateUserTrial(quizId, videoId, 9, 10);
-
+    await simulateUserTrial(quizId, videoId, 8, 10);
 
 }
   
@@ -111,25 +98,12 @@ const main = async () => {
   try {
     console.log("Seeding database");
 
-    // await db.delete(schema.spacedRepetition);
-    // await db.delete(quizzesCompleted);
-    // await db.delete(quizzes);
-    // await db.delete(transcripts);
-    // await db.delete(users);
+    await db.delete(schema.spacedRepetition);
+    await db.delete(quizzesCompleted);
+    await db.delete(quizzes);
+    await db.delete(transcripts);
+    await db.delete(schema.sessions);
 
-    UserTrialDataM();
-
-    
-    // const spacedRepetitionId = "bf8dac41-af1d-40c9-863b-9e6e70d6e3df";
-
-    // updateDueDate(spacedRepetitionId)
-
-// updateSpacedRepetitionInterval(spacedRepetitionId);
-
-    // updateDueDateToOneDayAgo(spacedRepetitionId);
-    
-
-    
   } catch (error) {
     console.error(error);
     throw new Error("Failed to seed database");

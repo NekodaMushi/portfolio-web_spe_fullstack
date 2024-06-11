@@ -65,8 +65,6 @@ export const quizzes = pgTable("quizzes", {
 });
 
 
-// NEW
-
 export const quizzesCompleted = pgTable("quizzesCompleted", {
   id: text("id").primaryKey().$defaultFn(() => randomUUID()),
   intId: serial("idInt").notNull(),
@@ -119,11 +117,9 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 }));
 
-
 export const userSettingsRelations = relations(userSettings, ({ one }) => ({
   user: one(users, { fields: [userSettings.userId], references: [users.id] })
 }));
-
 
 export const transcriptsRelations = relations(transcripts, ({ one }) => ({
   user: one(users, { fields: [transcripts.userId], references: [users.id] }),
@@ -160,7 +156,7 @@ export const accounts = pgTable(
   expires_at: integer("expires_at"),
   token_type: text("token_type"),
   scope: text("scope"),
-   id_token: text("id_token"),
+  id_token: text("id_token"),
   session_state: text("session_state"),
 },
 (account) => ({
