@@ -136,4 +136,40 @@ const main = async () => {
   }
 };
 
+// const main = async () => {
+//   const { quizzes, spacedRepetition, quizzesCompleted } = schema;
+
+//   try {
+//     console.log("Starting to erase user data");
+
+   
+
+
+//     const deletedSpacedRepetition = await db.delete(spacedRepetition)
+//       .where(eq(spacedRepetition.userId, "06b51c75-bf24-4aaa-a00d-2294018dbcbf"))
+//       .returning({ deletedId: spacedRepetition.id });
+
+
+//     const deletedQuizzesCompleted = await db.delete(quizzesCompleted)
+//       .where(eq(quizzesCompleted.userId, "06b51c75-bf24-4aaa-a00d-2294018dbcbf"))
+//       .returning({ deletedId: quizzesCompleted.id });
+    
+
+//     const deletedQuizzes = await db.delete(quizzes)
+//       .where(eq(quizzes.userId, "06b51c75-bf24-4aaa-a00d-2294018dbcbf"))
+//       .returning({ deletedId: quizzes.id });
+
+//     console.log("User data erased successfully:");
+//     console.log("Deleted Quizzes IDs:", deletedQuizzes.map(item => item.deletedId));
+//     console.log("Deleted Spaced Repetition IDs:", deletedSpacedRepetition.map(item => item.deletedId));
+//     console.log("Deleted Quizzes Completed IDs:", deletedQuizzesCompleted.map(item => item.deletedId));
+
+//   } catch (error) {
+//     console.error("Error erasing user data:", error);
+//     throw new Error("Failed to erase user data");
+//   }
+// };
+
+
+
 main();

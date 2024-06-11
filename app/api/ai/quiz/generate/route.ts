@@ -1,11 +1,10 @@
-// pages/api/quiz.ts
-
 import { fetchChatCompletion } from "@/lib/openaiAPI"; 
 import { db } from "@/db/index";
 import { quizzes, transcripts } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { auth } from "auth";
 import { validateAndCorrectQuizContent } from "@/lib/validators/doubleAiChecking";
+import { QuizGenerationSchema } from "@/lib/validators/generateQuiz";
 
 export const maxDuration = 60;
 
@@ -13,6 +12,16 @@ export async function POST(request: Request) {
   try {
     const url = new URL(request.url);
     const numQuestions = url.searchParams.get("numQuestions") || "5";
+    const validationResult = QuizGenerationSchema.safeParse({ numQuestions });
+
+    if (!validationResult.success) {
+      return new Response(JSON.stringify({ error: "Invalid data" }), {
+        status: 400,
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+    }
 
     const session = await auth();
 
@@ -26,7 +35,7 @@ export async function POST(request: Request) {
     }
 
     const sessionUser = session?.user;
-    console.log(sessionUser);
+    // console.log(sessionUser);
     const lastTranscript = await db
       .select({
         videoId: transcripts.videoId,
@@ -59,7 +68,7 @@ export async function POST(request: Request) {
       messages: [
         {
           role: "system",
-          content: `Generate a multiple choice quiz from the provided transcript with exactly ${numQuestions} questions. Each question should have one correct answer among four options. Format the output as JSON: [{"question": "Q", "choices": {"A": "option A", "B": "option B", "C": "option C", "D": "option D"}, "correct_answer": "A"}, ...]. Correct answer format should be the key of the option. Only JSON output is required. PLEASE ASSURE to always have one correct_answer per question`,
+          content: `Generate a multiple choice quiz from the provided transcript with exactly ${numQuestions} questions. Each question should have one correct answer, randomly assigned among four options (A, B, C, or D). Format the output as JSON: [{"question": "Q", "choices": {"A": "option A", "B": "option B", "C": "option C", "D": "option D"}, "correct_answer": "D"}, ...]. The correct answer format should be the key of the option. Ensure that the assignment of the correct answer is randomized for each question. Only JSON output is required. Please assure to always have one correct answer per question.`,
         },
         { role: "user", content: transcriptString },
       ],

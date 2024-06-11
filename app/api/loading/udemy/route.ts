@@ -2,12 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { db, eq, and } from "@/db/index";
 import { transcripts, users } from "@/db/schema";
 import { auth } from "@/lib/auth/auth";
+import { TranscriptSchema } from '@/lib/validators/udemy';
 
 export async function POST(req: NextRequest) {
-  const { spanData, videoTitle } = await req.json();
-  const transcriptString = spanData.join(" ");
-
   try {
+    const body = await req.json();
+    const validationResult = TranscriptSchema.safeParse(body);
+
+    if (!validationResult.success) {
+      return NextResponse.json({ error: "Invalid data" }, { status: 400 });
+    }
+
+    const { spanData, videoTitle } = validationResult.data;
+    const transcriptString = spanData.join(" ");
+
     const session = await auth();
     const sessionUser = session?.user;
 

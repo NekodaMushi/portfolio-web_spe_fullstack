@@ -53,14 +53,16 @@ export async function POST(request: Request) {
     const { videoId, content } = transcriptNeeded[0];
     const numberQuestions = inverseQuizDataMapping[numQuestions];
     
+
    console.log(numberQuestions)
-    
+
+
     const requestData = {
       model: "gpt-3.5-turbo",  
       messages: [
         {
           role: "system",
-          content: `Generate a multiple choice quiz from the provided transcript with exactly ${numQuestions} questions. Each question should have one correct answer among four options. Format the output as JSON: [{"question": "Q", "choices": {"A": "option A", "B": "option B", "C": "option C", "D": "option D"}, "correct_answer": "A"}, ...]. Correct answer format should be the key of the option. Only JSON output is required. PLEASE ASSURE to always have one correct_answer per question`,
+          content: `Generate a multiple choice quiz from the provided transcript with exactly ${numberQuestions} questions. Each question should have one correct answer, randomly assigned among four options (A, B, C, or D). Format the output as JSON: [{"question": "Q", "choices": {"A": "option A", "B": "option B", "C": "option C", "D": "option D"}, "correct_answer": "C"}, ...]. The correct answer format should be the key of the option. Ensure that the assignment of the correct answer is randomized for each question. Only JSON output is required. Please assure to always have one correct answer per question.`,
         },
         { role: "user", content: content },
       ],

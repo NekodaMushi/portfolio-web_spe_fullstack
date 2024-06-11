@@ -1,3 +1,4 @@
+
 import { z } from 'zod';
 
 export const MessageSchema = z.object({
@@ -10,3 +11,5 @@ export const MessageSchema = z.object({
 export const MessageArraySchema = z.array(MessageSchema);
 
 export type Message = z.infer<typeof MessageSchema>;
+
+
