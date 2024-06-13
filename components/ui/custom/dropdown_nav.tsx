@@ -3,15 +3,9 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import Head from "next/head"; // Import the Head component
+import Head from "next/head";
 
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import Quiz from "@/assets/images/Quiz";
-import Chat from "@/assets/images/Chat";
-import Recall from "@/assets/images/Recall";
-import FAQ from "@/assets/images/FAQ";
-import Documentation from "@/assets/images/Documentation";
-import Github from "@/assets/images/Github";
 import Image from "next/image";
 
 interface FlyoutLinkProps {
@@ -83,7 +77,15 @@ export const UseContent = () => {
           className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary"
         >
           <div className="basis-1/3">
-            <Quiz width={96} height={96} />
+            {/* <Quiz width={96} height={96} /> */}
+            <Image
+              src="/images/logos/quiz.png"
+              alt="Quiz"
+              width={96}
+              height={96}
+              unoptimized={true}
+              priority
+            />
           </div>
           <div className="basis-2/3">
             <CardTitle className="p-2 text-left">Quiz</CardTitle>
@@ -111,6 +113,7 @@ export const UseContent = () => {
               width={96}
               height={96}
               unoptimized={true}
+              priority
             />
           </div>
           <div className="basis-2/3">
@@ -139,7 +142,15 @@ export const LearnContent = () => {
           className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary"
         >
           <div className=" basis-1/3 pl-2 ">
-            <Recall width={88} height={88} />
+            {/* <Recall width={88} height={88} /> */}
+            <Image
+              src="/images/logos/recall.png"
+              alt="Recall"
+              width={88}
+              height={88}
+              unoptimized={true}
+              priority
+            />
           </div>
           <div className="basis-2/3 ">
             <CardTitle className="p-2 text-left">Recall</CardTitle>
@@ -161,7 +172,15 @@ export const LearnContent = () => {
           className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary"
         >
           <div className=" basis-1/3 pl-3 ">
-            <FAQ width={80} height={80} />
+            {/* <FAQ width={80} height={80} /> */}
+            <Image
+              src="/images/logos/faq.png"
+              alt="FAQ"
+              width={80}
+              height={80}
+              unoptimized={true}
+              priority
+            />
           </div>
           <div className="basis-2/3 ">
             <CardTitle className="p-2 text-left">FAQ</CardTitle>
@@ -189,7 +208,15 @@ export const DevContent = () => {
           className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary"
         >
           <div className=" basis-1/3 pl-2 ">
-            <Documentation width={80} height={80} />
+            {/* <Documentation width={80} height={80} /> */}
+            <Image
+              src="/images/logos/documentation.png"
+              alt="Documentation"
+              width={80}
+              height={80}
+              unoptimized={true}
+              priority
+            />
           </div>
           <div className="basis-2/3 ">
             <CardTitle className="p-2 text-left">Documentation</CardTitle>
@@ -212,7 +239,15 @@ export const DevContent = () => {
           className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary "
         >
           <div className="  -mr-1 ml-1 basis-1/3">
-            <Github width={80} height={80} />
+            {/* <Github width={80} height={80} /> */}
+            <Image
+              src="/images/logos/github.png"
+              alt="Github"
+              width={80}
+              height={80}
+              unoptimized={true}
+              priority
+            />
           </div>
           <div className="basis-2/3 ">
             <CardTitle className="p-2 text-left">Github</CardTitle>

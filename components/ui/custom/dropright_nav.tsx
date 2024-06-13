@@ -4,12 +4,7 @@ import { Button } from "../button";
 import { Menu } from "lucide-react";
 import { animated } from "@react-spring/web";
 import Link from "next/link";
-import Quiz from "@/assets/images/Quiz";
-import Chat from "@/assets/images/Chat";
-import Recall from "@/assets/images/Recall";
-import FAQ from "@/assets/images/FAQ";
-import Documentation from "@/assets/images/Documentation";
-import Github from "@/assets/images/Github";
+import Image from "next/image";
 
 interface NavLinksRight_navProps {
   activeSection: string | null;
@@ -46,7 +41,15 @@ const NavLinksRight_nav: React.FC<NavLinksRight_navProps> = ({
                   <div className="group relative flex items-center gap-10 p-2">
                     <div className="group-hover:delay-400 absolute top-1/2 h-0 w-0.5 -translate-y-1/2 transform rounded-md bg-primary duration-700 group-hover:h-full group-hover:w-full group-hover:transition-[width]"></div>
                     <div className="z-10 flex-shrink-0">
-                      <Quiz width={70} height={70} />
+                      {/* <Quiz width={70} height={70} /> */}
+                      <Image
+                        src="/images/logos/quiz.png"
+                        alt="Quiz"
+                        width={70}
+                        height={70}
+                        unoptimized={true}
+                        priority
+                      />
                     </div>
                     <div className="z-10">
                       <h1>Quiz</h1>
@@ -62,7 +65,14 @@ const NavLinksRight_nav: React.FC<NavLinksRight_navProps> = ({
                   <div className="group relative flex items-center gap-10 p-2">
                     <div className="group-hover:delay-400 absolute top-1/2 h-0 w-0.5 -translate-y-1/2 transform rounded-md bg-primary duration-700 group-hover:h-full group-hover:w-full group-hover:transition-[width]"></div>
                     <div className="z-10 flex-shrink-0">
-                      <Chat width={70} height={70} />
+                      <Image
+                        src="/images/logos/chat.png"
+                        alt="CHAT"
+                        width={70}
+                        height={70}
+                        unoptimized={true}
+                        priority
+                      />
                     </div>
                     <div className="z-10">
                       <h1>Chat</h1>
@@ -87,7 +97,15 @@ const NavLinksRight_nav: React.FC<NavLinksRight_navProps> = ({
                   <div className="group relative flex items-center gap-6 p-2">
                     <div className="group-hover:delay-400 absolute top-1/2 h-0 w-0.5 -translate-y-1/2 transform rounded-md bg-primary duration-700 group-hover:h-full group-hover:w-full group-hover:transition-[width]"></div>
                     <div className="z-10 flex items-center justify-center">
-                      <Recall width={100} height={100} />
+                      {/* <Recall width={100} height={100} /> */}
+                      <Image
+                        src="/images/logos/recall.png"
+                        alt="Recall"
+                        width={100}
+                        height={100}
+                        unoptimized={true}
+                        priority
+                      />
                     </div>
                     <div className="z-10 ml-5">
                       <h1>Recall</h1>
@@ -104,7 +122,15 @@ const NavLinksRight_nav: React.FC<NavLinksRight_navProps> = ({
                   <div className="group relative flex items-center gap-6 p-2">
                     <div className="group-hover:delay-400 absolute top-1/2 h-0 w-0.5 -translate-y-1/2 transform rounded-md bg-primary duration-700 group-hover:h-full group-hover:w-full group-hover:transition-[width]"></div>
                     <div className="z-10 flex items-center justify-center">
-                      <FAQ width={100} height={100} />
+                      {/* <FAQ width={100} height={100} /> */}
+                      <Image
+                        src="/images/logos/faq.png"
+                        alt="FAQ"
+                        width={100}
+                        height={100}
+                        unoptimized={true}
+                        priority
+                      />
                     </div>
                     <div className="z-10  ml-5">
                       <h1>FAQ</h1>
@@ -128,7 +154,15 @@ const NavLinksRight_nav: React.FC<NavLinksRight_navProps> = ({
                   <div className="group relative flex items-center gap-10 p-2">
                     <div className="group-hover:delay-400 absolute top-1/2 h-0 w-0.5 -translate-y-1/2 transform rounded-md bg-primary duration-700 group-hover:h-full group-hover:w-full group-hover:transition-[width]"></div>
                     <div className="z-10 flex items-center justify-center">
-                      <Documentation width={120} height={120} />
+                      {/* <Documentation width={120} height={120} /> */}
+                      <Image
+                        src="/images/logos/documentation.png"
+                        alt="Documentation"
+                        width={120}
+                        height={120}
+                        unoptimized={true}
+                        priority
+                      />
                     </div>
                     <div className="z-10">
                       <h1>Documentation</h1>
@@ -144,7 +178,15 @@ const NavLinksRight_nav: React.FC<NavLinksRight_navProps> = ({
                   <div className="group relative flex items-center gap-10 p-2 pl-2">
                     <div className="group-hover:delay-400 absolute top-1/2 h-0 w-0.5 -translate-y-1/2 transform rounded-md bg-primary duration-700 group-hover:h-full group-hover:w-full group-hover:transition-[width]"></div>
                     <div className="z-10 flex items-center justify-center sm:max-lg:ml-3">
-                      <Github width={70} height={70} />
+                      {/* <Github width={70} height={70} /> */}
+                      <Image
+                        src="/images/logos/github.png"
+                        alt="Github"
+                        width={70}
+                        height={70}
+                        unoptimized={true}
+                        priority
+                      />
                     </div>
                     <div className="z-10">
                       <h1>Github</h1>

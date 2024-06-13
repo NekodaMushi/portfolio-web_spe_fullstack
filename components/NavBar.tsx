@@ -3,7 +3,6 @@ import Link from "next/link";
 import Container from "./ui/container";
 import { ModeToggle } from "./themes/theme-toggle";
 import { useSpring, animated } from "@react-spring/web";
-import Logo from "@/assets/images/Logo";
 import { useState } from "react";
 import NavLinks from "./ui/custom/dropdown_nav";
 import NavLinksRight from "./ui/custom/dropright_nav";
@@ -12,6 +11,7 @@ import { FaGithub } from "react-icons/fa";
 
 import { useSession } from "next-auth/react";
 import { Button } from "./ui/button";
+import Image from "next/image";
 
 const NavBar = () => {
   const { data: session } = useSession();
@@ -33,7 +33,14 @@ const NavBar = () => {
         <div className="relative flex h-16 w-full items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center">
             <Link href="/" className="ml-4 flex items-center gap-2 lg:ml-0">
-              <Logo />
+              <Image
+                src="/images/logos/logo.gif"
+                alt="LOGO"
+                width={80}
+                height={80}
+                unoptimized={true}
+                priority={true}
+              />
             </Link>
           </div>
 
