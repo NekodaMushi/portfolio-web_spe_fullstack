@@ -2,7 +2,6 @@ import { db } from "@/db/index";
 import { quizzes } from "@/db/schema";
 import { and, desc, eq } from "drizzle-orm";
 import { auth } from "auth";
-import jwt from 'jsonwebtoken';
 
 export const dynamic = "force-dynamic";
 

@@ -2,7 +2,7 @@ import "@/assets/styles/globals.css";
 import { jetBrainsMono } from "../fonts";
 import { ThemeProvider } from "@/components/themes/theme-provider";
 import NavBar from "@/components/NavBar";
-import Providers from "@/components/Providers"; // Import the Providers component
+import Providers from "@/components/Providers";
 
 export const metadata = {
   title: "NexLearn | Interactive Video Based Learning",

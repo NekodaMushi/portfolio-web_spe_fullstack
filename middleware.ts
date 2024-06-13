@@ -28,7 +28,6 @@ export async function middleware(req: NextRequest) {
     
 
     if (!isLoggedIn) {
-      // console.log('Middleware Condition not Logged In')
       const signInUrl = new URL("/api/auth/signin", domain);
       signInUrl.searchParams.set("callbackUrl", `${domain}${req.nextUrl.pathname}`);
       return NextResponse.redirect(signInUrl);
