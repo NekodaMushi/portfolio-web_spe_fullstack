@@ -2,11 +2,6 @@ const API_URL = 'https://api.perplexity.ai/chat/completions';
 const API_KEY = process.env.PERPLEXITY_API_KEY
 
 
-interface Message {
-  role: 'system' | 'user';
-  content: string;
-}
-
 interface RequestData {
   model: string;
   messages: Array<{ role: string; content: string }>;
@@ -32,3 +27,6 @@ export async function fetchChatCompletion(requestData: RequestData) {
     throw error;
   }
 }
+
+
+

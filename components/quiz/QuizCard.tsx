@@ -38,7 +38,7 @@ const QuizCard = ({
 
   const isQuestionAnswered = userAnswers[currentQuestionIndex] ? true : false;
 
-  const [preventNaN, setPreventNaN] = useState<boolean>(false);
+  // const [preventNaN, setPreventNaN] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
 

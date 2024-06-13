@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { TypewriterEffectSmooth } from "../ui/typewriter-effect";
 import { MultiStepLoader as Loader } from "../ui/multi-step-loader";
-import { IconSquareRoundedX } from "@tabler/icons-react";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { SelectNumber } from "./ui/selectNumber";
 import { Toaster, toast } from "sonner";
@@ -61,13 +60,14 @@ export function QuizStart({ onSetQuizReady }: Props) {
   const [numQuestions, setNumQuestions] = useState<NumQuestions>("Select");
   const [animationDuration, setAnimationDuration] = useState<number>(750);
   const [generated, setGenerated] = useState<boolean>(false);
+  const [displayTitle, setdisplayTitle] = useState<boolean>(false);
 
   const [quizReady, setQuizReady] = useState<{
     [key in NumQuestions]?: boolean;
   }>({});
 
   const dispatch = useAppDispatch();
-  const { quizData } = useAppSelector((state) => state.quiz);
+  const { quizData, videoId } = useAppSelector((state) => state.quiz);
 
   useEffect(() => {
     const checkQuizReady = () => {
@@ -92,6 +92,7 @@ export function QuizStart({ onSetQuizReady }: Props) {
       ...prevState,
       [value]: quizData[value] !== undefined,
     }));
+    setdisplayTitle(true);
   };
 
   const handleGenerateClick = async () => {
@@ -125,7 +126,6 @@ export function QuizStart({ onSetQuizReady }: Props) {
 
       const data = await response.json();
       const quizId = data.quizId;
-      console.log("front", quizId);
       const videoId = data.videoId;
       const quizData = JSON.parse(data.quizData);
 
@@ -138,6 +138,7 @@ export function QuizStart({ onSetQuizReady }: Props) {
         ...prevState,
         [numQuestions]: true,
       }));
+      setdisplayTitle(true);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
 
@@ -187,7 +188,11 @@ export function QuizStart({ onSetQuizReady }: Props) {
       <p className="text-xs text-neutral-600 dark:text-neutral-200 sm:text-base">
         Once you used the chrome extension
       </p>
-      <TypewriterEffectSmooth words={words} />
+      {displayTitle && videoId ? (
+        <TypewriterEffectSmooth words={[{ text: `Video ID: ${videoId}` }]} />
+      ) : (
+        <TypewriterEffectSmooth words={words} />
+      )}
       <div className="flex flex-col  space-x-0 space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
         <SelectNumber value={numQuestions} onValueChange={handleSelectNumber} />
         <button

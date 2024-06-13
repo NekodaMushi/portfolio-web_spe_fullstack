@@ -1,10 +1,6 @@
 const API_URL = 'https://api.openai.com/v1/chat/completions';
 const API_KEY = process.env.OPENAI_API_KEY;
 
-interface Message {
-  role: 'system' | 'user';
-  content: string;
-}
 
 interface RequestData {
   model: string;
@@ -22,10 +18,10 @@ export async function fetchChatCompletion(requestData: RequestData) {
     body: JSON.stringify({
       model: requestData.model,
       messages: requestData.messages,
-      max_tokens: 4096,  // Adjust as necessary
+      max_tokens: 4096,
       n: 1,
       stop: null,
-      temperature: 0.7,  // Adjust as necessary
+      temperature: 0.7,
     }),
   };
 
