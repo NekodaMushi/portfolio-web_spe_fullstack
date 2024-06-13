@@ -5,9 +5,8 @@ import { useEffect, useRef, useState } from "react";
 
 import { FaArrowDown } from "react-icons/fa";
 
-import Quiz from "@/assets/images/Quiz";
 import transcripts from "@/transcripts.json";
-import Documentation from "@/assets/images/Documentation";
+import Image from "next/image";
 
 const LoadingQuiz: React.FC = () => {
   const [transcript, setTranscript] = useState<string>(
@@ -61,7 +60,14 @@ const LoadingQuiz: React.FC = () => {
         <section className="relative basis-1/3">
           <section className="absolute inset-1/4 h-1/2 w-1/2">
             <div className="flex h-full w-full animate-spring items-center justify-center">
-              <Documentation height={120} width={120} />
+              <Image
+                src="/images/logos/documentation.png"
+                alt="Documentation"
+                width={120}
+                height={120}
+                unoptimized={true}
+                priority
+              />
             </div>
           </section>
         </section>

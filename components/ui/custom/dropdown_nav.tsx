@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import Head from "next/head";
 
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
@@ -16,17 +15,11 @@ interface FlyoutLinkProps {
 
 const NavLinks = () => {
   return (
-    <>
-      <Head>
-        {/* Preload the Quiz image */}
-        <link rel="preload" href="/images/logos/quiz.png" as="image" />
-      </Head>
-      <nav className="mx-6 hidden items-center space-x-4 sm:flex lg:space-x-6">
-        <NavLink FlyoutContent={UseContent}>Use</NavLink>
-        <NavLink FlyoutContent={LearnContent}>Learn</NavLink>
-        <NavLink FlyoutContent={DevContent}>Dev</NavLink>
-      </nav>
-    </>
+    <nav className="mx-6 hidden items-center space-x-4 sm:flex lg:space-x-6">
+      <NavLink FlyoutContent={UseContent}>Use</NavLink>
+      <NavLink FlyoutContent={LearnContent}>Learn</NavLink>
+      <NavLink FlyoutContent={DevContent}>Dev</NavLink>
+    </nav>
   );
 };
 export const NavLink = ({ link, children, FlyoutContent }: FlyoutLinkProps) => {
@@ -77,7 +70,6 @@ export const UseContent = () => {
           className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary"
         >
           <div className="basis-1/3">
-            {/* <Quiz width={96} height={96} /> */}
             <Image
               src="/images/logos/quiz.png"
               alt="Quiz"
@@ -142,7 +134,6 @@ export const LearnContent = () => {
           className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary"
         >
           <div className=" basis-1/3 pl-2 ">
-            {/* <Recall width={88} height={88} /> */}
             <Image
               src="/images/logos/recall.png"
               alt="Recall"
@@ -172,7 +163,6 @@ export const LearnContent = () => {
           className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary"
         >
           <div className=" basis-1/3 pl-3 ">
-            {/* <FAQ width={80} height={80} /> */}
             <Image
               src="/images/logos/faq.png"
               alt="FAQ"
@@ -208,7 +198,6 @@ export const DevContent = () => {
           className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary"
         >
           <div className=" basis-1/3 pl-2 ">
-            {/* <Documentation width={80} height={80} /> */}
             <Image
               src="/images/logos/documentation.png"
               alt="Documentation"
@@ -239,7 +228,6 @@ export const DevContent = () => {
           className="m-2 flex items-center gap-8 rounded transition duration-300 ease-in-out hover:bg-primary "
         >
           <div className="  -mr-1 ml-1 basis-1/3">
-            {/* <Github width={80} height={80} /> */}
             <Image
               src="/images/logos/github.png"
               alt="Github"

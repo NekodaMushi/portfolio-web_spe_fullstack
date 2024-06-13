@@ -41,7 +41,6 @@ const NavLinksRight_nav: React.FC<NavLinksRight_navProps> = ({
                   <div className="group relative flex items-center gap-10 p-2">
                     <div className="group-hover:delay-400 absolute top-1/2 h-0 w-0.5 -translate-y-1/2 transform rounded-md bg-primary duration-700 group-hover:h-full group-hover:w-full group-hover:transition-[width]"></div>
                     <div className="z-10 flex-shrink-0">
-                      {/* <Quiz width={70} height={70} /> */}
                       <Image
                         src="/images/logos/quiz.png"
                         alt="Quiz"
@@ -97,7 +96,6 @@ const NavLinksRight_nav: React.FC<NavLinksRight_navProps> = ({
                   <div className="group relative flex items-center gap-6 p-2">
                     <div className="group-hover:delay-400 absolute top-1/2 h-0 w-0.5 -translate-y-1/2 transform rounded-md bg-primary duration-700 group-hover:h-full group-hover:w-full group-hover:transition-[width]"></div>
                     <div className="z-10 flex items-center justify-center">
-                      {/* <Recall width={100} height={100} /> */}
                       <Image
                         src="/images/logos/recall.png"
                         alt="Recall"
@@ -122,7 +120,6 @@ const NavLinksRight_nav: React.FC<NavLinksRight_navProps> = ({
                   <div className="group relative flex items-center gap-6 p-2">
                     <div className="group-hover:delay-400 absolute top-1/2 h-0 w-0.5 -translate-y-1/2 transform rounded-md bg-primary duration-700 group-hover:h-full group-hover:w-full group-hover:transition-[width]"></div>
                     <div className="z-10 flex items-center justify-center">
-                      {/* <FAQ width={100} height={100} /> */}
                       <Image
                         src="/images/logos/faq.png"
                         alt="FAQ"
@@ -154,7 +151,6 @@ const NavLinksRight_nav: React.FC<NavLinksRight_navProps> = ({
                   <div className="group relative flex items-center gap-10 p-2">
                     <div className="group-hover:delay-400 absolute top-1/2 h-0 w-0.5 -translate-y-1/2 transform rounded-md bg-primary duration-700 group-hover:h-full group-hover:w-full group-hover:transition-[width]"></div>
                     <div className="z-10 flex items-center justify-center">
-                      {/* <Documentation width={120} height={120} /> */}
                       <Image
                         src="/images/logos/documentation.png"
                         alt="Documentation"
@@ -178,7 +174,6 @@ const NavLinksRight_nav: React.FC<NavLinksRight_navProps> = ({
                   <div className="group relative flex items-center gap-10 p-2 pl-2">
                     <div className="group-hover:delay-400 absolute top-1/2 h-0 w-0.5 -translate-y-1/2 transform rounded-md bg-primary duration-700 group-hover:h-full group-hover:w-full group-hover:transition-[width]"></div>
                     <div className="z-10 flex items-center justify-center sm:max-lg:ml-3">
-                      {/* <Github width={70} height={70} /> */}
                       <Image
                         src="/images/logos/github.png"
                         alt="Github"
