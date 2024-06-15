@@ -7,31 +7,25 @@ interface TokenPayload {
   id: string;
   email: string;
 }
-
 export const dynamic = "force-dynamic";
-
 export async function POST(request: Request) {
   try {
     const { token, page } = await request.json();
-
     if (!token) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { "content-type": "application/json" },
       });
     }
-
     if (!process.env.AUTH_SECRET) {
       throw new Error("AUTH_SECRET is not defined in the environment variables.");
     }
-
     const decoded = jwt.verify(token, process.env.AUTH_SECRET) as TokenPayload;
     if (typeof decoded === "object" && decoded !== null && "id" in decoded) {
       const userId = decoded.id;
 
       const limit = 4;
       const offset = (page - 1) * limit;
-
       const quizCompletedData = await db
         .select({
           successRate: quizzesCompleted.successRate,

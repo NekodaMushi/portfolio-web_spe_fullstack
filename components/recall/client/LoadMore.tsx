@@ -1,14 +1,9 @@
 "use client";
-
-import Image from "next/image";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
 import Spinner from "@/components/ui/spinner";
 import fetchCards from "../server/action";
 import CustomCard from "./CustomCard";
-
-let page = 2;
-let loadCount = 7; //temp
 
 interface CarouselDataItem {
   successRate: number;
@@ -20,24 +15,24 @@ interface CarouselDataItem {
   updatedAt: string;
   videoId: string;
 }
-
 type CarouselData = CarouselDataItem[];
 
+let page = 2;
 function LoadMore() {
   const { ref, inView } = useInView();
   const [data, setData] = useState<CarouselData>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [loadCount, setLoadCount] = useState(0);
 
   useEffect(() => {
-    if (inView && !isLoading && loadCount < 10) {
-      // temp
+    if (inView && !isLoading && loadCount < 7) {
       setIsLoading(true);
 
       fetchCards(page)
         .then((resData) => {
           setData((prevData) => [...prevData, ...resData]);
           page++;
-          loadCount++; // temp
+          setLoadCount((prevCount) => prevCount + 1);
           setIsLoading(false);
         })
         .catch((error) => {
@@ -45,7 +40,7 @@ function LoadMore() {
           setIsLoading(false);
         });
     }
-  }, [inView, isLoading]);
+  }, [inView, isLoading, loadCount]);
 
   return (
     <>
@@ -63,9 +58,8 @@ function LoadMore() {
         />
       ))}
       {isLoading && <Spinner />}
-      {loadCount < 10 && <div ref={ref} style={{ height: "1px" }}></div>}
+      {loadCount < 7 && <div ref={ref} style={{ height: "1px" }}></div>}
     </>
-    // temp
   );
 }
 
