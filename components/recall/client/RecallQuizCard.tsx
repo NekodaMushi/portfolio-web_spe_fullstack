@@ -9,7 +9,7 @@ import { QuestionsState } from "@/types/quiz";
 import { IconSquareRoundedX } from "@tabler/icons-react";
 import { AlertCancel } from "@/components/ui/custom/alert-dialog";
 
-import { useAppDispatch } from "@/lib/redux/hooks";
+import { useAppDispatch } from "hooks";
 import { resetRecall } from "slices/recallSlice";
 
 interface QuizCardProps {
@@ -84,7 +84,6 @@ const RecallQuizCard = ({
   };
 
   const handleReset = () => {
-    console.log("TEST1");
     dispatch(resetRecall());
 
     setCurrentQuestionIndex(0);

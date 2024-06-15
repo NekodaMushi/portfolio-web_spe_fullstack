@@ -11,7 +11,6 @@ import { AlertCancel } from "@/components/ui/custom/alert-dialog";
 
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { resetQuiz } from "slices/quizSlice";
-import Spinner from "../ui/spinner";
 
 interface QuizCardProps {
   questions: QuestionsState;

@@ -68,12 +68,15 @@ const ChatBox: React.FC<ChatBoxProps> = ({
       setIsMessageUpdating(true);
 
       const reader = stream.getReader();
+      console.log(reader);
       const decoder = new TextDecoder();
       let done = false;
 
       while (!done) {
         const { value, done: doneReading } = await reader.read();
         done = doneReading;
+        console.log("HERE======");
+        console.log(value);
         const chunkValue = decoder.decode(value);
         updateMessage(id, (prev) => prev + chunkValue);
       }

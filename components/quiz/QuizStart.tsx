@@ -10,51 +10,19 @@ import { useAppDispatch, useAppSelector } from "hooks";
 import { setQuizData, setQuizSelected } from "slices/quizSlice";
 import { NumQuestions } from "@/types/quiz";
 
+import {
+  loadingStates,
+  words,
+  dynamicTitle,
+  dynamicTitleForSmallDevice,
+  updateAnimationDuration,
+} from "./ui/animationConfigQuizStart";
+
 type Props = {
   onSetQuizReady: () => void;
 };
 
 export function QuizStart({ onSetQuizReady }: Props) {
-  const loadingStates = [
-    {
-      text: "Check if quiz already exist in DB",
-    },
-    {
-      text: "Fetch Last Transcript",
-    },
-    {
-      text: "Sending transcript to AI",
-    },
-    {
-      text: "Receiving AI response",
-    },
-    {
-      text: "Quiz is ready & stored in DB",
-    },
-    {
-      text: "Enjoy...",
-    },
-  ];
-
-  const words = [
-    {
-      text: "Start",
-    },
-    {
-      text: "your",
-    },
-    {
-      text: "quiz",
-    },
-    {
-      text: "using",
-    },
-    {
-      text: "NexLearn.",
-      className: "text-primary dark:text-primary",
-    },
-  ];
-
   const [loading, setLoading] = useState<boolean>(false);
 
   const [numQuestions, setNumQuestions] = useState<NumQuestions>("Select");
@@ -84,7 +52,7 @@ export function QuizStart({ onSetQuizReady }: Props) {
 
   const handleSelectNumber = (value: NumQuestions) => {
     setNumQuestions(value);
-    updateAnimationDuration(value);
+    updateAnimationDuration(value, setAnimationDuration);
     dispatch(setQuizSelected(value));
 
     // Check if the selected numQuestions exists in quizData
@@ -105,9 +73,7 @@ export function QuizStart({ onSetQuizReady }: Props) {
     //   }));
     //   return;
     // }
-
     setLoading(true);
-
     try {
       const response = await fetch(
         `/api/ai/quiz/generate?numQuestions=${numQuestions}`,
@@ -129,7 +95,7 @@ export function QuizStart({ onSetQuizReady }: Props) {
       const videoId = data.videoId;
       const quizData = JSON.parse(data.quizData);
 
-      console.log(quizId);
+      // console.log(quizId);
 
       dispatch(setQuizData({ videoId, numQuestions, quizData, quizId }));
       dispatch(setQuizSelected(numQuestions));
@@ -165,19 +131,6 @@ export function QuizStart({ onSetQuizReady }: Props) {
     onSetQuizReady();
   };
 
-  const updateAnimationDuration = (numQuestions: NumQuestions) => {
-    setAnimationDuration(durationMap[numQuestions]);
-  };
-
-  const durationMap: { [key in NumQuestions]: number } = {
-    "1": 1000, // 750ms for 2 questions
-    "5": 2000, // Good
-    "10": 4000, // Perfect
-    "20": 9000, // Good
-    "30": 12000,
-    Select: 0, // Component doesn't allow to display something without value
-  };
-
   return (
     <div className="flex h-[30rem] flex-col items-center justify-center">
       <Loader
@@ -189,10 +142,20 @@ export function QuizStart({ onSetQuizReady }: Props) {
         Once you used the chrome extension
       </p>
       {displayTitle && videoId ? (
-        <TypewriterEffectSmooth words={[{ text: `Video ID: ${videoId}` }]} />
+        <>
+          <div className="hidden sm:block">
+            <TypewriterEffectSmooth words={dynamicTitle(videoId)} />
+          </div>
+          <div className="block sm:hidden">
+            <TypewriterEffectSmooth
+              words={dynamicTitleForSmallDevice(videoId)}
+            />
+          </div>
+        </>
       ) : (
         <TypewriterEffectSmooth words={words} />
       )}
+
       <div className="flex flex-col  space-x-0 space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
         <SelectNumber value={numQuestions} onValueChange={handleSelectNumber} />
         <button

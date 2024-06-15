@@ -18,7 +18,6 @@ const initialState: QuizState = {
   quizSelected: [],
   
 };
-
 const quizSlice = createSlice({
   name: 'quiz',
   initialState,
@@ -51,7 +50,6 @@ const quizSlice = createSlice({
     },
   },
 });
-
 export const { setQuizData, setQuizSelected, resetQuiz } = quizSlice.actions;
 
 export default quizSlice.reducer;

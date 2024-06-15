@@ -29,11 +29,9 @@ export async function POST(request: Request) {
       });
     }
     const sessionUser = session?.user;
-
     const { totalQuestions, incorrectAnswers, quizId, videoId } =
       await request.json();
     const currentSuccessRate = (1 - incorrectAnswers / totalQuestions) * 100;
-
     const latestQuizCompleted = await db
       .select()
       .from(quizzesCompleted)
@@ -46,62 +44,47 @@ export async function POST(request: Request) {
       .orderBy(desc(quizzesCompleted.createdAt))
       .limit(1);
 
-    let attemptNumberUpdated;
-    let newSuccessRate;
-    let highestScore;
-    let highestScoreTotal;
-
-    // New
-    let above60FourTimeUpdated;
-    let above70ThreeTimeUpdated;
-    let graduatedByPerformance;
-
+    let newSuccessRate: number;
+    let highestScore: number;
+    let highestScoreTotal: number;
+    let attemptNumberUpdated: number;
+    let above60FourTimeUpdated: number;
+    let above70ThreeTimeUpdated: number;
+    let under60ThreeTimeUpdated: number;
+    let graduatedByPerformance: boolean = false;
 
     if (latestQuizCompleted.length > 0) {
       // Quiz completed before
       const previousSuccessRate = latestQuizCompleted[0].successRate;
       const previousAttemptNumber = latestQuizCompleted[0].attemptNumber;
       const previousHighestScore = latestQuizCompleted[0].highestScore;
-      const previousHighestScoreTotal =
-        latestQuizCompleted[0].highestScoreTotal;
-
-      // New
+      const previousHighestScoreTotal = latestQuizCompleted[0].highestScoreTotal;
       const lastScore = currentSuccessRate;
       const isInReviewState = latestQuizCompleted[0].reviewState;
-
       // ---- REPETITION GRADUATION CASES ----
-      let above60FourTimeUpdated =
+      above60FourTimeUpdated =
         latestQuizCompleted.length > 0
           ? latestQuizCompleted[0].above60FourTime
           : 0;
-      let above70ThreeTimeUpdated =
+      above70ThreeTimeUpdated =
         latestQuizCompleted.length > 0
           ? latestQuizCompleted[0].above70ThreeTime
           : 0;
-
-      let under60ThreeTimeUpdated =
+      under60ThreeTimeUpdated =
         latestQuizCompleted.length > 0
           ? latestQuizCompleted[0].under60ThreeTime
           : 0;
 
       above60FourTimeUpdated = lastScore >= 60 ? above60FourTimeUpdated + 1 : 0;
-      above70ThreeTimeUpdated =
-        lastScore >= 70 ? above70ThreeTimeUpdated + 1 : 0;
-
-      under60ThreeTimeUpdated =
-        lastScore <= 60 ? under60ThreeTimeUpdated + 1 : 0;
-      // --
+      above70ThreeTimeUpdated = lastScore >= 70 ? above70ThreeTimeUpdated + 1 : 0;
+      under60ThreeTimeUpdated = lastScore <= 60 ? under60ThreeTimeUpdated + 1 : 0;
 
       attemptNumberUpdated = latestQuizCompleted[0].attemptNumber + 1;
       // GLOBAL USER RATE
-      newSuccessRate =
-        (previousSuccessRate * previousAttemptNumber + currentSuccessRate) /
-        attemptNumberUpdated;
+      newSuccessRate = (previousSuccessRate * previousAttemptNumber + currentSuccessRate) / attemptNumberUpdated;
 
-      const currentScorePercentage =
-        (totalQuestions - incorrectAnswers) / totalQuestions;
-      const previousScorePercentage =
-        previousHighestScore / previousHighestScoreTotal;
+      const currentScorePercentage = (totalQuestions - incorrectAnswers) / totalQuestions;
+      const previousScorePercentage = previousHighestScore / previousHighestScoreTotal;
 
       if (currentScorePercentage > previousScorePercentage) {
         highestScore = totalQuestions - incorrectAnswers;
@@ -115,12 +98,11 @@ export async function POST(request: Request) {
       const transitionReviewPeriod = latestQuizCompleted[0].transitionToReview;
 
       let isGraduated;
-
       let isInTransition = transitionReviewPeriod;
       if (transitionReviewPeriod) {
         isInTransition = false;
       } else {
-        // GAIN/ENTER REVIEW STATE
+        // GAIN/ENTER TRANSITION STATE
         if (!isInReviewState) {
           // ---- REPETITION CASES ----
           // Case 1 => Whatever scoreRate: 4 last trial > 60%
@@ -133,7 +115,6 @@ export async function POST(request: Request) {
             isGraduated = true;
             isInTransition = true;
           }
-
           // ---- BASE CASE ----
           // Case 3 => successRate above 80 & at least 2 quizz
           if (
@@ -144,7 +125,7 @@ export async function POST(request: Request) {
           }
           // ---- PERFORMANCE CASE ----
           // Case 4 => mark a good score at Exam
-          if (totalQuestions > 28 && currentSuccessRate >= 83) {
+          if (totalQuestions > 28 && currentSuccessRate > 82) {
             graduatedByPerformance = true;
           }
         }
@@ -202,10 +183,7 @@ export async function POST(request: Request) {
       // Check if quiz transitioning to review phase for 1thtime ??????
 
       //  Erase SpacedRepetition table is user loose review state
-      if (
-        !latestQuizCompleted[0].reviewState &&
-        latestQuizCompleted[0].attemptNumber > 4
-      ) {
+      if (!latestQuizCompleted[0].reviewState && latestQuizCompleted[0].attemptNumber > 4) {
         const existingSpacedRepetitionToErase = await db
           .select()
           .from(spacedRepetition)
@@ -261,10 +239,10 @@ export async function POST(request: Request) {
             currentInterval,
           );
 
-          const { newInterval, boundedEaseFactor, realDif } =
+          const { newInterval, boundedEaseFactor } =
             spacedRepetitionMetrics;
 
-          console.log("Real difference: ", realDif);
+
 
           await db
             .update(spacedRepetition)

@@ -9,7 +9,6 @@ const QuizLayout = ({ onSetQuizCancel }: QuizLayoutProps) => {
   const quizSelected = useAppSelector((state) => state.quiz.quizSelected);
   const quizId = useAppSelector((state) => state.quiz.quizId);
   const videoId = useAppSelector((state) => state.quiz.videoId);
-  console.log(quizId);
 
   const questions = quizSelected;
   const totalQuestions = questions.length;
