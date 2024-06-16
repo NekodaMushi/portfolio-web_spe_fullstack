@@ -1,4 +1,4 @@
-import { POST } from '@/app/api/ai/generate/quiz/route';
+import { POST } from '@/app/api/ai/quiz/generate/route';
 import { fetchChatCompletion } from '@/lib/perplexityAPI';
 
 jest.mock('@/lib/perplexityAPI');
