@@ -20,19 +20,19 @@ async function chatRateLimitMiddleware(req: NextRequest) {
 }
 
 export async function middleware(req: NextRequest) {
-  // const protectedPaths = ["/use/quiz", "/use/chat", "/learn/recall"];
+  const protectedPaths = ["/use/quiz", "/use/chat", "/learn/recall"];
 
-  // if (protectedPaths.some(path => req.nextUrl.pathname.startsWith(path))) {
-  //   const session = await auth();
-  //   const isLoggedIn = !!session;
+  if (protectedPaths.some(path => req.nextUrl.pathname.startsWith(path))) {
+    const session = await auth();
+    const isLoggedIn = !!session;
     
 
-  //   if (!isLoggedIn) {
-  //     const signInUrl = new URL("/api/auth/signin", domain);
-  //     signInUrl.searchParams.set("callbackUrl", `${domain}${req.nextUrl.pathname}`);
-  //     return NextResponse.redirect(signInUrl);
-  //   }
-  // }
+    if (!isLoggedIn) {
+      const signInUrl = new URL("/api/auth/signin", domain);
+      signInUrl.searchParams.set("callbackUrl", `${domain}${req.nextUrl.pathname}`);
+      return NextResponse.redirect(signInUrl);
+    }
+  }
 
   if (req.nextUrl.pathname.startsWith('/api/ai/chat/message')) {
     return chatRateLimitMiddleware(req);
