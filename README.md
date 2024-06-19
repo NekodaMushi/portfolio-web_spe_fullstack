@@ -48,9 +48,9 @@ Follow these steps to set up the project locally on your machine.
 
 To be able to generate quiz, you need to use the custom chrome extension from this repository:
 
-<a href="https://github.com/NekodaMushi/portfolio-web_spe_fullstack_chrome_extension" target="_blank"><b>Brave Extension</b></a>
+<a href="https://github.com/NekodaMushi/portfolio-web_spe_fullstack_chrome_extension" target="_blank"><b>Chrome Extension</b></a>
 
-<b>Warning</b>: It only works on brave for the moment.
+<b>Warning</b>: It only works on all Chromium-based browsers for the moment.
 
 **Installation**
 
@@ -515,7 +515,7 @@ export default config;
 
 ## <a name="links">🔗 Links</a>
 
-<a href="https://github.com/NekodaMushi/portfolio-web_spe_fullstack_chrome_extension" target="_blank"><b>Brave Extension</b></a>
+<a href="https://github.com/NekodaMushi/portfolio-web_spe_fullstack_chrome_extension" target="_blank"><b>Chrome Extension</b></a>
 
 ## <a name="more">🚀 More</a>
 
