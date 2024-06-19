@@ -6,7 +6,7 @@ import { auth } from "auth";
 
 // import { validateAndCorrectQuizContent } from "@/lib/validators/doubleAiChecking";
 
-
+export const maxDuration = 60;
 
 const inverseQuizDataMapping: Record<string, string> = {
   "quizDataTest": "1",
