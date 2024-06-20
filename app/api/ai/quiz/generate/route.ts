@@ -59,6 +59,8 @@ export async function POST(request: Request) {
       );
     }
 
+    // If Response -> Can't process anything after
+
     const { videoId, content } = lastTranscript[0];
     const transcriptString = content;
     const videoTitle = videoId;
