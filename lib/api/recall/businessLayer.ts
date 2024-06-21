@@ -118,6 +118,7 @@ export const processQuizResult = async (sessionUser: any, quizResult: any) => {
           SuccessRateTarget,
           currentSuccessRate,
           interval);
+        
         const { newInterval, boundedEaseFactor } = spacedRepetitionMetrics;
 
 

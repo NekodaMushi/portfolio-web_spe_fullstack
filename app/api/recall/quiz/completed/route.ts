@@ -5,17 +5,7 @@ import { processQuizResult } from "@/lib/api/recall/businessLayer";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
-    // DEV
-  // try {
-  //   let sessionUser;
-  //   const session = await auth();
-  //   if (session) {
-  //     sessionUser = session.user;
-  //   } else {
-  //     sessionUser = { id: "06b51c75-bf24-4aaa-a00d-2294018dbcbf" };
-  //   }
 
-    // PROD
   try {
     const session = await auth();
     if (!session) {

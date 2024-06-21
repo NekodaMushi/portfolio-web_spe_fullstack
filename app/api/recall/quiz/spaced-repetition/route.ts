@@ -2,7 +2,6 @@ import { db } from "@/db/index";
 import { quizzesCompleted, spacedRepetition } from "@/db/schema";
 import { eq, desc, and, or, lt, lte } from "drizzle-orm";
 import { auth } from "auth";
-import { error } from "console";
 
 export const dynamic = "force-dynamic";
 
@@ -55,9 +54,6 @@ export async function GET(request: Request) {
       )
       .orderBy(desc(quizzesCompleted.createdAt));
 
-    // Gets all Learning phase quiz which haven't been done today
-    // console.log('Nb of LearningPhaseQuizzes',LearningAndTransitionPhaseQuizzes.length);
-
 
 // Review Phase Quiz
 const tomorrow = new Date(today);
@@ -87,13 +83,6 @@ const reviewPhaseQuizzes = await db
   )
   .orderBy(desc(quizzesCompleted.updatedAt));
 
-
-
-
-
-
-
-// console.log(' Nb of reviewPhaseQuizzes with interval 1 =>', reviewPhaseQuizzes.length);
 
     return new Response(JSON.stringify({
       learningAndTransitionPhaseQuizzes: LearningAndTransitionPhaseQuizzes,

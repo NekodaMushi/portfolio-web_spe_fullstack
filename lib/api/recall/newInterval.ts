@@ -25,15 +25,7 @@ export function calculateNewInterval(
     }
 
       return {
-          CEF,
-          currentInterval,
-          logTSR,
-          logCSR,
-          logRatio,
-          adjustedEaseFactor,
           boundedEaseFactor,
           newInterval,
-          // realDif,
-          // difference,
       };
 }
