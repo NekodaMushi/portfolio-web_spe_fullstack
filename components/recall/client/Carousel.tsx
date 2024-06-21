@@ -36,7 +36,7 @@ export function Carousel() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPhasedCards = async () => {
       try {
         const response = await fetch("/api/recall/quiz/spaced-repetition");
         const fetchedData = await response.json();
@@ -53,7 +53,7 @@ export function Carousel() {
       }
     };
 
-    fetchData();
+    fetchPhasedCards();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

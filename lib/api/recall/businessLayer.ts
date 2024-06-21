@@ -47,10 +47,9 @@ export const processQuizResult = async (sessionUser: any, quizResult: any) => {
       highestScoreTotal = previousHighestScoreTotal;
     }
 
-    // ============ REVIEW STATE ============
     let isGraduated;
     let isInTransition = previousQuiz.transitionToReview;
-    console.log("isInTransition",isInTransition);
+
     if (isInTransition) {
       isInTransition = false;
     } else {
@@ -104,7 +103,6 @@ export const processQuizResult = async (sessionUser: any, quizResult: any) => {
 
           // --------- REVIEW PHASE ---------
 
-
       //  Erase SpacedRepetition table is user loose review state
     if (!isInReviewState && previousQuiz.attemptNumber > 4) {
       await deleteSpacedRepetition(sessionUser.id, previousQuiz.id);
@@ -112,21 +110,16 @@ export const processQuizResult = async (sessionUser: any, quizResult: any) => {
 
     if (isInReviewState ) {
       const spacedRepetition = await getSpacedRepetition(sessionUser.id, previousQuiz.id);
-
+      const SuccessRateTarget: number = 70;
 
       if (spacedRepetition.length > 0) {
-
         const { easeFactor, interval } = spacedRepetition[0];
-        const spacedRepetitionMetrics = calculateNewInterval(
-          easeFactor,
-          70,
+        const spacedRepetitionMetrics = calculateNewInterval( easeFactor,
+          SuccessRateTarget,
           currentSuccessRate,
-          interval
-        );
+          interval);
         const { newInterval, boundedEaseFactor } = spacedRepetitionMetrics;
 
-
-     
 
         await updateSpacedRepetition(spacedRepetition[0].id, {
           interval: newInterval,
