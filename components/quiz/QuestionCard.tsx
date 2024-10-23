@@ -15,7 +15,7 @@ const QuestionCard = ({
   onClick,
   correctAnswer,
 }: Props) => {
-  // PROD
+  // PROD -
 
   const getAnswerStyle = (answer: string) => {
     if (userAnswer === answer) {
