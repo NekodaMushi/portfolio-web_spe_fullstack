@@ -8,6 +8,10 @@ Example: 'You can browse our books [here](https://www.example.com/books)'.
 Other than links, use regular text.
 
 `
+
+// After answering include links in markdown format as this example: 'You can browse our books [here](https://www.example.com/books)'.
+// Other than links, use regular text.
+
 // Provide short, concise answers.
 // Refuse any answer that does not have to do with the web technologies.
 

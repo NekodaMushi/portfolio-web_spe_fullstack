@@ -7,7 +7,7 @@ import getDomain from "@/lib/getDomain";
 const domain = getDomain();
 
 async function chatRateLimitMiddleware(req: NextRequest) {
-  const ip = req.ip ?? '127.0.0.1';
+  const ip = req.ip ?? '127.0.0.1'; // IP de bouclage : use to test and access network servidces
 
   try {
     const { success } = await rateLimiter.limit(ip);
@@ -43,7 +43,7 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",//exclus
     "/api/ai/chat/message/:path*"
   ],
 };

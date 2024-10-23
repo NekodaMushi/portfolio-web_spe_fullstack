@@ -1,4 +1,4 @@
-// handler.ts
+
 import { auth } from "auth";
 import { processQuizResult } from "@/lib/api/recall/businessLayer";
 
